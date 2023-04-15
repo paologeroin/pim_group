@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import 'root.dart';
 
 void main() {
   runApp(const MyApp());
-} //main
+}
 
+/// Defition of MyApp class
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: _example1(),
+      // turning off the debug mode
+      debugShowCheckedModeBanner: false,
+      // first default widget when the app is started
+      home: const Root(),
+      // theme color of upbar and buttoms
+      theme: ThemeData(primarySwatch: Colors.blue)
     );
-  } //build
-
-  Widget _example1() => Container(
-        color: Colors.red,
-      );
-}//MyApp
+  }
+}
