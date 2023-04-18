@@ -29,7 +29,7 @@ class _HomePage extends State<HomePage> {
                     //color: Colors.amber,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
-                      color: Colors.blue[100],
+                      color: Colors.green[100],
                     ),
                     child: Column(children: [
                       const Center(
@@ -46,7 +46,7 @@ class _HomePage extends State<HomePage> {
                           padding: EdgeInsets.all(10.0) ,
                           decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(0),
-                      color: Colors.blue[50],),
+                      color: Colors.green[50],),
                           child: Text(
                         convertedDateTime,
                         style: const TextStyle(

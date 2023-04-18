@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pages/root.dart';
+import 'pages/LoginPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,12 +12,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // turning off the debug mode
-      debugShowCheckedModeBanner: false,
-      // first default widget when the app is started
-      home: const Root(),
-      // theme color of upbar and buttoms
-      theme: ThemeData(primarySwatch: Colors.blue)
-    );
+        // turning off the debug mode
+        // debugShowCheckedModeBanner: false,
+        // first default widget when the app is started
+        // home: const Root(), DA TOGLIERE SE VA
+        home: LoginPage(), // NEW
+        // theme color of upbar and buttoms
+        theme: ThemeData(primarySwatch: Colors.green));
   }
 }
