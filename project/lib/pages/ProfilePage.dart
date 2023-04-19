@@ -8,7 +8,7 @@ class ProfilePage extends StatelessWidget {
     return  Scaffold(
       appBar: AppBar(title: const Text('Profile')),
       body: Center(
-        child: Text('a domani')
+        child: Text('Profile page')
         
       )
     );

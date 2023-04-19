@@ -27,7 +27,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlutterLogin(
-      title: 'login_flow',
+      title: 'Welcome',
       onLogin: _loginUser,
       onSignup: _signUpUser,
       onRecoverPassword: _recoverPassword,

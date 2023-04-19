@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'LoginPage.dart';
+import 'AboutPage.dart';
+import 'SettingsPage.dart';
 
 /// Definition of HomePage class
 class HomePage extends StatefulWidget {
@@ -16,8 +19,54 @@ class _HomePage extends State<HomePage> {
     convertedDateTime =
         "${now.year.toString()}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}-${now.minute.toString().padLeft(2, '0')}";
     return Scaffold(
-      
-        appBar: AppBar(title: const Text('App name')),
+        drawer: Drawer(
+          
+      child: ListView(
+        // Important: Remove any padding from the ListView.
+        padding: EdgeInsets.zero,
+        
+        children: [
+          
+          SizedBox(
+            height: 50,
+          ),
+        
+          ListTile(
+            leading: Icon(
+              Icons.logout_outlined,
+            ),
+            title: const Text('Logout'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+            },
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(
+              Icons.info_outline,
+            ),
+            title: const Text('About'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AboutPage()));
+            },
+          ),
+          
+          ListTile(
+            leading: Icon(
+              Icons.settings,
+            ),
+            title: const Text('Settings'),
+            onTap: () {
+              // TO DO: create settings page
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
+            },
+          ),
+        
+        ],
+      ),
+    ),
+    
+        appBar: AppBar(title: const Text('App name', textAlign: TextAlign.center), centerTitle: true),
         body: Column(
           children: [
             Center(
@@ -77,6 +126,6 @@ class _HomePage extends State<HomePage> {
               ),
             )),
           ],
-        ));
+        ),);
   }
 }
