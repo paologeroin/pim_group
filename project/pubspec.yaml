@@ -64,6 +64,7 @@ flutter:
   assets: 
     - assets/images/unipd-universita-di-padova.png
     - assets/images/dei-logo.png
+    - assets/images/avatar.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
