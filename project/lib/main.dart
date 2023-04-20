@@ -15,8 +15,7 @@ class MyApp extends StatelessWidget {
         // turning off the debug mode
         // debugShowCheckedModeBanner: false,
         // first default widget when the app is started
-        // home: const Root(), DA TOGLIERE SE VA
-        home: LoginPage(), // NEW
+        home: LoginPage(),
         // theme color of upbar and buttoms
         theme: ThemeData(primarySwatch: Colors.green));
   }
