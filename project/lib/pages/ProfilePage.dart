@@ -12,16 +12,16 @@ class ProfilePage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 1,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.green,
-          ),
-          //da sistemare la navigation
-          onPressed: () {//Navigator.of(context).push(MaterialPageRoute(
-                  //builder: (BuildContext context) => HomePage()));
-            },
-        ),
+        // leading: IconButton(
+        //   icon: Icon(
+        //     Icons.arrow_back,
+        //     color: Colors.green,
+        //   ),
+        //   //da sistemare la navigation
+        //   onPressed: () {//Navigator.of(context).push(MaterialPageRoute(
+        //           //builder: (BuildContext context) => HomePage()));
+        //     },
+        // ), //Non serve se rimane la bottomNavigationBar
         actions: [
           IconButton(
             icon: Icon(
@@ -89,7 +89,11 @@ class ProfilePage extends StatelessWidget {
               SizedBox(
                 height: 35,
               ),
-              buildText("DA CAPIRE DIPENDENZA DA EDIT"),
+              buildText("TO DO:"),
+              buildText("- Condivisione dati tra le schermate (profilo, edit, home, ecc);"),
+              buildText("- Mettere grafico (vedi app tutoring!);"),
+              buildText("- Widget scelta data e ora;"),
+              buildText("Problemi di navigazione")
   ])));
   }
 }
