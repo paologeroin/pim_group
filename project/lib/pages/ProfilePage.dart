@@ -28,9 +28,12 @@ class ProfilePage extends StatelessWidget {
               Icons.edit,
               color: Colors.green,
             ),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => EditProfilePage()));
+            onPressed: () async {
+              final result = await Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) => EditProfilePage()));
+              ScaffoldMessenger.of(context)
+              ..removeCurrentSnackBar()
+              ..showSnackBar(SnackBar(content: Text('$result')));
             },
           ),
         ],
@@ -40,7 +43,7 @@ class ProfilePage extends StatelessWidget {
           child: ListView(
             children: [
               Text(
-                "Edit Profile",
+                "Your Profile",
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
               ),
               SizedBox(
@@ -93,7 +96,6 @@ class ProfilePage extends StatelessWidget {
               buildText("- Condivisione dati tra le schermate (profilo, edit, home, ecc);"),
               buildText("- Mettere grafico (vedi app tutoring!);"),
               buildText("- Widget scelta data e ora;"),
-              buildText("Problemi di navigazione")
   ])));
   }
 }

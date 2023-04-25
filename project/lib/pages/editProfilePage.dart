@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:pim_group/pages/ProfilePage.dart';
-import 'SettingsPage.dart';
 
-class SettingsUI extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "Setting UI",
-      home: EditProfilePage(),
-    );
-  }
-}
+//Teoricamente inutile questa parte
+// class SettingsUI extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       title: "Setting UI",
+//       home: EditProfilePage(),
+//     );
+//   }
+// }
 
 class EditProfilePage extends StatefulWidget {
   @override
@@ -26,16 +26,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 1,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.green,
-          ),
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => ProfilePage()));
-            },
-        ),
+        // leading: IconButton(
+        //   icon: Icon(
+        //     Icons.arrow_back,
+        //     color: Colors.green,
+        //   ),
+        //   onPressed: () {
+        //     Navigator.of(context).pop();
+        //     },
+        // ),
       ),
       body: Container(
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),
@@ -103,7 +102,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ),
               buildTextField("Full Name", "No Drama Lama", false),
               buildTextField("E-mail", "hello@lama.com", false),
-              buildTextField("Password", "********", true),
+              buildTextField("Password", "        ", true),
+              buildTextField("Withdrawal Date", "inserite widget di scelta data", false),
               buildTextField("Altro", "...", false),
               SizedBox(
                 height: 35,
@@ -112,20 +112,25 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   OutlinedButton(
-                    onPressed: () {},
-                    child: Text("CANCEL",
-                        style: TextStyle(
-                            fontSize: 14,
-                            letterSpacing: 2.2,
-                            color: Colors.black)),
-                    style: OutlinedButton.styleFrom(
+                    onPressed: () {
+                      Navigator.pop(context, 'No changes to the profile');
+                    },
+                    child: Text(
+                      "CANCEL",
+                      style: TextStyle(
+                          fontSize: 14,
+                          letterSpacing: 2.2,
+                          color: Colors.black)),
+                      style: OutlinedButton.styleFrom(
                       padding: EdgeInsets.symmetric(horizontal: 50),
                       shape: RoundedRectangleBorder(
                          borderRadius: BorderRadius.circular(20)),
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context, 'Profile changes saved successfully!');
+                    },
                     child: Text(
                       "SAVE",
                       style: TextStyle(
