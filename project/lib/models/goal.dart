@@ -1,8 +1,7 @@
-//This is the data model of a meal.
+//This is the data model of a goal.
 class Goal {
-  // The Goal has a name and a budget to reach with the money saved
-
-  // String name; INSERISCI QUANDO CAPISCI IL METODO
+  // The Goal has a name and a budget to reach with the money risparmiati
+  String name;
 
   double money;
 
@@ -12,6 +11,8 @@ class Goal {
   DateTime dateTime;
 
   //Constructor
-  // Goal({required this.name, required this.money, required this.dateTime}); // INSERISCI QUANDO CAPISCI IL METODO
-  Goal({required this.money, required this.dateTime});
+  Goal(
+      {required this.name,
+      required this.money,
+      required this.dateTime}); // INSERISCI QUANDO CAPISCI IL METODO
 } //Goal

@@ -1,15 +1,88 @@
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:pim_group/models/goalDB.dart';
+import 'package:pim_group/pages/inizializegoals.dart';
+import 'package:pim_group/utils/formats.dart';
+import 'package:provider/provider.dart';
 
-class GoalsPage extends StatefulWidget {
-  const GoalsPage({super.key});
+//Homepage screen. It will show the list of meals.
+class GoalsPage extends StatelessWidget {
+  GoalsPage({Key? key}) : super(key: key);
 
-  @override
-  State<GoalsPage> createState() => _GoalsPageState();
-}
+  static const routeDisplayName = 'Goals';
 
-class _GoalsPageState extends State<GoalsPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
-  }
-}
+    //Print the route display name for debugging
+    print('${GoalsPage.routeDisplayName} built');
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.green,
+        actions: const [
+          Icon(
+            Icons.airplane_ticket,
+          ),
+        ],
+        centerTitle: true,
+        title: const Text(
+          GoalsPage.routeDisplayName,
+          style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+        ),
+      ),
+      body: Center(
+        //Here we are using a Consumer because we want the UI showing
+        //the list of goals to rebuild every time the meal DB updates.
+        child: Consumer<GoalDB>(
+          builder: (context, goalDB, child) {
+            //If the list of goals is empty, show a simple Text, otherwise show the list of goals using a ListView.
+            return goalDB.goals.isEmpty
+                ? const Text(
+                    'You have no Goals now, insert one of yours Goals here')
+                : ListView.builder(
+                    itemCount: goalDB.goals.length,
+                    itemBuilder: (context, mealIndex) {
+                      //Here, I'm showing to you some new things:
+                      //1. We are using the Card widget to wrap each ListTile to make the UI prettier;
+                      //2. I'm using DateTime to manage dates;
+                      //3. I'm using a custom DateFormats to format the DateTime (take a look at the utils/formats.dart file);
+                      //4. Improving UI/UX adding a leading and a trailing to the ListTile
+                      return Card(
+                        elevation: 5,
+                        child: ListTile(
+                          leading: Icon(MdiIcons.flag),
+                          trailing: Icon(MdiIcons.noteEdit),
+                          title: Text('${goalDB.goals[mealIndex].name}'),
+                          subtitle: Text(
+                              'objective to reach: ${goalDB.goals[mealIndex].money} €'),
+                          //When a ListTile is tapped, the user is redirected to the GoalPage, where it will be able to edit it.
+                          onTap: () => _toGoalPage(context, goalDB, mealIndex),
+                        ),
+                      );
+                    });
+          },
+        ),
+      ),
+
+      //Here, I'm using a FAB to let the user add new goals.
+      //Rationale: I'm using -1 as goalIndex to let GoalPage know that we want to add a new goal.
+      floatingActionButton: FloatingActionButton(
+        child: Icon(MdiIcons.plus),
+        backgroundColor: Colors.green,
+        onPressed: () => _toGoalPage(
+            context, Provider.of<GoalDB>(context, listen: false), -1),
+      ),
+    );
+  } //build
+
+  //Utility method to navigate to GoalPage
+  void _toGoalPage(BuildContext context, GoalDB goalDB, int goalIndex) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CreateGoalsPage(
+                  goalDB: goalDB,
+                  goalIndex: goalIndex,
+                )));
+  } //_toGoalPage
+} //Goalspage
