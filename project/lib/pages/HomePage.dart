@@ -3,6 +3,7 @@ import 'LoginPage.dart';
 import 'AboutPage.dart';
 import 'SettingsPage.dart';
 import 'package:quickalert/quickalert.dart';
+import 'SleepPage.dart';
 
 /// Definition of HomePage class
 class HomePage extends StatefulWidget {
@@ -56,6 +57,16 @@ class _HomePage extends State<HomePage> {
               onTap: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => AboutPage()));
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.bed_outlined,
+              ),
+              title: const Text('Sleep'),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SleepPage()));
               },
             ),
             ListTile(
