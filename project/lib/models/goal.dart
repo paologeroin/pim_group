@@ -11,8 +11,6 @@ class Goal {
   DateTime dateTime;
 
   //Constructor
-  Goal(
-      {required this.name,
-      required this.money,
-      required this.dateTime}); // INSERISCI QUANDO CAPISCI IL METODO
+  Goal({required this.name, required this.money, required this.dateTime});
 } //Goal
+

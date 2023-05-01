@@ -22,7 +22,6 @@ class FormSeparator extends StatelessWidget {
                 width: 75,
                 child: Container(
                   color: Colors.green,
-                  // Theme.of(context).colorScheme.secondary, // SOSTITUITO PER COLORARE I SEPARATORI DI VERDE
                 ),
               ),
               Expanded(
@@ -36,7 +35,6 @@ class FormSeparator extends StatelessWidget {
                 width: 75,
                 child: Container(
                   color: Colors.green,
-                  // Theme.of(context).colorScheme.secondary,// SOSTITUITO PER COLORARE I SEPARATORI DI VERDE
                 ),
               ),
             ],

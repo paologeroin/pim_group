@@ -5,7 +5,7 @@ import 'package:pim_group/pages/inizializegoals.dart';
 import 'package:pim_group/utils/formats.dart';
 import 'package:provider/provider.dart';
 
-//Homepage screen. It will show the list of meals.
+//Homepage screen. It will show the list of goals.
 class GoalsPage extends StatelessWidget {
   GoalsPage({Key? key}) : super(key: key);
 
@@ -31,8 +31,8 @@ class GoalsPage extends StatelessWidget {
         ),
       ),
       body: Center(
-        //Here we are using a Consumer because we want the UI showing
-        //the list of goals to rebuild every time the meal DB updates.
+        //We are using a Consumer because we want that the UI showing
+        //the list of goals to rebuild every time the Goal DB updates.
         child: Consumer<GoalDB>(
           builder: (context, goalDB, child) {
             //If the list of goals is empty, show a simple Text, otherwise show the list of goals using a ListView.
@@ -50,12 +50,13 @@ class GoalsPage extends StatelessWidget {
                       return Card(
                         elevation: 5,
                         child: ListTile(
+                          // DOBBIAMO AGGIUNGERE LA LINEAR PERCENT INDICATOR
                           leading: Icon(MdiIcons.flag),
                           trailing: Icon(MdiIcons.noteEdit),
                           title: Text('${goalDB.goals[mealIndex].name}'),
                           subtitle: Text(
                               'objective to reach: ${goalDB.goals[mealIndex].money} €'),
-                          //When a ListTile is tapped, the user is redirected to the GoalPage, where it will be able to edit it.
+                          //When a ListTile is tapped, the user is redirected to the GoalPage of the specific goal, where it will be able to edit it.
                           onTap: () => _toGoalPage(context, goalDB, mealIndex),
                         ),
                       );
@@ -64,7 +65,7 @@ class GoalsPage extends StatelessWidget {
         ),
       ),
 
-      //Here, I'm using a FAB to let the user add new goals.
+      //Here, we are using a FAB to let the user add new goals.
       //Rationale: I'm using -1 as goalIndex to let GoalPage know that we want to add a new goal.
       floatingActionButton: FloatingActionButton(
         child: Icon(MdiIcons.plus),

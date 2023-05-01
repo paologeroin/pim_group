@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pim_group/models/goal.dart';
 
-//This class extends ChangeNotifier.
-//It will act as data repository for the meals and will be shared thorugh the application.
+//This class GoalDB extends ChangeNotifier.
+//It will act as data repository for the goals and will be shared thorugh the application.
 class GoalDB extends ChangeNotifier {
   //The GoalDB can be represented here as list of goals.
   List<Goal> goals = [];

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+// COSTRUISCO FormTextTile affinchè mi permetta di creare un goal solo se il campo è completato correttamente
+//
 ///Class that implement a custom-made [ListTile] to manage textboxes containing strings in a [Form].
 ///You must provide a controller, a label that is shown as helper, and an icon. This is checked via a regex.
 ///The [FormTextTile] content is valid if it is not empty.
@@ -25,11 +27,14 @@ class FormTextTile extends ListTile {
             width: screenSize.width / 1.5,
             child: TextFormField(
               controller: controller,
-              validator: (value) => value == "" ? 'Must not be empty.' : null,
+              validator: (value) => value == ""
+                  ? 'Must not be empty.'
+                  : null, // controllo che campo sia completato correttamente, cioè non sia vuoto
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 labelText: labelText,
-                focusColor: Theme.of(context).colorScheme.secondary,
+                focusColor: Colors.green,
+                // Theme.of(context).colorScheme.secondary,
               ),
             ),
           ),
@@ -39,6 +44,8 @@ class FormTextTile extends ListTile {
   } // build
 } // FormTextTile
 
+// COSTRUISCO FormNumberTile affinchè mi permetta di creare un goal solo se il campo è completato correttamente
+//
 ///Class that implement a custom-made [ListTile] to manage textboxes containing numbers in a [Form].
 ///You must provide a controller, a label that is shown as helper, and an icon.
 ///The [FormNumberTile] content is valid if it contains numbers only. This is checked via a regex.
@@ -53,7 +60,7 @@ class FormNumberTile extends ListTile {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     return ListTile(
-      leading: Icon(icon, color: Theme.of(context).colorScheme.secondary),
+      leading: Icon(icon, color: Colors.green),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -66,12 +73,15 @@ class FormNumberTile extends ListTile {
                 String pattern =
                     r'^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$';
                 RegExp regex = RegExp(pattern);
-                if (!regex.hasMatch(value!)) ret = 'Must be a number.';
+                if (!regex.hasMatch(value!))
+                  ret =
+                      'Must be a number.'; // controllo che sia completato solo con numeri
                 return ret;
               },
               keyboardType: TextInputType.numberWithOptions(signed: true),
               decoration: InputDecoration(
                 labelText: labelText,
+                focusColor: Colors.green,
               ),
             ),
           ),
@@ -81,6 +91,7 @@ class FormNumberTile extends ListTile {
   } // build
 } // FormTextTile
 
+// CONTROLLO PER IL CAMPO DELLA DATA
 ///Class that implement a custom-made [ListTile] to manage textboxes containing dates in a [Form].
 ///You must provide a label that is shown as helper, the date to show, an icon, a callback to define the behaviour of the field when it is tapped, and a [DateFormat].
 ///The [FormDateTile] content is always valid and it should be guaranteed via a DatePicker.
@@ -102,7 +113,7 @@ class FormDateTile extends ListTile {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     return ListTile(
-      leading: Icon(icon, color: Theme.of(context).colorScheme.secondary),
+      leading: Icon(icon, color: Colors.green),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -119,7 +130,10 @@ class FormDateTile extends ListTile {
               alignment: Alignment.centerLeft,
               width: screenSize.width / 1.5,
               child: TextButton(
-                child: Text(dateFormat.format(date)),
+                child: Text(
+                  dateFormat.format(
+                      date), // NON CAMBIA COLORE DENTRO IL CONTAINER E QUELLO DA SELEZIONARE LA DATA NON CAPISCO PERCHE'
+                ),
                 onPressed: onPressed,
               ),
             ),
@@ -130,6 +144,8 @@ class FormDateTile extends ListTile {
   } // build
 } // FormDateTile
 
+// QUESTE ULTIME DUE CLASSI DEVO ANCORA CAPIRE BENE A COSA SERVANO
+//
 ///Class that implement a custom-made [ListTile] to manage dropdown menus containing numbers in a [Form].
 ///You must provide a label that is shown as helper, the value to show, the items to show, a callback to define the behaviour of the field when it changes, and an icon.
 ///The [DropdownButtonTileNumber] content is always valid since it is guaranteed by the fact that the values it can assumes are provided by the user.
@@ -149,7 +165,7 @@ class DropdownButtonTileNumber extends ListTile {
     return ListTile(
       leading: Icon(icon,
           color: Colors
-              .green), // Theme.of(context).colorScheme.secondary),// SOSTITUITO PER COLORARE I SEPARATORI DI VERDE
+              .green), // Theme.of(context).colorScheme.secondary),// SOSTITUITO PER COLORARE DI VERDE
       title: Container(
         width: screenSize.width / 1.5,
         child: DropdownButton<int>(
@@ -205,4 +221,3 @@ class DropdownButtonTileString extends ListTile {
     );
   } // build
 } // DropdownButtonTileString
-
