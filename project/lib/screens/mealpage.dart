@@ -31,6 +31,8 @@ class MealPage extends StatefulWidget {
 //Class that manages the state of MealPage
 class _MealPageState extends State<MealPage> {
 
+  bool checkstate = false;
+
   //Form globalkey: this is required to validate the form fields.
   final formKey = GlobalKey<FormState>();
 
@@ -71,6 +73,7 @@ class _MealPageState extends State<MealPage> {
         title: Text(MealPage.routeDisplayName),
         actions: [
           IconButton(onPressed: () => {
+            checkstate = false,
             _validateAndSave(context),
             showDialog(
                       context: context,
@@ -78,9 +81,15 @@ class _MealPageState extends State<MealPage> {
                         //Future.delayed(Duration(seconds: 5), () {
                          // Navigator.of(context).pop(true);
                         //});
+                        if (checkstate){
                         return AlertDialog(
                           title: Text('Added'),
                         );
+                        } else {
+                          return AlertDialog(
+                          title: Text('Null value invalid'),
+                        );
+                        }
                       }),
              // Navigator.pop(context)
             Future.delayed(Duration(seconds: 1), () {
@@ -258,10 +267,19 @@ Consumer<MealDB>(
   void _validateAndSave(BuildContext context) {
     if(formKey.currentState!.validate()){
       //print(currentSelectedValue);
-
-      Meal newMeal = Meal(carbohydrates: (currentSelectedValue!), dateTime: _selectedDate);
-      widget.mealIndex == -1 ? widget.mealDB.addMeal(newMeal) : widget.mealDB.editMeal(widget.mealIndex, newMeal);
+      if (currentSelectedValue == null){
+        setState(() {
+                  checkstate = false;
+        });
+      } else {
+        Meal newMeal = Meal(carbohydrates: (currentSelectedValue!), dateTime: _selectedDate);
+         widget.mealIndex == -1 ? widget.mealDB.addMeal(newMeal) : widget.mealDB.editMeal(widget.mealIndex, newMeal);
+        setState(() {
+          checkstate = true;
+        });
+      }
       
+     
 
     // Navigator.push(
     //context,
