@@ -33,7 +33,7 @@ class LoginPage extends StatelessWidget {
       onRecoverPassword: _recoverPassword,
       onSubmitAnimationCompleted: () async {
         Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const Root()));
+            MaterialPageRoute(builder: (context) =>  BottomNavBarV2()));
       },
     );
   } // build
