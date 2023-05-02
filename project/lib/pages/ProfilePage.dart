@@ -10,7 +10,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Colors.green,
         elevation: 1,
         // leading: IconButton(
         //   icon: Icon(
@@ -26,7 +26,7 @@ class ProfilePage extends StatelessWidget {
           IconButton(
             icon: Icon(
               Icons.edit,
-              color: Colors.green,
+              color: Color.fromARGB(255, 255, 255, 255),
             ),
             onPressed: () async {
               final result = await Navigator.of(context).push(MaterialPageRoute(
@@ -37,6 +37,12 @@ class ProfilePage extends StatelessWidget {
             },
           ),
         ],
+        centerTitle: true,
+        title: 
+          const Text(
+            "Profile",
+            style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+        ),
       ),
       body: Container(
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),
@@ -83,8 +89,9 @@ class ProfilePage extends StatelessWidget {
               buildText("No Drama Lama"),
               buildTextLabel("E-mail"),
               buildText("hello@lama.com"),
-              buildTextLabel("Password"),
-              buildText("*******"),
+              // Il modifica password c'è già in settings
+              // buildTextLabel("Password"),
+              // buildText("*******"),
               buildTextLabel("Withdrawal Date"),
               buildText("24/04/23"),
               buildTextLabel("Altro"),

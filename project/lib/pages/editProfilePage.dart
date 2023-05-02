@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pim_group/models/profileInfo_provider.dart';
 import 'package:pim_group/pages/ProfilePage.dart';
+
+import '../models/profileDB.dart';
 
 //Teoricamente inutile questa parte
 // class SettingsUI extends StatelessWidget {
@@ -24,7 +27,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Colors.green,
         elevation: 1,
         // leading: IconButton(
         //   icon: Icon(
@@ -100,11 +103,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
               SizedBox(
                 height: 35,
               ),
-              buildTextField("Full Name", "No Drama Lama", false),
-              buildTextField("E-mail", "hello@lama.com", false),
-              buildTextField("Password", "        ", true),
-              buildTextField("Withdrawal Date", "inserite widget di scelta data", false),
-              buildTextField("Altro", "...", false),
+              buildTextField("Full Name", $newProfileInfo, false),
+              buildTextField("E-mail", , false),
+              // buildTextField("Password", , true),
+              buildTextField("Withdrawal Date", , false),
+              buildTextField("Altro", , false),
               SizedBox(
                 height: 35,
               ),
@@ -156,7 +159,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Widget buildTextField(
-      String labelText, String placeholder, bool isPasswordTextField) {
+      String labelText, ProfileInfo newProfileInfo, bool isPasswordTextField) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20.0),
       child: TextField(
@@ -178,7 +181,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             contentPadding: EdgeInsets.only(bottom: 3),
             labelText: labelText,
             floatingLabelBehavior: FloatingLabelBehavior.always,
-            hintText: placeholder,
+            hintText: newProfileInfo.toString(),
             hintStyle: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
