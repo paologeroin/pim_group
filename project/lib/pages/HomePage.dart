@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'LoginPage.dart';
 import 'AboutPage.dart';
@@ -31,6 +33,40 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
+
+  int oldValue = randomNumber;
+  Timer? countdownTimer;
+  Duration myDuration = Duration(seconds: 10);
+
+  void startTimer() {
+    countdownTimer =
+        Timer.periodic(myDuration, (_) => changePhrase());
+  }
+
+  void stopTimer() {
+    setState(() => countdownTimer!.cancel());
+  }
+
+  void changePhrase() {
+    print(oldValue);
+    randomNumber = random.nextInt(4);
+    print(randomNumber);
+    setState(() {
+      if (randomNumber == oldValue && randomNumber>0) {randomNumber--; print("change: $randomNumber");}
+      else if (randomNumber == oldValue && randomNumber<3) {randomNumber++; print("change: $randomNumber");}
+    });
+    setState(() {
+      oldValue = randomNumber;
+      frasedisplay = listaFrasi[randomNumber];
+    });
+  }
+
+  @override
+  void initState() {
+    startTimer();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
@@ -98,7 +134,7 @@ class _HomePage extends State<HomePage> {
         ),
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(40.0),
-          child: new AppBar(
+          child: AppBar(
             title: Column(children: [
               Text(
                 "Ciao NOME,",style: GoogleFonts.lato()
