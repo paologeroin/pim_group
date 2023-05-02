@@ -9,6 +9,7 @@ import 'GoalsPage.dart';
 import 'package:provider/provider.dart';
 import 'AddingDrinkPage.dart';
 import 'HomePage.dart';
+import 'ProgressPage.dart';
 
 /// Definition of Root class, the firs class called by the main application class [MyApp]
 
@@ -25,11 +26,9 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
     const HomePage(),
     SleepPage(),
     GoalsPage(),
-    ProfilePage(),
-  
-
-
+    ProgressPage(),
   ];
+
   var _appPageController = PageController();
 
   setBottomBarIndex(index) {
@@ -46,7 +45,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
     return Scaffold(
       backgroundColor: Colors.white.withAlpha(100),
       body: PageView(
-        scrollDirection: Axis.horizontal,
+       scrollDirection: Axis.horizontal,
         children: pages,
         onPageChanged: (index) {
           setState(() {
@@ -119,7 +118,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                       }),
                   IconButton(
                       icon: Icon(
-                        Icons.account_circle,
+                        Icons.calendar_month_outlined,
                         color: currentIndex == 3
                             ? Colors.teal[600]
                             : Colors.grey.shade400,
