@@ -103,11 +103,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
               SizedBox(
                 height: 35,
               ),
+              /*
               buildTextField("Full Name", $newProfileInfo, false),
               buildTextField("E-mail", , false),
               // buildTextField("Password", , true),
               buildTextField("Withdrawal Date", , false),
               buildTextField("Altro", , false),
+              */
               SizedBox(
                 height: 35,
               ),
