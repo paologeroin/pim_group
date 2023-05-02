@@ -1,64 +1,185 @@
 import 'package:flutter/material.dart';
+import 'package:pim_group/models/mealDB.dart';
+import 'package:pim_group/screens/mealpage.dart';
+import 'package:pim_group/models/meal.dart';
 import 'HomePage.dart';
 import 'ProfilePage.dart';
-import 'ProgressPage.dart';
+import 'SleepPage.dart';
 import 'GoalsPage.dart';
+import 'package:provider/provider.dart';
+import 'AddingDrinkPage.dart';
+import 'HomePage.dart';
 
 /// Definition of Root class, the firs class called by the main application class [MyApp]
-class Root extends StatefulWidget {
-  const Root({super.key});
+
+class BottomNavBarV2 extends StatefulWidget {
+  
 
   @override
-  State<Root> createState() => _RootState();
+  _BottomNavBarV2State createState() => _BottomNavBarV2State();
 }
 
-class _RootState extends State<Root> {
-  // index of the selected page on the bottom bar
-  int currentPage = 0;
+class _BottomNavBarV2State extends State<BottomNavBarV2> {
+  int currentIndex = 0;
+  var pages = [
+    const HomePage(),
+    SleepPage(),
+    GoalsPage(),
+    ProfilePage(),
+  
 
-  // List of page widgets on the bottom bar
-  List<Widget> pages = [HomePage(), ProgressPage(), GoalsPage(), ProfilePage()];
+
+  ];
+  var _appPageController = PageController();
+
+  setBottomBarIndex(index) {
+    setState(() {
+      currentIndex = index;
+    });
+    _appPageController.animateToPage(index,
+        duration: Duration(milliseconds: 500), curve: Curves.ease);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: pages[currentPage],
-
-      // Buttom to add drink
-      floatingActionButton: FloatingActionButton(
-          // action to be performed when the buttom is pressed
-          onPressed: () => setState(() {
-                // temporary action when Floating Button is pressed (to modify)
-                print('add drink');
-              }),
-          // plus sign for Floating Button
-          child: const Icon(Icons.add)),
-
-      // Locationing Floating Action Button on center
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
-      // fixed bottom bar
-      bottomNavigationBar: NavigationBar(
-        backgroundColor: Colors.green[100],
-
-        destinations: const [
-          // cretion of the icons for the buttom bar
-          NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
-          NavigationDestination(
-              icon: Icon(Icons.stacked_bar_chart), label: 'Progress'),
-          NavigationDestination(icon: Icon(Icons.star), label: 'Goals'),
-          NavigationDestination(
-              icon: Icon(Icons.account_circle_rounded), label: 'Profile')
-        ],
-
-        // set the index of the current page based on the selected NavigationDestination
-        onDestinationSelected: (int index) {
+      backgroundColor: Colors.white.withAlpha(100),
+      body: PageView(
+        scrollDirection: Axis.horizontal,
+        children: pages,
+        onPageChanged: (index) {
           setState(() {
-            currentPage = index;
+            currentIndex = index;
           });
         },
-        selectedIndex: currentPage,
+        controller: _appPageController,
+      ),
+      bottomNavigationBar: Container(
+        width: size.width,
+        height: 80,
+        color:Colors.teal[50],
+       
+        
+        child: Stack(
+          //overflow: Overflow.visible,
+          children: [
+            CustomPaint(
+              size: Size(size.width, 80),
+              painter: BNBCustomPainter(),
+            ),
+            Center(
+              heightFactor: 0.6,
+              child: FloatingActionButton(
+                  backgroundColor: Colors.pink[300],
+                  child: Icon(Icons.add), // Analyze Button
+                  elevation: 0.1,
+                  
+                 onPressed: () => _toMealPage(context, Provider.of<MealDB>(context, listen: false), -1),)),
+            Container(
+              width: size.width,
+              height: 80,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.home,
+                      color: currentIndex == 0
+                          ? Colors.teal[400]
+                          : Colors.grey.shade400,
+                    ),
+                    onPressed: () {
+                      setBottomBarIndex(0);
+                    },
+                    splashColor: Colors.white,
+                  ),
+                  IconButton(
+                      icon: Icon(
+                        Icons.nights_stay,
+                        color: currentIndex == 1
+                            ? Colors.teal[600]
+                            : Colors.grey.shade400,
+                      ),
+                      onPressed: () {
+                        setBottomBarIndex(1);
+                      }),
+                  Container(
+                    width: size.width * 0.20,
+                  ),
+                  IconButton(
+                      icon: Icon(
+                        Icons.star,
+                        color: currentIndex == 2
+                            ? Colors.teal[600]
+                            : Colors.grey.shade400,
+                      ),
+                      onPressed: () {
+                        setBottomBarIndex(2);
+                      }),
+                  IconButton(
+                      icon: Icon(
+                        Icons.account_circle,
+                        color: currentIndex == 3
+                            ? Colors.teal[600]
+                            : Colors.grey.shade400,
+                      ),
+                      onPressed: () {
+                        setBottomBarIndex(3);
+                      }),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
+
+  void _onTappedBar(int value) {
+    setState(() {
+      currentIndex = value;
+    });
+    _appPageController.jumpToPage(value);
+  }
 }
+
+
+ //Utility method to navigate to MealPage
+  void _toMealPage(BuildContext context, MealDB mealDB, int mealIndex) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MealPage(mealDB: mealDB, mealIndex: mealIndex,)));
+  } //_toMealPage
+
+
+
+class BNBCustomPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = new Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.fill;
+
+    Path path = Path();
+    path.moveTo(0, 20); // Start
+    path.quadraticBezierTo(size.width * 0.20, 0, size.width * 0.35, 0);
+    path.quadraticBezierTo(size.width * 0.40, 0, size.width * 0.40, 20);
+    path.arcToPoint(Offset(size.width * 0.60, 20),
+        radius: Radius.circular(20.0), clockwise: false);
+    path.quadraticBezierTo(size.width * 0.60, 0, size.width * 0.65, 0);
+    path.quadraticBezierTo(size.width * 0.80, 0, size.width, 20);
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+    path.lineTo(0, 20);
+    canvas.drawShadow(path, Colors.black, 5, true);
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+
+
+
