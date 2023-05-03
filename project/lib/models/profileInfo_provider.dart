@@ -7,18 +7,19 @@ import 'package:pim_group/models/profileDB.dart';
 
 
 class ProfileInfo extends ChangeNotifier{
-  // The profile info is a String
   late FullName fullName;
   late Email email;
   late WithdrawalDate withdrawalDate;
   late Status status;
-
-  // //Constructor
-  // ProfileInfo({required this.profileInfo});
   
-  // //Method to use to edit a profileInfo.
-  // void editProfileInfo(ProfileInfo newProfileInfo) {
-  //   profileInfo = newProfileInfo;
-  //   //Call the notifyListeners() method to alert that someone has modified a goal.
-   notifyListeners();
+  //Call the notifyListeners() method to alert that someone has modified a goal.
+  ProfileInfo (){
+    // Method to use to edit a profileInfo. Ma voglio farne uno generale per tutti i tipi di info! 
+    // Creo una classe generale in profileDB?
+    void editFullName(FullName newFullName) {
+      fullName = newFullName;
+
+    }
+  }
+  notifyListeners();
 } //ProfileInfo

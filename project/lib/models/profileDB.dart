@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pim_group/models/profileInfo_provider.dart';
 //This is the data model of a user info.
+// class ProfileData 
 
 class FullName {
   final String fullname;
