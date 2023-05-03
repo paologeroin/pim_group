@@ -12,13 +12,14 @@ class _SleepPageState extends State<SleepPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text ('Pagina relativa al sonno', 
-      textAlign: TextAlign.center), 
-      centerTitle: true,
-      leading: IconButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 97, 198, 171),
+        elevation: 1,
+        title: const Text ('Pagina relativa al sonno', 
+        textAlign: TextAlign.center), 
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {},
         icon: Icon(
           Icons.arrow_back,
           color: Colors.white,

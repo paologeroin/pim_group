@@ -10,7 +10,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: Color.fromARGB(255, 97, 198, 171),
         elevation: 1,
         // leading: IconButton(
         //   icon: Icon(
@@ -40,7 +40,7 @@ class ProfilePage extends StatelessWidget {
         centerTitle: true,
         title: 
           const Text(
-            "Profile",
+            "Your Profile",
             style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
         ),
       ),
@@ -49,7 +49,7 @@ class ProfilePage extends StatelessWidget {
           child: ListView(
             children: [
               Text(
-                "Your Profile",
+                "User Name",
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
               ),
               SizedBox(
@@ -86,7 +86,7 @@ class ProfilePage extends StatelessWidget {
                 height: 35,
               ),
               buildTextLabel("Full Name"),
-              buildText("No Drama Lama"),
+              buildText("Dama Lama"),
               buildTextLabel("E-mail"),
               buildText("hello@lama.com"),
               // Il modifica password c'è già in settings
@@ -94,7 +94,7 @@ class ProfilePage extends StatelessWidget {
               // buildText("*******"),
               buildTextLabel("Withdrawal Date"),
               buildText("24/04/23"),
-              buildTextLabel("Altro"),
+              buildTextLabel("Status"),
               buildText("..."),
               SizedBox(
                 height: 35,
