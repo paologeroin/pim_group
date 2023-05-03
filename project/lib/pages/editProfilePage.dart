@@ -27,17 +27,23 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: Color.fromARGB(255, 97, 198, 171),
         elevation: 1,
-        // leading: IconButton(
-        //   icon: Icon(
-        //     Icons.arrow_back,
-        //     color: Colors.green,
-        //   ),
-        //   onPressed: () {
-        //     Navigator.of(context).pop();
-        //     },
-        // ),
+        centerTitle: true,
+        title: 
+          const Text(
+            "Edit Profile",
+            style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.pop(context, 'Discarded changes');
+            },
+        ),
       ),
       body: Container(
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),
@@ -47,10 +53,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
           },
           child: ListView(
             children: [
-              Text(
-                "Edit Profile",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-              ),
+              // Text(
+              //   "Edit Profile",
+              //   style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+              // ),
               SizedBox(
                 height: 15,
               ),
@@ -90,7 +96,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               width: 4,
                               color: Theme.of(context).scaffoldBackgroundColor,
                             ),
-                            color: Colors.green,
+                            color: Colors.teal[200],
                           ),
                           child: Icon(
                             Icons.edit,
@@ -113,51 +119,50 @@ class _EditProfilePageState extends State<EditProfilePage> {
               SizedBox(
                 height: 35,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  OutlinedButton(
-                    onPressed: () {
-                      Navigator.pop(context, 'No changes to the profile');
-                    },
-                    child: Text(
-                      "CANCEL",
-                      style: TextStyle(
-                          fontSize: 14,
-                          letterSpacing: 2.2,
-                          color: Colors.black)),
-                      style: OutlinedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 50),
-                      shape: RoundedRectangleBorder(
-                         borderRadius: BorderRadius.circular(20)),
-                    ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     OutlinedButton(
+              //       onPressed: () {
+              //         Navigator.pop(context, 'No changes to the profile');
+              //       },
+              //       child: Text(
+              //         "CANCEL",
+              //         style: TextStyle(
+              //             fontSize: 14,
+              //             letterSpacing: 2.2,
+              //             color: Colors.black)),
+              //         style: OutlinedButton.styleFrom(
+              //         padding: EdgeInsets.symmetric(horizontal: 50),
+              //         shape: RoundedRectangleBorder(
+              //            borderRadius: BorderRadius.circular(20)),
+              //       ),
+              //     ),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context, 'Profile changes saved successfully!');
+                  },
+                  child: Text(
+                    "SAVE",
+                    style: TextStyle(
+                        fontSize: 14,
+                        letterSpacing: 2.2,
+                        color: Colors.white),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context, 'Profile changes saved successfully!');
-                    },
-                    child: Text(
-                      "SAVE",
-                      style: TextStyle(
-                          fontSize: 14,
-                          letterSpacing: 2.2,
-                          color: Colors.white),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                      backgroundColor: Colors.green,
-                      padding: EdgeInsets.symmetric(horizontal: 50)
-                    ),
-                  )
-                ],
+                  style: ElevatedButton.styleFrom(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                    backgroundColor: Colors.teal[200],
+                    padding: EdgeInsets.symmetric(horizontal: 50)
+                  ),
+                ),
               )
-            ],
+            ]))
           ),
-        ),
-      ),
-    );
+        );
+    // );
   }
 
   Widget buildTextField(
