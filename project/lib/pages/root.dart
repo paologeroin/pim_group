@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pim_group/models/mealDB.dart';
-import 'package:pim_group/screens/mealpage.dart';
-import 'package:pim_group/models/meal.dart';
+import 'package:pim_group/models/drinkDB.dart';
+import 'package:pim_group/models/drink.dart';
+import 'package:pim_group/drink_screens/drinkpage.dart';
 import 'HomePage.dart';
 import 'ProfilePage.dart';
 import 'SleepPage.dart';
@@ -11,11 +11,9 @@ import 'AddingDrinkPage.dart';
 import 'HomePage.dart';
 import 'ProgressPage.dart';
 
-/// Definition of Root class, the firs class called by the main application class [MyApp]
+/// Definition of Root class, the first class called by the main application class [MyApp]
 
 class BottomNavBarV2 extends StatefulWidget {
-  
-
   @override
   _BottomNavBarV2State createState() => _BottomNavBarV2State();
 }
@@ -45,7 +43,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
     return Scaffold(
       backgroundColor: Colors.white.withAlpha(100),
       body: PageView(
-       scrollDirection: Axis.horizontal,
+        scrollDirection: Axis.horizontal,
         children: pages,
         onPageChanged: (index) {
           setState(() {
@@ -57,9 +55,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
       bottomNavigationBar: Container(
         width: size.width,
         height: 80,
-        color:Colors.teal[50],
-       
-        
+        color: Colors.teal[50],
         child: Stack(
           //overflow: Overflow.visible,
           children: [
@@ -68,13 +64,15 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
               painter: BNBCustomPainter(),
             ),
             Center(
-              heightFactor: 0.6,
-              child: FloatingActionButton(
+                heightFactor: 0.6,
+                child: FloatingActionButton(
                   backgroundColor: Colors.pink[300],
                   child: Icon(Icons.add), // Analyze Button
                   elevation: 0.1,
-                  
-                 onPressed: () => _toMealPage(context, Provider.of<MealDB>(context, listen: false), -1),)),
+
+                  onPressed: () => _toDrinkPage(context,
+                      Provider.of<DrinkDB>(context, listen: false), -1),
+                )),
             Container(
               width: size.width,
               height: 80,
@@ -143,13 +141,16 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
   }
 }
 
-
- //Utility method to navigate to MealPage
-  void _toMealPage(BuildContext context, MealDB mealDB, int mealIndex) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MealPage(mealDB: mealDB, mealIndex: mealIndex,)));
-  } //_toMealPage
-
-
+//Utility method to navigate to DrinkPage
+void _toDrinkPage(BuildContext context, DrinkDB drinkDB, int drinkIndex) {
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => DrinkPage(
+                drinkDB: drinkDB,
+                drinkIndex: drinkIndex,
+              )));
+} //_toDrinkPage
 
 class BNBCustomPainter extends CustomPainter {
   @override
@@ -178,7 +179,3 @@ class BNBCustomPainter extends CustomPainter {
     return false;
   }
 }
-
-
-
-

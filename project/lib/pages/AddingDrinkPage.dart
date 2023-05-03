@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:pim_group/models/mealDB.dart';
-import 'package:pim_group/screens/mealpage.dart';
+import 'package:pim_group/models/drinkDB.dart';
+import 'package:pim_group/drink_screens/drinkpage.dart';
 import 'package:pim_group/utils/formats.dart';
 import 'package:provider/provider.dart';
-
 
 class AddingDrinkPage extends StatelessWidget {
   AddingDrinkPage({Key? key}) : super(key: key);
@@ -20,37 +19,36 @@ class AddingDrinkPage extends StatelessWidget {
         title: Text(AddingDrinkPage.routeDisplayName),
       ),
       body: Center(
-        //Here we are using a Consumer because we want the UI showing 
-        //the list of meals to rebuild every time the meal DB updates.
-        child: Consumer<MealDB>(
-          builder: (context, mealDB, child) {
-            //If the list of meals is empty, show a simple Text, otherwise show the list of meals using a ListView.
-            return mealDB.meals.isEmpty
+        //Here we are using a Consumer because we want the UI showing
+        //the list of drink to rebuild every time the meal DB updates.
+        child: Consumer<DrinkDB>(
+          builder: (context, drinkDB, child) {
+            //If the list of drinks is empty, show a simple Text, otherwise show the list of drinks using a ListView.
+            return drinkDB.drinks.isEmpty
                 ? Text('The drink list is currently empty')
                 : ListView.builder(
-                    itemCount: mealDB.meals.length,
-                    itemBuilder: (context, mealIndex) {
+                    itemCount: drinkDB.drinks.length,
+                    itemBuilder: (context, drinkIndex) {
                       //Here, I'm showing to you some new things:
                       //1. We are using the Card widget to wrap each ListTile to make the UI prettier;
                       //2. I'm using DateTime to manage dates;
                       //3. I'm using a custom DateFormats to format the DateTime (take a look at the utils/formats.dart file);
                       //4. Improving UI/UX adding a leading and a trailing to the ListTile
-                      
-                  
-                 
-                       return Card(
+
+                      return Card(
                         elevation: 5,
                         child: ListTile(
                           leading: Icon(Icons.wine_bar),
                           trailing: Icon(Icons.note_alt),
-                          title:
-                              Text('CHO : ${mealDB.meals[mealIndex].carbohydrates}'),
-                          subtitle: Text('${Formats.fullDateFormatNoSeconds.format(mealDB.meals[mealIndex].dateTime)}'),
-                          //When a ListTile is tapped, the user is redirected to the MealPage, where it will be able to edit it.
-                          onTap: () => _toMealPage(context, mealDB, mealIndex),
+                          title: Text(
+                              'CHO : ${drinkDB.drinks[drinkIndex].carbohydrates}'),
+                          subtitle: Text(
+                              '${Formats.fullDateFormatNoSeconds.format(drinkDB.drinks[drinkIndex].dateTime)}'),
+                          //When a ListTile is tapped, the user is redirected to the DrinkPage, where it will be able to edit it.
+                          onTap: () =>
+                              _toDrinkPage(context, drinkDB, drinkIndex),
                         ),
                       );
-                      
                     });
           },
         ),
@@ -59,30 +57,23 @@ class AddingDrinkPage extends StatelessWidget {
       //Rationale: I'm using -1 as mealIndex to let MealPage know that we want to add a new meal.
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => _toMealPage(context, Provider.of<MealDB>(context, listen: false), -1),
+        onPressed: () => _toDrinkPage(
+            context, Provider.of<DrinkDB>(context, listen: false), -1),
       ),
     );
   } //build
 
-  //Utility method to navigate to MealPage
-  void _toMealPage(BuildContext context, MealDB mealDB, int mealIndex) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MealPage(mealDB: mealDB, mealIndex: mealIndex,)));
-  } //_toMealPage
+  //Utility method to navigate to DrinkPage
+  void _toDrinkPage(BuildContext context, DrinkDB drinkDB, int drinkIndex) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => DrinkPage(
+                  drinkDB: drinkDB,
+                  drinkIndex: drinkIndex,
+                )));
+  } //_toDrinkPage
 } //AddingDrinkPage
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* lion
 import 'package:flutter/foundation.dart';
@@ -142,10 +133,6 @@ class _AddingDrinkPageState extends State<AddingDrinkPage> {
   }
 }
 */
-
-
-
-
 
 /*
 
@@ -339,13 +326,6 @@ class CustomDropdownButton2 extends StatelessWidget {
 
 
 */
-
-
-
-
-
-
-
 
 /*
   @override

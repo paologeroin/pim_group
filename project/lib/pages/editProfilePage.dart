@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pim_group/models/profileInfo_provider.dart';
+import 'package:pim_group/models/profile/profileInfo_provider.dart';
 import 'package:pim_group/pages/ProfilePage.dart';
 
-import '../models/profileDB.dart';
+import '../models/profile/profileDB.dart';
 
 //Teoricamente inutile questa parte
 // class SettingsUI extends StatelessWidget {
@@ -30,10 +30,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
         backgroundColor: Color.fromARGB(255, 97, 198, 171),
         elevation: 1,
         centerTitle: true,
-        title: 
-          const Text(
-            "Edit Profile",
-            style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+        title: const Text(
+          "Edit Profile",
+          style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
         ),
         leading: IconButton(
           icon: Icon(
@@ -42,126 +41,126 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ),
           onPressed: () {
             Navigator.pop(context, 'Discarded changes');
-            },
+          },
         ),
       ),
       body: Container(
-        padding: EdgeInsets.only(left: 16, top: 25, right: 16),
-        child: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: ListView(
-            children: [
-              // Text(
-              //   "Edit Profile",
-              //   style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-              // ),
-              SizedBox(
-                height: 15,
-              ),
-              Center(
-                child: Stack(
-                  children: [
-                    Container(
-                      width: 130,
-                      height: 130,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              width: 4,
-                              color: Theme.of(context).scaffoldBackgroundColor),
-                          boxShadow: [
-                            BoxShadow(
-                                spreadRadius: 2,
-                                blurRadius: 10,
-                                color: Colors.black.withOpacity(0.1),
-                                offset: Offset(0, 10))
-                          ],
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(
-                                "https://i.pinimg.com/originals/22/91/ba/2291babd9eb9f7a2744b8cc24de1216a.jpg",
-                              ))),
-                    ),
-                    Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              width: 4,
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                            ),
-                            color: Colors.teal[200],
-                          ),
-                          child: Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                          ),
-                        )),
-                  ],
+          padding: EdgeInsets.only(left: 16, top: 25, right: 16),
+          child: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: ListView(children: [
+                // Text(
+                //   "Edit Profile",
+                //   style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+                // ),
+                SizedBox(
+                  height: 15,
                 ),
-              ),
-              SizedBox(
-                height: 35,
-              ),
-              /*
+                Center(
+                  child: Stack(
+                    children: [
+                      Container(
+                        width: 130,
+                        height: 130,
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 4,
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor),
+                            boxShadow: [
+                              BoxShadow(
+                                  spreadRadius: 2,
+                                  blurRadius: 10,
+                                  color: Colors.black.withOpacity(0.1),
+                                  offset: Offset(0, 10))
+                            ],
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(
+                                  "https://i.pinimg.com/originals/22/91/ba/2291babd9eb9f7a2744b8cc24de1216a.jpg",
+                                ))),
+                      ),
+                      Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                width: 4,
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
+                              ),
+                              color: Colors.teal[200],
+                            ),
+                            child: Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                            ),
+                          )),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 35,
+                ),
+                /*
               buildTextField("Full Name", $newProfileInfo, false),
               buildTextField("E-mail", , false),
               // buildTextField("Password", , true),
               buildTextField("Withdrawal Date", , false),
               buildTextField("Altro", , false),
               */
-              SizedBox(
-                height: 35,
-              ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     OutlinedButton(
-              //       onPressed: () {
-              //         Navigator.pop(context, 'No changes to the profile');
-              //       },
-              //       child: Text(
-              //         "CANCEL",
-              //         style: TextStyle(
-              //             fontSize: 14,
-              //             letterSpacing: 2.2,
-              //             color: Colors.black)),
-              //         style: OutlinedButton.styleFrom(
-              //         padding: EdgeInsets.symmetric(horizontal: 50),
-              //         shape: RoundedRectangleBorder(
-              //            borderRadius: BorderRadius.circular(20)),
-              //       ),
-              //     ),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context, 'Profile changes saved successfully!');
-                  },
-                  child: Text(
-                    "SAVE",
-                    style: TextStyle(
-                        fontSize: 14,
-                        letterSpacing: 2.2,
-                        color: Colors.white),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                    backgroundColor: Colors.teal[200],
-                    padding: EdgeInsets.symmetric(horizontal: 50)
-                  ),
+                SizedBox(
+                  height: 35,
                 ),
-              )
-            ]))
-          ),
-        );
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     OutlinedButton(
+                //       onPressed: () {
+                //         Navigator.pop(context, 'No changes to the profile');
+                //       },
+                //       child: Text(
+                //         "CANCEL",
+                //         style: TextStyle(
+                //             fontSize: 14,
+                //             letterSpacing: 2.2,
+                //             color: Colors.black)),
+                //         style: OutlinedButton.styleFrom(
+                //         padding: EdgeInsets.symmetric(horizontal: 50),
+                //         shape: RoundedRectangleBorder(
+                //            borderRadius: BorderRadius.circular(20)),
+                //       ),
+                //     ),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(
+                          context, 'Profile changes saved successfully!');
+                    },
+                    child: Text(
+                      "SAVE",
+                      style: TextStyle(
+                          fontSize: 14,
+                          letterSpacing: 2.2,
+                          color: Colors.white),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        backgroundColor: Colors.teal[200],
+                        padding: EdgeInsets.symmetric(horizontal: 50)),
+                  ),
+                )
+              ]))),
+    );
     // );
   }
 

@@ -16,7 +16,9 @@ class GoalsPage extends StatelessWidget {
     //Print the route display name for debugging
     print('${GoalsPage.routeDisplayName} built');
 
-    return Scaffold();}}
+    return Scaffold();
+  }
+}
 /*
     return Scaffold(
       appBar: AppBar(

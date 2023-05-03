@@ -1,48 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:pim_group/models/sleep_provider.dart';
+import 'package:pim_group/models/sleep/sleep_provider.dart';
 
 // Refer to lab_04-hello_flutter for list of fitbit sleep data
 // dateOfSleep: day associated to the sleep entry (MM-DD format)
-class DateOfSleep{
+class DateOfSleep {
   final DateTime dateOfSleep; //penso sia DateTime
 
   DateOfSleep(this.dateOfSleep); //dà errore se metto required
-}//DateOfSleep
+} //DateOfSleep
+
 // startTime: the starting timestamp of the sleep (MM-DD hh:mm:ss format)
-class StartTime{
+class StartTime {
   final DateTime startTime;
-  
+
   StartTime(this.startTime);
-}//StartTime
+} //StartTime
+
 // endTime: the ending timestamp of the sleep (MM-DD hh:mm:ss format)
-class EndTime{
+class EndTime {
   final DateTime endTime;
-  
-  EndTime(this.endTime); 
+
+  EndTime(this.endTime);
 }
+
 // duration: the duration of the sleep session (in ms)
-class Duration{
+class Duration {
   final int duration;
-  
+
   Duration(this.duration);
-}//Duration
+} //Duration
+
 // minutesAsleep: the number of minutes asleep during the sleep entry
-class MinutesAsleep{
+class MinutesAsleep {
   final int minutesAsleep; //penso sia DateTime
-  
+
   MinutesAsleep(this.minutesAsleep); //dà errore se metto required
-}//MinutesAsleep
+} //MinutesAsleep
+
 // minutesAwake: the number of minutes awake during the sleep entry
-class MinutesAwake{
+class MinutesAwake {
   final int minutesAwake; //penso sia DateTime
-  
+
   MinutesAwake(this.minutesAwake); //dà errore se metto required
-}//MinutesAwake
+} //MinutesAwake
 
 // efficiency: the estimated sleep efficiency (from 0 to 100)
-class Efficiency{
+class Efficiency {
   final int efficiency; //penso sia DateTime
-  
+
   Efficiency(this.efficiency); //dà errore se metto required
 }//Efficiency
 

@@ -1,36 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:pim_group/models/meal.dart';
-import 'package:pim_group/models/mealDB.dart';
+import 'package:pim_group/models/drink.dart';
+import 'package:pim_group/models/drinkDB.dart';
 import 'package:pim_group/widgetsgoals/formTiles.dart';
 import 'package:pim_group/widgetsgoals/formSeparator.dart';
 import 'package:pim_group/utils/formats.dart';
-import 'package:pim_group/screens/AddDrinkPage.dart';
+import 'package:pim_group/drink_screens/AddDrinkPage.dart';
 import 'package:provider/provider.dart';
 import 'package:pim_group/models/contacts.dart';
 
-//This is the class that implement the page to be used to edit existing meals and add new meals.
+//This is the class that implement the page to be used to edit existing drinks and add new drinks.
 //This is a StatefulWidget since it needs to rebuild when the form fields change.
-class MealPage extends StatefulWidget {
-
-  //MealPage needs to know the index of the meal we are editing (it is equal to -1 if the meal is new)
-  final int mealIndex;
-  //For simplicity, even if it is not necessary, we are also passing the instance of MealDB. 
+class DrinkPage extends StatefulWidget {
+  //DrinkPage needs to know the index of the drink we are editing (it is equal to -1 if the drink is new)
+  final int drinkIndex;
+  //For simplicity, even if it is not necessary, we are also passing the instance of DrinkDB.
   //This choice is not mandatory and maybe redundant, but it will allow us to initialize easily the form values.
-  final MealDB mealDB;
+  final DrinkDB drinkDB;
 
-  //MealPage constructor
-  MealPage({Key? key, required this.mealDB, required this.mealIndex}) : super(key: key);
+  //DrinkPage constructor
+  DrinkPage({Key? key, required this.drinkDB, required this.drinkIndex})
+      : super(key: key);
 
   static const routeDisplayName = 'Add your drink';
 
   @override
-  State<MealPage> createState() => _MealPageState();
-}//MealPage
+  State<DrinkPage> createState() => _DrinkPageState();
+} //DrinkPage
 
-//Class that manages the state of MealPage
-class _MealPageState extends State<MealPage> {
-
+//Class that manages the state of DrinkPage
+class _DrinkPageState extends State<DrinkPage> {
   bool checkstate = false;
 
   //Form globalkey: this is required to validate the form fields.
@@ -44,12 +43,16 @@ class _MealPageState extends State<MealPage> {
   final ValueNotifier<List<String>> _listNotifier =
       ValueNotifier<List<String>>(["Beer", "Wine", "Cocktail"]);
   //Here, we are using initState() to initialize the form fields values.
-  //Rationale: Meal content and time are not known is the meal is new (mealIndex == -1). 
+  //Rationale: Drink content and time are not known is the drink is new (drinkIndex == -1).
   //  In this case, initilize them to empty and now(), respectively, otherwise set them to the respective values.
   @override
   void initState() {
-    _choController.text = widget.mealIndex == -1 ? '' : widget.mealDB.meals[widget.mealIndex].carbohydrates.toString();
-    _selectedDate = widget.mealIndex == -1 ? DateTime.now() : widget.mealDB.meals[widget.mealIndex].dateTime;
+    _choController.text = widget.drinkIndex == -1
+        ? ''
+        : widget.drinkDB.drinks[widget.drinkIndex].carbohydrates.toString();
+    _selectedDate = widget.drinkIndex == -1
+        ? DateTime.now()
+        : widget.drinkDB.drinks[widget.drinkIndex].dateTime;
     super.initState();
   } // initState
 
@@ -61,51 +64,56 @@ class _MealPageState extends State<MealPage> {
   } // dispose
 
   @override
-  Widget build(BuildContext context) {    
-
+  Widget build(BuildContext context) {
     //Print the route display name for debugging
-    print('${MealPage.routeDisplayName} built');
+    print('${DrinkPage.routeDisplayName} built');
 
     //The page is composed of a form. An action in the AppBar is used to validate and save the information provided by the user.
     //A FAB is showed to provide the "delete" functinality. It is showed only if the meal already exists.
     return Scaffold(
       appBar: AppBar(
-        title: Text(MealPage.routeDisplayName),
+        title: Text(DrinkPage.routeDisplayName),
         actions: [
-          IconButton(onPressed: () => {
-            checkstate = false,
-            _validateAndSave(context),
-            showDialog(
-                      context: context,
-                      builder: (context) {
-                        //Future.delayed(Duration(seconds: 5), () {
-                         // Navigator.of(context).pop(true);
-                        //});
-                        if (checkstate){
-                        return AlertDialog(
-                          title: Text('Added'),
-                        );
-                        } else {
-                          return AlertDialog(
-                          title: Text('Null value invalid'),
-                        );
-                        }
-                      }),
-             // Navigator.pop(context)
-            Future.delayed(Duration(seconds: 1), () {
-                          Navigator.of(context).pop(true);
-                          //Navigator.of(context).pop(true);
-                        })
-            }, icon: Icon(Icons.done)),
-          
+          IconButton(
+              onPressed: () => {
+                    checkstate = false,
+                    _validateAndSave(context),
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          //Future.delayed(Duration(seconds: 5), () {
+                          // Navigator.of(context).pop(true);
+                          //});
+                          if (checkstate) {
+                            return AlertDialog(
+                              title: Text('Added'),
+                            );
+                          } else {
+                            return AlertDialog(
+                              title: Text('Null value invalid'),
+                            );
+                          }
+                        }),
+                    // Navigator.pop(context)
+                    Future.delayed(Duration(seconds: 1), () {
+                      Navigator.of(context).pop(true);
+                      //Navigator.of(context).pop(true);
+                    })
+                  },
+              icon: Icon(Icons.done)),
         ],
       ),
       body: Center(
         child: _buildForm(context),
       ),
-      floatingActionButton: widget.mealIndex == -1 ? null : FloatingActionButton(onPressed: () => _deleteAndPop(context), child: Icon(Icons.delete),),
+      floatingActionButton: widget.drinkIndex == -1
+          ? null
+          : FloatingActionButton(
+              onPressed: () => _deleteAndPop(context),
+              child: Icon(Icons.delete),
+            ),
     );
-  }//build
+  } //build
 
   //Utility method used to build the form.
   //Here, I'm showing to you how to do some new things:
@@ -119,7 +127,6 @@ class _MealPageState extends State<MealPage> {
         padding: const EdgeInsets.only(top: 10, bottom: 8, left: 20, right: 20),
         child: ListView(
           children: <Widget>[
-
             // DRINK
             FormSeparator(label: 'SELEZIONA DRINK'),
             /*
@@ -129,54 +136,53 @@ class _MealPageState extends State<MealPage> {
               icon: Icons.wine_bar_rounded,
             ),
             */
-         
-   
-SizedBox(
-      height: 100, // fixed height
-      child:((){
-      return ValueListenableBuilder(
-      valueListenable: _listNotifier,
-      builder: (BuildContext context, List<String> list, Widget? child) {
-        return Container(
-             
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          
-          child: FormField<String>(
-            builder: (FormFieldState<String> state) {
-              return InputDecorator(
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0))),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    hint: Text("Select Drink"),
-                    value: currentSelectedValue,
-                    isDense: true,
-                    onChanged: (newValue) {
-                        currentSelectedValue = newValue;
-                      _listNotifier.notifyListeners();
-                    },
-                    items: list.map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
+
+            SizedBox(
+              height: 100, // fixed height
+              child: (() {
+                return ValueListenableBuilder(
+                    valueListenable: _listNotifier,
+                    builder: (BuildContext context, List<String> list,
+                        Widget? child) {
+                      return Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: FormField<String>(
+                          builder: (FormFieldState<String> state) {
+                            return InputDecorator(
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(5.0))),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  hint: Text("Select Drink"),
+                                  value: currentSelectedValue,
+                                  isDense: true,
+                                  onChanged: (newValue) {
+                                    currentSelectedValue = newValue;
+                                    _listNotifier.notifyListeners();
+                                  },
+                                  items: list.map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       );
-                    }).toList(),
-                  ),
-                ),
-              );
-            },
-          ),
-        );
-      }
-    
-);}()),),
+                    });
+              }()),
+            ),
             //MyWidget(),),
 
             // ORARIO
             FormSeparator(label: 'IMPOSTA ORARIO'),
             FormDateTile(
-              labelText: 'Meal Time',
+              labelText: 'Drink Time',
               date: _selectedDate,
               icon: MdiIcons.clockTimeFourOutline,
               onPressed: () {
@@ -229,15 +235,13 @@ Consumer<MealDB>(
                     
           },
         ),*/
-
-
           ],
         ),
       ),
     );
   } // _buildForm
 
-  //Utility method that implements a Date+Time picker. 
+  //Utility method that implements a Date+Time picker.
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
             context: context,
@@ -248,11 +252,13 @@ Consumer<MealDB>(
       if (value != null) {
         TimeOfDay? pickedTime = await showTimePicker(
           context: context,
-          initialTime: TimeOfDay(
-              hour: _selectedDate.hour, minute: _selectedDate.minute),
+          initialTime:
+              TimeOfDay(hour: _selectedDate.hour, minute: _selectedDate.minute),
         );
-        return pickedTime != null ? value.add(
-              Duration(hours: pickedTime.hour, minutes: pickedTime.minute)) : null;
+        return pickedTime != null
+            ? value.add(
+                Duration(hours: pickedTime.hour, minutes: pickedTime.minute))
+            : null;
       }
       return null;
     });
@@ -261,37 +267,36 @@ Consumer<MealDB>(
       setState(() {
         _selectedDate = picked;
       });
-  }//_selectDate
+  } //_selectDate
 
-  //Utility method that validate the form and, if it is valid, save the new meal information.
+  //Utility method that validate the form and, if it is valid, save the new drink information.
   void _validateAndSave(BuildContext context) {
-    if(formKey.currentState!.validate()){
+    if (formKey.currentState!.validate()) {
       //print(currentSelectedValue);
-      if (currentSelectedValue == null){
+      if (currentSelectedValue == null) {
         setState(() {
-                  checkstate = false;
+          checkstate = false;
         });
       } else {
-        Meal newMeal = Meal(carbohydrates: (currentSelectedValue!), dateTime: _selectedDate);
-         widget.mealIndex == -1 ? widget.mealDB.addMeal(newMeal) : widget.mealDB.editMeal(widget.mealIndex, newMeal);
+        Drink newDrink = Drink(
+            carbohydrates: (currentSelectedValue!), dateTime: _selectedDate);
+        widget.drinkIndex == -1
+            ? widget.drinkDB.addDrink(newDrink)
+            : widget.drinkDB.editDrink(widget.drinkIndex, newDrink);
         setState(() {
           checkstate = true;
         });
       }
-      
-     
 
-    // Navigator.push(
-    //context,
-   // MaterialPageRoute(builder: (context) =>  AddDrinkPage()));
+      // Navigator.push(
+      //context,
+      // MaterialPageRoute(builder: (context) =>  AddDrinkPage()));
     }
   } // _validateAndSave
 
-  //Utility method that deletes a meal entry.
-  void _deleteAndPop(BuildContext context){
-    widget.mealDB.deleteMeal(widget.mealIndex);
+  //Utility method that deletes a drink entry.
+  void _deleteAndPop(BuildContext context) {
+    widget.drinkDB.deleteDrink(widget.drinkIndex);
     Navigator.pop(context);
-  }//_deleteAndPop
-
-
-} //MealPage
+  } //_deleteAndPop
+} //DrinkPage
