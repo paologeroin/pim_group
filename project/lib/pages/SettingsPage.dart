@@ -10,12 +10,15 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text ('About', 
-      textAlign: TextAlign.center), 
-      centerTitle: true,
-      leading: IconButton(
-        onPressed: () {
-          Navigator.of(context).pop();
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 97, 198, 171),
+        elevation: 1, 
+        title: const Text ('Settings', 
+        textAlign: TextAlign.center), 
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
         },
         icon: Icon(
           Icons.arrow_back,
@@ -27,10 +30,10 @@ class _SettingsPageState extends State<SettingsPage> {
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),
         child: ListView(
           children: [
-            Text(
-              "Settings",
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-            ),
+            // Text(
+            //   "Settings",
+            //   style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+            // ),
             SizedBox(
               height: 40,
             ),

@@ -8,7 +8,9 @@ class AboutPage extends StatelessWidget {
  @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      appBar: AppBar(title: const Text ('About', textAlign: TextAlign.center), centerTitle: true),
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 97, 198, 171),
+        elevation: 1,title: const Text ('About', textAlign: TextAlign.center), centerTitle: true),
       body: Column(
         children: [
           Container( 
