@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:pim_group/models/drinkDB.dart';
+import 'package:pim_group/models/drinks/drinkDB.dart';
 import 'package:pim_group/drink_screens/drinkpage.dart';
 import 'package:pim_group/utils/formats.dart';
 import 'package:provider/provider.dart';

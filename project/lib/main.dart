@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pim_group/models/drinkDB.dart';
+import 'package:pim_group/models/drinks/drinkDB.dart';
 import 'package:pim_group/pages/HomePage.dart';
 import 'pages/LoginPage.dart';
 import 'package:provider/provider.dart';

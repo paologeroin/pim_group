@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:pim_group/models/goal.dart';
-import 'package:pim_group/models/goalDB.dart';
+import 'package:pim_group/models/goals/goal.dart';
+import 'package:pim_group/models/goals/goalDB.dart';
 import 'package:pim_group/widgetsgoals/formTiles.dart';
 import 'package:pim_group/widgetsgoals/formSeparator.dart';
 import 'package:pim_group/utils/formats.dart';
