@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:pim_group/models/goals/goal.dart';
+import 'package:pim_group/models/goals/goalProvider.dart';
 import 'package:pim_group/models/goals/goalDB.dart';
 import 'package:pim_group/widgetsgoals/formTiles.dart';
 import 'package:pim_group/widgetsgoals/formSeparator.dart';
@@ -14,7 +14,7 @@ class CreateGoalsPage extends StatefulWidget {
   final int goalIndex;
   //For simplicity, even if it is not necessary, we are also passing the instance of GoalDB.
   //This choice is not mandatory and maybe redundant, but it will allow us to initialize easily the form values.
-  final GoalDB goalDB;
+  final GoalProvider goalDB;
 
   //GoalPage constructor
   CreateGoalsPage({Key? key, required this.goalDB, required this.goalIndex})

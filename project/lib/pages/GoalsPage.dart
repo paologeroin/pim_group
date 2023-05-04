@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:pim_group/models/goals/goalDB.dart';
+import 'package:pim_group/models/goals/goalProvider.dart';
 import 'package:pim_group/pages/inizializegoals.dart';
 import 'package:pim_group/utils/formats.dart';
 import 'package:provider/provider.dart';
@@ -16,10 +16,6 @@ class GoalsPage extends StatelessWidget {
     //Print the route display name for debugging
     print('${GoalsPage.routeDisplayName} built');
 
-    return Scaffold();
-  }
-}
-/*
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
@@ -37,7 +33,7 @@ class GoalsPage extends StatelessWidget {
       body: Center(
         //We are using a Consumer because we want that the UI showing
         //the list of goals to rebuild every time the Goal DB updates.
-        child: Consumer<GoalDB>(
+        child: Consumer<GoalProvider>(
           builder: (context, goalDB, child) {
             //If the list of goals is empty, show a simple Text, otherwise show the list of goals using a ListView.
             return goalDB.goals.isEmpty
@@ -75,13 +71,13 @@ class GoalsPage extends StatelessWidget {
         child: Icon(MdiIcons.plus),
         backgroundColor: Colors.green,
         onPressed: () => _toGoalPage(
-            context, Provider.of<GoalDB>(context, listen: false), -1),
+            context, Provider.of<GoalProvider>(context, listen: false), -1),
       ),
     );
   } //build
 
   //Utility method to navigate to GoalPage
-  void _toGoalPage(BuildContext context, GoalDB goalDB, int goalIndex) {
+  void _toGoalPage(BuildContext context, GoalProvider goalDB, int goalIndex) {
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -90,5 +86,4 @@ class GoalsPage extends StatelessWidget {
                   goalIndex: goalIndex,
                 )));
   } //_toGoalPage
-} //Goalspage
-*/
+} //Goalspage);

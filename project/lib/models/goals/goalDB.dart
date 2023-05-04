@@ -1,30 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:pim_group/models/goals/goal.dart';
+//This is the data model of a goal.
+class Goal {
+  // The Goal has a name and a budget to reach with the money risparmiati
+  String name;
 
-//This class GoalDB extends ChangeNotifier.
-//It will act as data repository for the goals and will be shared thorugh the application.
-class GoalDB extends ChangeNotifier {
-  //The GoalDB can be represented here as list of goals.
-  List<Goal> goals = [];
+  double money;
 
-  //Method to use to add a goal.
-  void addGoal(Goal toAdd) {
-    goals.add(toAdd);
-    //Call the notifyListeners() method to alert that someone has inserted a new goal
-    notifyListeners();
-  } //addGoal
+  // We can also save the date in which the user create the goal
+  // the goal that is created first has the priority respect to the others
+  // I think it was the best idea to manage with less problems this page
+  DateTime dateTime;
 
-  //Method to use to edit a Goal.
-  void editGoal(int index, Goal newGoal) {
-    goals[index] = newGoal;
-    //Call the notifyListeners() method to alert that someone has modified a goal.
-    notifyListeners();
-  } //editGoal
+  //Constructor
+  Goal({required this.name, required this.money, required this.dateTime});
+} //Goal
 
-  //Method to use to delete a goal.
-  void deleteGoal(int index) {
-    goals.removeAt(index);
-    //Call the notifyListeners() method to alert that someone has deleted a goal.
-    notifyListeners();
-  } //deleteGoal
-} //goal
