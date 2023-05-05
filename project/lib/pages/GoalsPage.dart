@@ -20,10 +20,17 @@ class GoalsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        actions: const [
-          Icon(
-            Icons.airplane_ticket,
-          ),
+        elevation: 0,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.add_box,
+              size: 30.0,
+              color: Colors.white,
+            ),
+            onPressed: () => _toGoalPage(
+                context, Provider.of<GoalProvider>(context, listen: false), -1),
+          )
         ],
         centerTitle: true,
         title: const Text(
@@ -51,7 +58,6 @@ class GoalsPage extends StatelessWidget {
                       return Card(
                         elevation: 5,
                         child: ListTile(
-                          // DOBBIAMO AGGIUNGERE LA LINEAR PERCENT INDICATOR
                           leading: Icon(MdiIcons.flag),
                           trailing: Icon(MdiIcons.noteEdit),
                           title: Text('${goalDB.goals[mealIndex].name}'),
@@ -68,12 +74,12 @@ class GoalsPage extends StatelessWidget {
 
       //Here, we are using a FAB to let the user add new goals.
       //Rationale: I'm using -1 as goalIndex to let GoalPage know that we want to add a new goal.
-      floatingActionButton: FloatingActionButton(
+      /*    floatingActionButton: FloatingActionButton(
         child: Icon(MdiIcons.plus),
         backgroundColor: Colors.green,
         onPressed: () => _toGoalPage(
             context, Provider.of<GoalProvider>(context, listen: false), -1),
-      ),
+      ), */
     );
   } //build
 

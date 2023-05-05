@@ -37,7 +37,7 @@ dependencies:
   flutter_login: ^4.1.1
   quickalert:  
   percent_indicator: ^3.4.0
-  google_fonts: ^2.1.1
+  google_fonts: ^4.0.4
   dropdown_button2: ^2.1.0
   table_calendar: ^3.0.9
   graphic: ^1.0.1

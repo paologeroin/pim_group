@@ -22,21 +22,19 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<DrinkDB>(
-        create: (context) => DrinkDB(),
-        ),//DrinkProvider
+          create: (context) => DrinkDB(),
+        ), //DrinkProvider
         ChangeNotifierProvider<GoalProvider>(
           create: (context) => GoalProvider(),
-        ),//GoalProvider
+        ), //GoalProvider
         ChangeNotifierProvider<SleepProvider>(
           create: (context) => SleepProvider(),
-        ),//SleepProvider
+        ), //SleepProvider
         ChangeNotifierProvider<ProfileInfo>(
           create: (context) => ProfileInfo(),
-        ),//Profile Provider
+        ), //Profile Provider
       ],
-
-    
-    child: MaterialApp(
+      child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Bottom Nav Bar V2',
           theme: ThemeData(

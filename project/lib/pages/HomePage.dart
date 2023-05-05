@@ -33,14 +33,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
-
   int oldValue = randomNumber;
   Timer? countdownTimer;
   Duration myDuration = Duration(seconds: 10);
 
   void startTimer() {
-    countdownTimer =
-        Timer.periodic(myDuration, (_) => changePhrase());
+    countdownTimer = Timer.periodic(myDuration, (_) => changePhrase());
   }
 
   void stopTimer() {
@@ -52,8 +50,13 @@ class _HomePage extends State<HomePage> {
     randomNumber = random.nextInt(4);
     print(randomNumber);
     setState(() {
-      if (randomNumber == oldValue && randomNumber>0) {randomNumber--; print("change: $randomNumber");}
-      else if (randomNumber == oldValue && randomNumber<3) {randomNumber++; print("change: $randomNumber");}
+      if (randomNumber == oldValue && randomNumber > 0) {
+        randomNumber--;
+        print("change: $randomNumber");
+      } else if (randomNumber == oldValue && randomNumber < 3) {
+        randomNumber++;
+        print("change: $randomNumber");
+      }
     });
     setState(() {
       oldValue = randomNumber;
@@ -77,7 +80,7 @@ class _HomePage extends State<HomePage> {
     return Scaffold(
         //backgroundColor: Colors.grey[200],
         //backgroundColor: Color.fromARGB(99, 243, 210, 112),
-       backgroundColor: Colors.teal[50],
+        backgroundColor: Colors.teal[50],
         drawer: Drawer(
           backgroundColor: Colors.teal[50],
           child: ListView(
@@ -136,11 +139,9 @@ class _HomePage extends State<HomePage> {
           preferredSize: Size.fromHeight(40.0),
           child: AppBar(
             title: Column(children: [
-              Text(
-                "Ciao NOME,",style: GoogleFonts.lato()
-              ),
+              Text("Ciao NOME,", style: GoogleFonts.lato()),
               GestureDetector(
-                child: Text(frasedisplay,style: GoogleFonts.lato()),
+                child: Text(frasedisplay, style: GoogleFonts.lato()),
               )
             ]),
             backgroundColor: Color.fromARGB(255, 97, 198, 171),
@@ -244,7 +245,7 @@ class _HomePage extends State<HomePage> {
                             radius: 140.0,
                             lineWidth: 25.0,
                             percent: 0.40,
-                            
+
                             //  header: new Text("Icon header"),
                             center: Container(
                                 child: Text(
@@ -254,7 +255,7 @@ class _HomePage extends State<HomePage> {
                                   style: GoogleFonts.lato(),
                                 ),
                                 width: 70,
-                                height: 53,                         
+                                height: 53,
                                 padding: EdgeInsets.all(7.0),
                                 //color: Colors.amber,
                                 decoration: BoxDecoration(
