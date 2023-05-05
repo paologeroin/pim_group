@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:pim_group/models/goals/goalProvider.dart';
+import 'package:provider/provider.dart';
 import 'LoginPage.dart';
 import 'AboutPage.dart';
 import 'SettingsPage.dart';
@@ -294,6 +297,61 @@ class _HomePage extends State<HomePage> {
                         fontWeight: FontWeight.normal, fontSize: 30),
                   )),
                 )),
+                // INSERITO DA PAOLO PER GOALS, NON CAPISCO COME RISOLVERE ERRORE E NON CAPISCO DOVE POSSO METTERLO SE NO
+                Center(
+                  //We are using a Consumer because we want that the UI showing
+                  //the list of goals to rebuild every time the Goal DB updates.
+                  child: Consumer<GoalProvider>(
+                    builder: (context, goalProvider, child) {
+                      //If the list of goals is empty, show a simple Text, otherwise show the list of goals using a ListView.
+                      return goalProvider.goals.isEmpty
+                          ? const Text(
+                              'You have no Goals now, insert one of yours Goals here')
+                          : ListView.builder(
+                              itemCount: goalProvider.goals.length,
+                              itemBuilder: (context, goalIndex) {
+                                return Card(
+                                  child: Column(
+                                    children: <Widget>[
+                                      ListTile(
+                                        leading: Icon(MdiIcons.flag),
+                                        trailing: Icon(MdiIcons.noteEdit),
+                                        title: Text(
+                                            '${goalProvider.goals[goalIndex].name}'),
+                                        subtitle: Text(
+                                            'objective to reach: ${goalProvider.goals[goalIndex].money} €'),
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: EdgeInsets.all(15),
+                                            child: LinearPercentIndicator(
+                                              width:
+                                                  330, //MediaQuery.of(context).size.width = 50,
+                                              animation: true,
+                                              lineHeight: 30.0,
+                                              animationDuration: 2500,
+                                              percent:
+                                                  0.8, // percent: $soldi_risparmiati / ${goalDB.goals[mealIndex].money}
+                                              center: Text(
+                                                  "80 %"), // center: Text($soldi_risparmiati / ${goalDB.goals[mealIndex].money})
+                                              // barRadius: Radius.circular(15),
+                                              // backgroundColor: Colors.grey,
+                                              progressColor: Colors.green,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              });
+                    },
+                  ),
+                )
+                // FINE CODICE INSERITO DA PAOLO
               ],
             )
           ]),
