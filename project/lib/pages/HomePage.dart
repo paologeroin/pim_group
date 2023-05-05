@@ -307,47 +307,42 @@ class _HomePage extends State<HomePage> {
                       return goalProvider.goals.isEmpty
                           ? const Text(
                               'You have no Goals now, insert one of yours Goals here')
-                          : ListView.builder(
-                              itemCount: goalProvider.goals.length,
-                              itemBuilder: (context, goalIndex) {
-                                return Card(
-                                  child: Column(
+                          : Card(
+                              child: Column(
+                                children: <Widget>[
+                                  ListTile(
+                                    leading: Icon(MdiIcons.flag),
+                                    trailing: Icon(MdiIcons.noteEdit),
+                                    title:
+                                        Text('${goalProvider.goals[0].name}'),
+                                    subtitle: Text(
+                                        'objective to reach: ${goalProvider.goals[0].money} €'),
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
-                                      ListTile(
-                                        leading: Icon(MdiIcons.flag),
-                                        trailing: Icon(MdiIcons.noteEdit),
-                                        title: Text(
-                                            '${goalProvider.goals[goalIndex].name}'),
-                                        subtitle: Text(
-                                            'objective to reach: ${goalProvider.goals[goalIndex].money} €'),
-                                      ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          Padding(
-                                            padding: EdgeInsets.all(15),
-                                            child: LinearPercentIndicator(
-                                              width:
-                                                  330, //MediaQuery.of(context).size.width = 50,
-                                              animation: true,
-                                              lineHeight: 30.0,
-                                              animationDuration: 2500,
-                                              percent:
-                                                  0.8, // percent: $soldi_risparmiati / ${goalDB.goals[mealIndex].money}
-                                              center: Text(
-                                                  "80 %"), // center: Text($soldi_risparmiati / ${goalDB.goals[mealIndex].money})
-                                              // barRadius: Radius.circular(15),
-                                              // backgroundColor: Colors.grey,
-                                              progressColor: Colors.green,
-                                            ),
-                                          ),
-                                        ],
+                                      Padding(
+                                        padding: EdgeInsets.all(15),
+                                        child: LinearPercentIndicator(
+                                          width:
+                                              330, //MediaQuery.of(context).size.width = 50,
+                                          animation: true,
+                                          lineHeight: 30.0,
+                                          animationDuration: 2500,
+                                          percent:
+                                              0.8, // percent: $soldi_risparmiati / ${goalDB.goals[mealIndex].money}
+                                          center: Text(
+                                              "80 %"), // center: Text($soldi_risparmiati / ${goalDB.goals[mealIndex].money}) QUANDO AVREMO I DATI
+                                          // barRadius: Radius.circular(15),
+                                          // backgroundColor: Colors.grey,
+                                          progressColor: Colors.green,
+                                        ),
                                       ),
                                     ],
                                   ),
-                                );
-                              });
+                                ],
+                              ),
+                            );
                     },
                   ),
                 )
