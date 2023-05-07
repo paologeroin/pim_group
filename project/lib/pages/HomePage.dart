@@ -164,8 +164,8 @@ class _HomePage extends State<HomePage> {
             ],
           ),
         ),
-        body: SafeArea(
-          child: Column(children: [
+        body: ListView(
+          children:[ Column(children: [
             ClipPath(
               clipper: RoundShape(),
               child: Container(
@@ -350,7 +350,7 @@ class _HomePage extends State<HomePage> {
               ],
             )
           ]),
-        ));
+      ]));
   }
 }
 
