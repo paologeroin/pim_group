@@ -99,7 +99,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               color: Colors.teal[200],
                             ),
                             child: Icon(
-                              Icons.edit,
+                              Icons.photo_library_outlined,
                               color: Colors.white,
                             ),
                           )),
@@ -109,35 +109,73 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 SizedBox(
                   height: 35,
                 ),
-                /*
-              buildTextField("Full Name", $newProfileInfo, false),
-              buildTextField("E-mail", , false),
-              // buildTextField("Password", , true),
-              buildTextField("Withdrawal Date", , false),
-              buildTextField("Altro", , false),
-              */
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(bottom: 3),
+                        labelText: "Full Name",
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        hintText: "creo dipendenza",
+                        hintStyle: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        )
+                    ),
+                  ),
+                ),//Full Name
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(bottom: 3),
+                        labelText: "Email",
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        hintText: "creo dipendenza",
+                        hintStyle: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        )
+                    ),
+                  ),
+                ),//Email
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(bottom: 3),
+                        labelText: "Withdrawal Date",
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        hintText: "creo dipendenza",
+                        hintStyle: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        )
+                    ),
+                  ),
+                ),//Withdrawal Date
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(bottom: 3),
+                        labelText: "Username",
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        hintText: "creo dipendenza",
+                        hintStyle: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        )
+                    ),
+                  ),
+                ),//Username
                 SizedBox(
                   height: 35,
                 ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     OutlinedButton(
-                //       onPressed: () {
-                //         Navigator.pop(context, 'No changes to the profile');
-                //       },
-                //       child: Text(
-                //         "CANCEL",
-                //         style: TextStyle(
-                //             fontSize: 14,
-                //             letterSpacing: 2.2,
-                //             color: Colors.black)),
-                //         style: OutlinedButton.styleFrom(
-                //         padding: EdgeInsets.symmetric(horizontal: 50),
-                //         shape: RoundedRectangleBorder(
-                //            borderRadius: BorderRadius.circular(20)),
-                //       ),
-                //     ),
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
@@ -162,38 +200,5 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ]))),
     );
     // );
-  }
-
-  Widget buildTextField(
-      String labelText, ProfileInfo newProfileInfo, bool isPasswordTextField) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20.0),
-      child: TextField(
-        obscureText: isPasswordTextField ? showPassword : false,
-        decoration: InputDecoration(
-            suffixIcon: isPasswordTextField
-                ? IconButton(
-                    onPressed: () {
-                      setState(() {
-                        showPassword = !showPassword;
-                      });
-                    },
-                    icon: Icon(
-                      Icons.remove_red_eye,
-                      color: Colors.grey,
-                    ),
-                  )
-                : null,
-            contentPadding: EdgeInsets.only(bottom: 3),
-            labelText: labelText,
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            hintText: newProfileInfo.toString(),
-            hintStyle: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            )),
-      ),
-    );
   }
 }
