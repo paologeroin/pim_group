@@ -4,8 +4,13 @@ import 'package:pim_group/models/profile/profileInfo_provider.dart';
 // class ProfileData
 
 class FullName {
-  final String fullname;
-  FullName({required this.fullname}); //costruttore
+  final String fullName;
+  FullName({required this.fullName}); //costruttore
+}
+
+class UserName {
+  final String userName;
+  UserName({required this.userName}); //costruttore
 }
 
 class Email {
@@ -16,9 +21,4 @@ class Email {
 class WithdrawalDate {
   final DateTime withdrawalDate;
   WithdrawalDate({required this.withdrawalDate}); //costruttore
-}
-
-class Status {
-  final String status;
-  Status({required this.status}); //costruttore
 }

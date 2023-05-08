@@ -7,9 +7,9 @@ import 'package:pim_group/models/profile/profileDB.dart';
 
 class ProfileInfo extends ChangeNotifier {
   late FullName fullName;
+  late UserName userName;
   late Email email;
   late WithdrawalDate withdrawalDate;
-  late Status status;
 
   //Call the notifyListeners() method to alert that someone has modified a goal.
   ProfileInfo() {
@@ -17,7 +17,20 @@ class ProfileInfo extends ChangeNotifier {
     // Creo una classe generale in profileDB?
     void editFullName(FullName newFullName) {
       fullName = newFullName;
-    }
+    }//editFullName
+
+    void editEmail(Email newEmail) {
+      email = newEmail;
+    }//editEmail
+
+    void editWithdrawalDate(WithdrawalDate newWithdrawalDate) {
+      withdrawalDate = newWithdrawalDate;
+    }//editWithdrawalDate
+    
+    void editUserName(UserName newUserName) {
+      userName = newUserName;
+    }//editFullName
+
   }
   notifyListeners();
 } //ProfileInfo
