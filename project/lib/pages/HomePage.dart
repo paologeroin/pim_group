@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pim_group/models/goals/goalProvider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'LoginPage.dart';
 import 'AboutPage.dart';
 import 'SettingsPage.dart';
@@ -16,13 +17,13 @@ import 'package:google_fonts/google_fonts.dart';
 
 Random random = new Random();
 int randomNumber = random.nextInt(4); // from 0 upto 99 included
-const Sec = Duration(seconds: 3);
+const Sec = Duration(seconds: 30);
 
 List listaFrasi = [
-  'frase motivazionale 1',
-  'frase motivazionale 2',
-  'frase motivazionale 3',
-  'frase motivazionale 4'
+  'Alcohol is your enemy, beat it!',
+  'You got this!',
+  'Less Alcohol more Maria!',
+  'It\'s one life, don\'t waste it!'
 ];
 
 var frasedisplay = listaFrasi[randomNumber];
@@ -52,15 +53,15 @@ class _HomePage extends State<HomePage> {
     print(oldValue);
     randomNumber = random.nextInt(4);
     print(randomNumber);
-    setState(() {
-      if (randomNumber == oldValue && randomNumber > 0) {
-        randomNumber--;
-        print("change: $randomNumber");
-      } else if (randomNumber == oldValue && randomNumber < 3) {
-        randomNumber++;
-        print("change: $randomNumber");
-      }
-    });
+    //setState(() {
+    if (randomNumber == oldValue && randomNumber > 0) {
+      randomNumber--;
+      print("change: $randomNumber");
+    } else if (randomNumber == oldValue && randomNumber < 3) {
+      randomNumber++;
+      print("change: $randomNumber");
+    }
+    //});
     setState(() {
       oldValue = randomNumber;
       frasedisplay = listaFrasi[randomNumber];
@@ -107,8 +108,7 @@ class _HomePage extends State<HomePage> {
                     confirmBtnText: 'Yes',
                     cancelBtnText: 'No',
                     confirmBtnColor: Colors.green,
-                    onConfirmBtnTap: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => LoginPage())),
+                    onConfirmBtnTap: () => _toLoginPage(context),
                   );
                   //  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
                 },
@@ -164,8 +164,8 @@ class _HomePage extends State<HomePage> {
             ],
           ),
         ),
-        body: ListView(
-          children:[ Column(children: [
+        body: ListView(children: [
+          Column(children: [
             ClipPath(
               clipper: RoundShape(),
               child: Container(
@@ -350,9 +350,21 @@ class _HomePage extends State<HomePage> {
               ],
             )
           ]),
-      ]));
+        ]));
   }
-}
+
+  void _toLoginPage(BuildContext context) async {
+    //Unset the 'username' filed in SharedPreference
+    final sp = await SharedPreferences.getInstance();
+    sp.remove('username');
+
+    //Pop the drawer first
+    Navigator.pop(context);
+    //Then pop the HomePage
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));
+  } //_toCalendarPage
+} // Homepage
 
 class RoundShape extends CustomClipper<Path> {
   @override
