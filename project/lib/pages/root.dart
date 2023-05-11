@@ -9,7 +9,7 @@ import 'GoalsPage.dart';
 import 'package:provider/provider.dart';
 import 'AddingDrinkPage.dart';
 import 'HomePage.dart';
-import 'ProgressPage.dart';
+import 'CalendarPage.dart';
 
 /// Definition of Root class, the first class called by the main application class [MyApp]
 

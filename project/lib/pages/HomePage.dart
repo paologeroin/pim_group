@@ -1,8 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pim_group/models/goals/goalProvider.dart';
+import 'package:pim_group/pages/TokenPage.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'LoginPage.dart';
@@ -20,7 +20,7 @@ int randomNumber = random.nextInt(4); // from 0 upto 99 included
 const Sec = Duration(seconds: 30);
 
 List listaFrasi = [
-  'Alcohol is your enemy, beat it!',
+  'Alcohol is an enemy',
   'You got this!',
   'Less Alcohol more Maria!',
   'It\'s one life, don\'t waste it!'
@@ -84,9 +84,9 @@ class _HomePage extends State<HomePage> {
     return Scaffold(
         //backgroundColor: Colors.grey[200],
         //backgroundColor: Color.fromARGB(99, 243, 210, 112),
-        backgroundColor: Colors.teal[50],
+        backgroundColor: Colors.white, // CAMBIO COLORE PAOLO Colors.teal[50],
         drawer: Drawer(
-          backgroundColor: Colors.teal[50],
+          backgroundColor: Colors.white, // CAMBIO COLORE PAOLO Colors.teal[50],
           child: ListView(
             // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
@@ -124,6 +124,7 @@ class _HomePage extends State<HomePage> {
                       MaterialPageRoute(builder: (context) => AboutPage()));
                 },
               ),
+              Divider(),
               ListTile(
                 leading: Icon(
                   Icons.settings,
@@ -147,7 +148,8 @@ class _HomePage extends State<HomePage> {
                 child: Text(frasedisplay, style: GoogleFonts.lato()),
               )
             ]),
-            backgroundColor: Color.fromARGB(255, 97, 198, 171),
+            backgroundColor: Color.fromARGB(255, 109, 230,
+                69), // CAMBIO COLORE PAOLO Color.fromARGB(255, 97, 198, 171),
             elevation: 0,
             actions: <Widget>[
               IconButton(
@@ -160,6 +162,17 @@ class _HomePage extends State<HomePage> {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => ProfilePage()));
                 },
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.key,
+                  size: 30.0,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => TokenPage()));
+                },
               )
             ],
           ),
@@ -170,7 +183,8 @@ class _HomePage extends State<HomePage> {
               clipper: RoundShape(),
               child: Container(
                 height: 50,
-                color: Color.fromARGB(255, 97, 198, 171),
+                color: Color.fromARGB(255, 109, 230,
+                    69), // CAMBIO COLORE PAOLO Color.fromARGB(255, 97, 198, 171),
               ),
             ),
             Column(
@@ -179,7 +193,8 @@ class _HomePage extends State<HomePage> {
                     child: Text('You are sober from:',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.lato(
-                            fontSize: 30, color: Colors.teal[700])),
+                            fontSize: 30,
+                            color: Color.fromARGB(255, 30, 121, 0))),
                     // Border to visualize the container
                     width: MediaQuery.of(context).size.width / 1.2,
                     height: 155,
@@ -188,9 +203,11 @@ class _HomePage extends State<HomePage> {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          Color.fromARGB(96, 138, 242, 211),
+                          Color.fromARGB(255, 109, 230,
+                              69), // CAMBIO COLORE PAOLO Color.fromARGB(96, 138, 242, 211),
 
-                          Color.fromARGB(134, 47, 192, 156)
+                          Colors
+                              .white // CAMBIO COLORE PAOLO Color.fromARGB(134, 47, 192, 156)
 
 //add more colors for gradient
                         ],
@@ -289,7 +306,7 @@ class _HomePage extends State<HomePage> {
                     child: Container(
                   width: MediaQuery.of(context).size.width / 3,
                   margin: const EdgeInsets.all(40.0),
-                  color: Colors.green,
+                  color: Color.fromARGB(255, 109, 230, 69),
                   child: Center(
                       child: const Text(
                     '100£',
@@ -335,7 +352,8 @@ class _HomePage extends State<HomePage> {
                                               "80 %"), // center: Text($soldi_risparmiati / ${goalDB.goals[mealIndex].money}) QUANDO AVREMO I DATI
                                           // barRadius: Radius.circular(15),
                                           // backgroundColor: Colors.grey,
-                                          progressColor: Colors.green,
+                                          progressColor:
+                                              Color.fromARGB(255, 109, 230, 69),
                                         ),
                                       ),
                                     ],
@@ -345,14 +363,14 @@ class _HomePage extends State<HomePage> {
                             );
                     },
                   ),
-                )
-                // FINE CODICE INSERITO DA PAOLO
+                ), // FINE CODICE INSERITO DA PAOLO
               ],
             )
           ]),
         ]));
   }
 
+  // METHOD FOR GO TO LOG OUT AND RETURN TO LOGINPAGE
   void _toLoginPage(BuildContext context) async {
     //Unset the 'username' filed in SharedPreference
     final sp = await SharedPreferences.getInstance();

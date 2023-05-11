@@ -19,7 +19,7 @@ class GoalsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: Color.fromARGB(255, 109, 230, 69),
         elevation: 0,
         actions: <Widget>[
           IconButton(

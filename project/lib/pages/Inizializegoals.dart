@@ -86,7 +86,7 @@ class _GoalPageState extends State<CreateGoalsPage> {
     //A FAB is showed to provide the "delete" functinality. It is showed only if the goal already exists.
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: Color.fromARGB(255, 109, 230, 69),
         centerTitle: true,
         title: Text(CreateGoalsPage.routeDisplayName),
         actions: [
