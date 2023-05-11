@@ -66,7 +66,8 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
             Center(
                 heightFactor: 0.6,
                 child: FloatingActionButton(
-                  backgroundColor: Colors.pink[300],
+                  backgroundColor: Color.fromARGB(
+                      255, 109, 230, 69), // PAOLO Colors.pink[300],
                   child: Icon(Icons.add), // Analyze Button
                   elevation: 0.1,
 
@@ -83,7 +84,8 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                     icon: Icon(
                       Icons.home,
                       color: currentIndex == 0
-                          ? Colors.teal[400]
+                          ? Color.fromARGB(
+                              255, 109, 230, 69) // PAOLO Colors.teal[400]
                           : Colors.grey.shade400,
                     ),
                     onPressed: () {
@@ -95,7 +97,8 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                       icon: Icon(
                         Icons.nights_stay,
                         color: currentIndex == 1
-                            ? Colors.teal[600]
+                            ? Color.fromARGB(
+                                255, 109, 230, 69) // PAOLO Colors.teal[600]
                             : Colors.grey.shade400,
                       ),
                       onPressed: () {
@@ -108,7 +111,8 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                       icon: Icon(
                         Icons.star,
                         color: currentIndex == 2
-                            ? Colors.teal[600]
+                            ? Color.fromARGB(
+                                255, 109, 230, 69) // PAOLO Colors.teal[600]
                             : Colors.grey.shade400,
                       ),
                       onPressed: () {
@@ -118,7 +122,8 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                       icon: Icon(
                         Icons.calendar_month_outlined,
                         color: currentIndex == 3
-                            ? Colors.teal[600]
+                            ? Color.fromARGB(
+                                255, 109, 230, 69) // PAOLO Colors.teal[600]
                             : Colors.grey.shade400,
                       ),
                       onPressed: () {

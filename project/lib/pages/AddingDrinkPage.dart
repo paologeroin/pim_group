@@ -17,6 +17,9 @@ class AddingDrinkPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(AddingDrinkPage.routeDisplayName),
+        backgroundColor: Color.fromARGB(255, 109, 230, 69),
+        elevation: 1,
+        centerTitle: true,
       ),
       body: Center(
         //Here we are using a Consumer because we want the UI showing
