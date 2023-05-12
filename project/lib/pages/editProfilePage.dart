@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pim_group/models/profile/profileInfo_provider.dart';
-import 'package:pim_group/pages/ProfilePage.dart';
 
 import '../models/profile/profileDB.dart';
-
-//Teoricamente inutile questa parte
-// class SettingsUI extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       title: "Setting UI",
-//       home: EditProfilePage(),
-//     );
-//   }
-// }
+import '../utils/formats.dart';
+import '../widgetsgoals/formSeparator.dart';
+import '../widgetsgoals/formTiles.dart';
 
 class EditProfilePage extends StatefulWidget {
+  //EditProfilePage needs to know the bool value: if is true it means that the field has been modified
+  final bool profileBool = false; // late?
+  late final ProfileProvider profileDB;
+
+
   static const routeDisplayName = 'Edit Profile';
 
   @override
@@ -29,13 +25,23 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final formKey = GlobalKey<FormState>();
 
   //Variables that maintain the current form fields values in memory.
-  TextEditingController _infoController = TextEditingController();
-  DateTime _selectedDate = DateTime.now();
+  TextEditingController _infoController = TextEditingController(); // controllore per fullname, username, email
+  DateTime _selectedDate = DateTime.now(); // controllore per withdrawal date
 
   @override
   void initState() {
-    // collegamento alla registrazione utente?
-    _selectedDate =  DateTime.now();
+    _infoController.text = widget.profileBool == false
+        ? widget.profileDB.profileData.toString()
+        : widget.profileDB.newProfileData.toString();
+    // se l'indice è uguale a false (vuol dire che non ho modificato il field)
+    // inizializzo _infoController come l'ultimo salvataggio, altrimenti lo imposto al nuovo valore inserito
+
+    _selectedDate = widget.profileBool == false
+        ? widget.profileDB.profileData.withdrawalDate
+        : widget.profileDB.newProfileData.withdrawalDate;
+    // se l'indice è uguale a false (vuol dire che non ho modificato il field)
+    // inizializzo _selectDate come l'ultimo salvataggio, altrimenti lo imposto al nuovo valore inserito
+
     super.initState();
   }//initState
 
@@ -51,7 +57,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 97, 198, 171),
+        backgroundColor: Color.fromARGB(255, 109, 230, 69),
         elevation: 1,
         centerTitle: true,
         title: const Text(
@@ -129,6 +135,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 SizedBox(
                   height: 35,
                 ),
+                Center(
+                  child: _buildForm(context),
+                ),
                 // qui elenco info
                 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 // Creazione di un widget a parte che crea il TextField
@@ -179,12 +188,53 @@ class _EditProfilePageState extends State<EditProfilePage> {
     // );
   }
 
+  Widget _buildForm(BuildContext context) {
+    return Form(
+      key: formKey,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 10, bottom: 8, left: 20, right: 20),
+        child: ListView(
+          children: <Widget>[
+            // BISOGNA CAMBIARE COLORE ALLE ICONE DEI SEPARATORI E ALLE SCRITTE
+            FormSeparator(label: 'Full Name'),
+            FormTextTile(
+              labelText: "Write here your full name",
+              // icon: Icons.photo_camera_front, // E' L'ICONA
+              controller: _infoController,
+            ),
+            FormSeparator(label: 'Username'),
+            FormNumberTile(
+              labelText: 'Write here your username',
+              controller: _infoController,
+              // icon: Icons.money,
+            ),
+            FormSeparator(label: 'Withdrawal Date'),
+            FormDateTile(
+              labelText: 'When you decided to quit?',
+              date: _selectedDate,
+              icon: MdiIcons.clockTimeFourOutline,
+              onPressed: () {
+                _selectDate(context);
+              },
+              dateFormat: Formats.fullDateFormatNoSeconds,
+            ),
+          ],
+        ),
+      ),
+    );
+  } // _buildForm
+
   //Utility method that validate the form and, if it is valid, save the new user information.
   void _validateAndSave(BuildContext context) {
     if(formKey.currentState!.validate()){
-      // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      // ProfileData newProfileData = ProfileData(fullName: , userName: , email: , withdrawalDate: _selectedDate);
-      // widget.profileData.editProfileData(newProfileData);
+      
+      ProfileData newProfileData = ProfileData(
+        fullName: _infoController.text, 
+        userName: _infoController.text, 
+        email: _infoController.text,
+        withdrawalDate: _selectedDate);
+      widget.profileBool == true ? widget.profileDB.editProfileData(widget.profileBool, newProfileData)
+      : widget.profileDB.profileData;
       Navigator.pop(
         context, 'Profile changes saved successfully!');
     }
@@ -215,70 +265,4 @@ class _EditProfilePageState extends State<EditProfilePage> {
         _selectedDate = picked;
       });
   }//_selectDate
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    Widget buildTextField(String labelText, List<ProfileData> profileData) {
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 35.0),
-        child: TextField(
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(bottom: 3),
-            labelText: labelText,
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            // vuole una stringa
-            // hintText: profileData,
-            hintStyle: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            )),
-        ),
-      );
-    }
-}//_EditProfilePageState
-
-
-// QUESTO CODICE L'HO PRESO DA flutter.dev 
-// // Define a custom Form widget.
-// class MyCustomForm extends StatefulWidget {
-//   const MyCustomForm({super.key});
-
-//   @override
-//   State<MyCustomForm> createState() => _MyCustomFormState();
-// }
-
-// // Define a corresponding State class.
-// // This class holds data related to the Form.
-// class _MyCustomFormState extends State<MyCustomForm> {
-//   // Create a text controller. Later, use it to retrieve the
-//   // current value of the TextField.
-//   final myController = TextEditingController();
-
-//   @override
-//   void dispose() {
-//     // Clean up the controller when the widget is removed from the widget tree.
-//     // This also removes the _printLatestValue listener.
-//     myController.dispose();
-//     super.dispose();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     // Fill this out in the next step.
-//   }
-  
-//   // You need a function to run every time the text changes.
-//   // Create a method in the _MyCustomFormState class that prints out the current value of the text field.
-//   void _printLatestValue() {
-//   print('Second text field: ${myController.text}');
-//   }
-//   // Finally, listen to the TextEditingController and call the _printLatestValue() method when the text changes.
-//   // Use the addListener() method for this purpose.
-//   @override
-//     void initState() {
-//       super.initState();
-
-//       // Start listening to changes.
-//       myController.addListener(_printLatestValue);
-//     }
-// }
-
+}//EditProfilePage

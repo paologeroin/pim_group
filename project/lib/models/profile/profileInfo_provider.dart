@@ -6,17 +6,18 @@ import 'package:pim_group/models/profile/profileDB.dart';
 //We only need to modify the user information defined in ProfilePage
 
 class ProfileProvider extends ChangeNotifier {
-  // come posso raggruppare questa variabili in una più generale chiamata ad es info?
+  
   late ProfileData profileData;
+  late ProfileData newProfileData;
 
-  //Call the notifyListeners() method to alert that someone has modified a goal.
-  ProfileProvider() {
-    // Method to use to edit a profileInfo. Ma voglio farne uno generale per tutti i tipi di info!
-    // Creo una classe generale in profileDB?
-    void editProfileData(ProfileData newProfileData) {
-      profileData = newProfileData;
-    }//editProfileData
-
-  notifyListeners();
-} //ProfileInfo
-}
+  //Call the notifyListeners() method to alert that someone has modified a field.
+  // Method to use to edit a profileData.
+  void editProfileData(bool boolean, ProfileData newProfileData) {
+    if (boolean == true) {
+      profileData  = newProfileData;
+    }else{
+      profileData = profileData;
+    }
+    notifyListeners(); 
+  }//editProfileData 
+}//ProfileProvider
