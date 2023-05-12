@@ -1,24 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:pim_group/models/profile/profileInfo_provider.dart';
+
+// ignore_for_file: file_names
+
 //This is the data model of a user info.
 // class ProfileData
-
-class FullName {
+class ProfileData {
   final String fullName;
-  FullName({required this.fullName}); //costruttore
-}
-
-class UserName {
   final String userName;
-  UserName({required this.userName}); //costruttore
-}
-
-class Email {
   final String email;
-  Email({required this.email}); //costruttore
-}
-
-class WithdrawalDate {
   final DateTime withdrawalDate;
-  WithdrawalDate({required this.withdrawalDate}); //costruttore
+
+  // Costruttore
+  ProfileData({required this.fullName, required this.userName, required this.email, required this.withdrawalDate});
 }

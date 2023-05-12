@@ -30,8 +30,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<SleepProvider>(
           create: (context) => SleepProvider(),
         ), //SleepProvider
-        ChangeNotifierProvider<ProfileInfo>(
-          create: (context) => ProfileInfo(),
+        ChangeNotifierProvider<ProfileProvider>(
+          create: (context) => ProfileProvider(),
         ), //Profile Provider
       ],
       child: MaterialApp(

@@ -15,6 +15,8 @@ import 'package:percent_indicator/percent_indicator.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
+import 'editProfilePage.dart';
+
 Random random = new Random();
 int randomNumber = random.nextInt(4); // from 0 upto 99 included
 const Sec = Duration(seconds: 30);
@@ -154,13 +156,13 @@ class _HomePage extends State<HomePage> {
             actions: <Widget>[
               IconButton(
                 icon: Icon(
-                  Icons.account_circle_sharp,
+                  Icons.manage_accounts_rounded,
                   size: 30.0,
                   color: Colors.white,
                 ),
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ProfilePage()));
+                      MaterialPageRoute(builder: (context) => EditProfilePage()));
                 },
               ),
               IconButton(
