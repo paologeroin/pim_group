@@ -5,9 +5,6 @@ import 'package:pim_group/models/drinks/drinkDB.dart';
 import 'package:pim_group/widgetsgoals/formTiles.dart';
 import 'package:pim_group/widgetsgoals/formSeparator.dart';
 import 'package:pim_group/utils/formats.dart';
-import 'package:pim_group/drink_screens/AddDrinkPage.dart';
-import 'package:provider/provider.dart';
-import 'package:pim_group/models/contacts.dart';
 import 'package:quickalert/quickalert.dart';
 
 //This is the class that implement the page to be used to edit existing drinks and add new drinks.
@@ -79,27 +76,30 @@ class _DrinkPageState extends State<DrinkPage> {
               onPressed: () => {
                     checkstate = false,
                     _validateAndSave(context),
-                    if (checkstate){
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                           Future.delayed(Duration(seconds: 1), () {
-                          Navigator.of(context).pop(true);
-                          //Navigator.of(context).pop(true);
-                        });
-                  return AlertDialog(
-                          title: Text('Added'),
-                        );
-                }
-                )
-            } else {
-              QuickAlert.show(
-                           context: context,
-                           type: QuickAlertType.error,
-                            title: 'Sorry, something went wrong',
+                    if (checkstate)
+                      {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              Future.delayed(Duration(seconds: 1), () {
+                                Navigator.of(context).pop(true);
+                                //Navigator.of(context).pop(true);
+                              });
+                              return AlertDialog(
+                                title: Text('Added'),
+                              );
+                            })
+                      }
+                    else
+                      {
+                        QuickAlert.show(
+                          context: context,
+                          type: QuickAlertType.error,
+                          title: 'Sorry, something went wrong',
                           text: 'You need to select a drink',
-                         )
-            },},
+                        )
+                      },
+                  },
               icon: Icon(Icons.done)),
         ],
       ),

@@ -1,56 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/flutter_login.dart';
-import 'package:pim_group/utils/shared_preferences.dart';
+import 'package:pim_group/pages/root.dart';
+import 'package:pim_group/services/impact.dart';
 import 'package:provider/provider.dart';
-import 'root.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class LoginPage extends StatefulWidget {
-  static const route = '/login/';
-  static const routeDisplayName = 'LoginPage';
+class ImpactOnboarding extends StatefulWidget {
+  static const route = '/impact/';
+  static const routeDisplayName = 'ImpactOnboardingPage';
 
-  LoginPage({Key? key}) : super(key: key);
+  ImpactOnboarding({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginState();
+  State<ImpactOnboarding> createState() => _ImpactOnboardingState();
 }
 
-class _LoginState extends State<LoginPage> {
+class _ImpactOnboardingState extends State<ImpactOnboarding> {
   static bool _passwordVisible = false;
   final TextEditingController userController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
   void _showPassword() {
     setState(() {
       _passwordVisible = !_passwordVisible;
     });
   }
 
-  @override
+  Future<bool> _loginImpact(
+      String name, String password, BuildContext context) async {
+    ImpactService service = Provider.of<ImpactService>(context, listen: false);
+    bool logged = await service.getTokens(name, password);
+    return logged;
+  }
+
+  @override // DA PERSONALIZZARE LAYOUT PERCHE SE NO è UGUALE A QUELLA DEI PROF LA PAGINA
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFE4DFD4),
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: const Color(0xFFE4DFD4),
-        title: const Text('PolluTrack',
-            style: TextStyle(
-                color: Color(0xFF83AA99),
-                fontSize: 28,
-                fontWeight: FontWeight.bold)),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Form(
           key: _formKey,
           child: Column(
             children: <Widget>[
-              const Text('Login',
-                  style: TextStyle(
-                      color: Color(0xFF89453C),
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold)),
-              const Text('Please login to use our app',
+              Image.asset('assets/impact_logo.png'),
+              const Text(
+                  'Please authorize to use our app', // PER ACCEDERE AI TOKEN
                   style: TextStyle(
                     fontSize: 16,
                   )),
@@ -70,8 +64,6 @@ class _LoginState extends State<LoginPage> {
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return 'Username is required';
-                  } else if (value != 'username') {
-                    return 'Username is wrong';
                   }
                   return null;
                 },
@@ -110,8 +102,6 @@ class _LoginState extends State<LoginPage> {
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return 'Password is required';
-                  } else if (value != 'password') {
-                    return 'Password is wrong';
                   }
                   return null;
                 },
@@ -153,14 +143,40 @@ class _LoginState extends State<LoginPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        var prefs =
-                            Provider.of<Preferences>(context, listen: false);
-                        prefs.username = userController.text;
-                        prefs.password = passwordController.text;
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => BottomNavBarV2()));
+                    onPressed: () async {
+                      bool? validation = await _loginImpact(userController.text,
+                          passwordController.text, context);
+                      if (!validation) {
+                        // if not correct show message
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          backgroundColor: Colors.red,
+                          behavior: SnackBarBehavior.floating,
+                          margin: EdgeInsets.all(8),
+                          content: Text('Wrong Credentials'),
+                          duration: Duration(seconds: 2),
+                        ));
+                      } else {
+                        // else move to Purpleair Onboarding if we have not saved a api key yet //CREDO DA TOGLIERE QUESTO
+                        // DA TOGLIERE QUESTO
+                        /*  if (Provider.of<Preferences>(context, listen: false)
+                                .purpleAirXApiKey !=
+                            null)  { */
+                        // TOLTO PERCHE NON ABBIAMO LA POLLUTION PAGE
+                        Future.delayed(
+                            const Duration(milliseconds: 300),
+                            () => Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => BottomNavBarV2())));
+                        /* } else {
+                          Future.delayed(
+                              const Duration(milliseconds: 300),
+                              () => Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute( 
+                                      builder: (context) =>
+                                          PurpleAirOnboarding())));
+                        }*/
+                        // TOLTO PERCHE NON ABBIAMO LA POLLUTIONPAGE
                       }
                     },
                     style: ButtonStyle(
@@ -175,7 +191,7 @@ class _LoginState extends State<LoginPage> {
                             MaterialStateProperty.all<Color>(Colors.white),
                         backgroundColor: MaterialStateProperty.all<Color>(
                             const Color(0xFF89453C))),
-                    child: const Text('Log In'),
+                    child: const Text('Authorize'),
                   ),
                 ),
               ),

@@ -1,9 +1,16 @@
-import 'dart:convert';
+/* import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:pim_group/utils/impact.dart';
+import 'package:pim_group/utils/server_strings.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+//
+//
+//
+// VECCHIA PAGINA TOKEN, PROBABILMENTE NON SERVIRà PIU, NO GUARDARE
+//
+//
+//
 class TokenPage extends StatelessWidget {
   TokenPage({Key? key}) : super(key: key);
 
@@ -183,3 +190,6 @@ class TokenPage extends StatelessWidget {
     return response.statusCode;
   } // Refresh tokens
 } //HomePage
+
+// VECCHIA PAGINA TOKEN, PROBABILMENTE NON SERVIRà PIU
+*/ 

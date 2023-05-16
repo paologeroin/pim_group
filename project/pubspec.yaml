@@ -43,6 +43,8 @@ dependencies:
   graphic: ^1.0.1
   shared_preferences: ^2.1.0 #aggiunto
   http: ^0.13.6 #aggiunto
+  jwt_decoder: ^2.0.1 #aggiunto
+  dio: ^5.0.0 #aggiunto
   
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

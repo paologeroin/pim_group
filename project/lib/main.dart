@@ -4,11 +4,13 @@ import 'package:pim_group/models/goals/goalProvider.dart';
 import 'package:pim_group/models/profile/profileInfo_provider.dart';
 import 'package:pim_group/models/sleep/sleep_provider.dart';
 import 'package:pim_group/pages/HomePage.dart';
+import 'package:pim_group/pages/splash.dart';
+import 'package:pim_group/services/impact.dart';
+import 'package:pim_group/utils/shared_preferences.dart';
 import 'pages/LoginPage.dart';
 import 'package:provider/provider.dart';
 import 'package:pim_group/drink_screens/drinkpage.dart';
 import 'package:pim_group/drink_screens/AddDrinkPage.dart';
-import 'pages/root.dart';
 
 void main() {
   runApp(MyApp());
@@ -33,6 +35,16 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<ProfileProvider>(
           create: (context) => ProfileProvider(),
         ), //Profile Provider
+        Provider(
+          create: (context) => Preferences()..init(),
+          // This creates the preferences when the provider is creater. With lazy = true (default), the preferences would be initialized when first accessed, but we need them for the other services
+          lazy: false,
+        ),
+        Provider(
+            create: (context) => ImpactService(
+                  // We pass the newly created preferences to the service
+                  Provider.of<Preferences>(context, listen: false),
+                )),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -41,7 +53,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.green,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          home: LoginPage()),
+          home: const Splash()),
     );
   }
 }

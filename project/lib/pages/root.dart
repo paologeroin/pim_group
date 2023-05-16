@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pim_group/models/drinks/drinkDB.dart';
-import 'package:pim_group/models/drinks/drink.dart';
 import 'package:pim_group/drink_screens/drinkpage.dart';
 import 'HomePage.dart';
-import 'ProfilePage.dart';
 import 'SleepPage.dart';
 import 'GoalsPage.dart';
 import 'package:provider/provider.dart';
-import 'AddingDrinkPage.dart';
 import 'HomePage.dart';
 import 'CalendarPage.dart';
 

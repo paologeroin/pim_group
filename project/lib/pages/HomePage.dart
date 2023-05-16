@@ -161,11 +161,13 @@ class _HomePage extends State<HomePage> {
                   color: Colors.white,
                 ),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => EditProfilePage()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EditProfilePage()));
                 },
               ),
-              IconButton(
+              /*    IconButton(
                 icon: Icon(
                   Icons.key,
                   size: 30.0,
@@ -175,7 +177,7 @@ class _HomePage extends State<HomePage> {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => TokenPage()));
                 },
-              )
+              )*/ //NON DOVREBBE ESSERE PIù COSI
             ],
           ),
         ),
