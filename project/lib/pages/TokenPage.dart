@@ -1,8 +1,10 @@
-/* import 'dart:convert';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:pim_group/utils/server_strings.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../services/impact.dart';
 
 //
 //
@@ -134,7 +136,7 @@ class TokenPage extends StatelessWidget {
   //This method allows to check if the IMPACT backend is up
   Future<bool> _isImpactUp() async {
     //Create the request
-    final url = Impact.baseUrl + Impact.pingEndpoint;
+    final url = ServerStrings.baseUrl + ServerStrings.pingEndpoint;
 
     //Get the response
     print('Calling: $url');
@@ -147,8 +149,8 @@ class TokenPage extends StatelessWidget {
   //This method allows to obtain the JWT token pair from IMPACT and store it in SharedPreferences
   Future<int> _getAndStoreTokens() async {
     //Create the request
-    final url = Impact.baseUrl + Impact.tokenEndpoint;
-    final body = {'username': Impact.username, 'password': Impact.password};
+    final url = ServerStrings.baseUrl + ServerStrings.tokenEndpoint;
+    final body = {'username': ServerStrings.username, 'password': ServerStrings.password};
 
     //Get the response
     print('Calling: $url');
@@ -169,7 +171,7 @@ class TokenPage extends StatelessWidget {
   //This method allows to refrsh the stored JWT in SharedPreferences
   Future<int> _refreshTokens() async {
     //Create the request
-    final url = Impact.baseUrl + Impact.refreshEndpoint;
+    final url = ServerStrings.baseUrl + ServerStrings.refreshEndpoint;
     final sp = await SharedPreferences.getInstance();
     final refresh = sp.getString('refresh');
     final body = {'refresh': refresh};
@@ -192,4 +194,3 @@ class TokenPage extends StatelessWidget {
 } //HomePage
 
 // VECCHIA PAGINA TOKEN, PROBABILMENTE NON SERVIRà PIU
-*/ 
