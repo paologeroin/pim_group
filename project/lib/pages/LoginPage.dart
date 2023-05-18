@@ -110,7 +110,7 @@ class _LoginState extends State<LoginPage> {
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return 'Password is required';
-                  } else if (value != 'password') {
+                  } else if (value != '1234!') {
                     return 'Password is wrong';
                   }
                   return null;
@@ -159,7 +159,7 @@ class _LoginState extends State<LoginPage> {
                             Provider.of<Preferences>(context, listen: false);
                         prefs.username = userController.text;
                         prefs.password = passwordController.text;
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        Navigator.pushReplacement(context, MaterialPageRoute(
                             builder: (context) => BottomNavBarV2()));
                       }
                     },

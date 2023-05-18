@@ -167,7 +167,7 @@ class _HomePage extends State<HomePage> {
                           builder: (context) => EditProfilePage()));
                 },
               ),
-              /*    IconButton(
+              IconButton(
                 icon: Icon(
                   Icons.key,
                   size: 30.0,
@@ -177,7 +177,7 @@ class _HomePage extends State<HomePage> {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => TokenPage()));
                 },
-              )*/ //NON DOVREBBE ESSERE PIù COSI
+              )//NON DOVREBBE ESSERE PIù COSI
             ],
           ),
         ),
