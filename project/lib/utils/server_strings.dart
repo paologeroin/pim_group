@@ -10,7 +10,7 @@ class ServerStrings {
   static const authServerUrl = 'gate/v1/';
   static const apiServerUrl = 'api/v1/';
 
-// TOLTE PERCHE CREDO NON SERVANO
+/* TOLTE PERCHE CREDO NON SERVANO
 
   static String baseUrl = 'https://impact.dei.unipd.it/bwthw/';
   static String pingEndpoint = 'gate/v1/ping/';
@@ -18,5 +18,5 @@ class ServerStrings {
   static String refreshEndpoint = 'gate/v1/refresh/';
 
   static String username = '<YOUR_USERNAME>';
-  static String password = '<YOUR_PASSWORD>';
+  static String password = '<YOUR_PASSWORD>';*/
 }//Impact

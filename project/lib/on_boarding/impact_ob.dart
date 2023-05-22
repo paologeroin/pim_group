@@ -4,7 +4,7 @@ import 'package:pim_group/services/impact.dart';
 import 'package:provider/provider.dart';
 
 class ImpactOnboarding extends StatefulWidget {
-  static const route = '/impact/';
+  // inizializzo la classe ImpactOnboarding
   static const routeDisplayName = 'ImpactOnboardingPage';
 
   ImpactOnboarding({Key? key}) : super(key: key);
@@ -14,39 +14,46 @@ class ImpactOnboarding extends StatefulWidget {
 }
 
 class _ImpactOnboardingState extends State<ImpactOnboarding> {
-  static bool _passwordVisible = false;
+  // inizializzo la classe ImpactOnboardingState
+
   final TextEditingController userController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  static bool _passwordVisible = false; // per far vedere la password o meno
 
   void _showPassword() {
+    // come spiegato nel login
     setState(() {
       _passwordVisible = !_passwordVisible;
     });
   }
 
   Future<bool> _loginImpact(
-      String name, String password, BuildContext context) async {
+      // metodo per eseguire il login
+      String name,
+      String password,
+      BuildContext context) async {
     ImpactService service = Provider.of<ImpactService>(context, listen: false);
     bool logged = await service.getTokens(name, password);
-    return logged;
+    return logged; // ritorna i tokens
   }
 
-  @override // DA PERSONALIZZARE LAYOUT PERCHE SE NO è UGUALE A QUELLA DEI PROF LA PAGINA
+  @override // costruiamo la pagina in modo molto simile alla loginpage
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE4DFD4),
+      backgroundColor: Color.fromARGB(255, 222, 212, 12),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Form(
           key: _formKey,
           child: Column(
             children: <Widget>[
-              Image.asset('assets/impact_logo.png'),
+              Image.asset(
+                  'assets/impact_logo.png'), // prende il logo di impact da internet, io lo cambierei
               const Text(
-                  'Please authorize to use our app', // PER ACCEDERE AI TOKEN
+                  'We need your authorization to connect to your fitbit', // PER ACCEDERE AI TOKEN serve che l'utente acceda a impact
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 14,
                   )),
               const SizedBox(
                 height: 20,
@@ -55,35 +62,38 @@ class _ImpactOnboardingState extends State<ImpactOnboarding> {
                 alignment: Alignment.topLeft,
                 child: Text('Username',
                     style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
               ),
               const SizedBox(
-                height: 7,
+                height: 8,
               ),
               TextFormField(
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
-                    return 'Username is required';
+                    // appare scritta se utente non scrive nulla
+                    return 'Insert your username';
                   }
                   return null;
                 },
-                controller: userController,
-                cursorColor: const Color(0xFF83AA99),
+                controller:
+                    userController, // solito controllore per l'inserimento, si vuole che l'inserimento rispetti le nostre richieste
+                cursorColor: Color.fromARGB(255, 222, 212, 12),
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: const BorderSide(
-                      color: Color(0xFF89453C),
+                      color: Color.fromARGB(255, 109, 230, 69),
                     ),
                   ),
                   border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0))),
                   prefixIcon: const Icon(
                     Icons.person,
-                    color: Color(0xFF89453C),
+                    color: Color.fromARGB(255, 109, 230, 69),
                   ),
                   hintText: 'Username',
-                  hintStyle: const TextStyle(color: Color(0xFF89453C)),
+                  hintStyle:
+                      const TextStyle(color: Color.fromARGB(255, 109, 230, 69)),
                 ),
               ),
               const SizedBox(
@@ -91,6 +101,7 @@ class _ImpactOnboardingState extends State<ImpactOnboarding> {
               ),
               const Align(
                 alignment: Alignment.topLeft,
+                // uguale a Username per la password
                 child: Text('Password',
                     style:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
@@ -101,86 +112,79 @@ class _ImpactOnboardingState extends State<ImpactOnboarding> {
               TextFormField(
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
-                    return 'Password is required';
+                    // ritorna scritta se non ci sono inserimenti
+                    return 'Insert your password';
                   }
                   return null;
                 },
-                controller: passwordController,
-                cursorColor: const Color(0xFF83AA99),
+                controller:
+                    passwordController, // solito controllore per l'inserimento, si vuole che l'inserimento rispetti le nostre richieste
+                cursorColor: Color.fromARGB(255, 222, 212, 12),
                 obscureText: !_passwordVisible,
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: const BorderSide(
-                      color: Color(0xFF89453C),
+                      color: Color.fromARGB(255, 109, 230, 69),
                     ),
                   ),
                   border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0))),
                   prefixIcon: const Icon(
                     Icons.lock,
-                    color: Color(0xFF89453C),
+                    color: Color.fromARGB(255, 109, 230, 69),
                   ),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      // Based on passwordVisible state choose the icon
+                      // icona che ci permette di rendere la password visibile
                       _passwordVisible
                           ? Icons.visibility
                           : Icons.visibility_off,
-                      color: Colors.grey,
+                      color: Color.fromARGB(255, 222, 212, 12),
                     ),
                     onPressed: () {
                       _showPassword();
                     },
                   ),
                   hintText: 'Password',
-                  hintStyle: const TextStyle(color: Color(0xFF89453C)),
+                  hintStyle:
+                      const TextStyle(color: Color.fromARGB(255, 109, 230, 69)),
                 ),
               ),
               const Spacer(),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
+                  // qui abbiamo il tasto per validare la connessione all'impact
                   padding: const EdgeInsets.all(12.0),
                   child: ElevatedButton(
                     onPressed: () async {
-                      bool? validation = await _loginImpact(userController.text,
-                          passwordController.text, context);
+                      bool? validation = await _loginImpact(
+                          userController.text,
+                          passwordController.text,
+                          context); // userController.text, passwordController.text sono i nostri inserimenti
                       if (!validation) {
-                        // if not correct show message
+                        // se non è riuscito il login a impact appare il messaggio che le credenziali sono sbagliate
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
-                          backgroundColor: Colors.red,
+                          backgroundColor: Color.fromARGB(255, 120, 10, 3),
                           behavior: SnackBarBehavior.floating,
                           margin: EdgeInsets.all(8),
-                          content: Text('Wrong Credentials'),
-                          duration: Duration(seconds: 2),
+                          content: Text(
+                              'Your credentials are wrong, please try again'),
+                          duration: Duration(seconds: 3),
                         ));
                       } else {
-                        // else move to Purpleair Onboarding if we have not saved a api key yet //CREDO DA TOGLIERE QUESTO
-                        // DA TOGLIERE QUESTO
-                        /*  if (Provider.of<Preferences>(context, listen: false)
-                                .purpleAirXApiKey !=
-                            null)  { */
-                        // TOLTO PERCHE NON ABBIAMO LA POLLUTION PAGE
+                        // se è andato a buon fine ci riporta nella homepage, perchè la connessione è avvenuta e abbiamo ottenuto i token per i dati
                         Future.delayed(
                             const Duration(milliseconds: 300),
                             () => Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                     builder: (context) => BottomNavBarV2())));
-                        /* } else {
-                          Future.delayed(
-                              const Duration(milliseconds: 300),
-                              () => Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute( 
-                                      builder: (context) =>
-                                          PurpleAirOnboarding())));
-                        }*/
-                        // TOLTO PERCHE NON ABBIAMO LA POLLUTIONPAGE
                       }
                     },
                     style: ButtonStyle(
-                        //maximumSize: const MaterialStatePropertyAll(Size(50, 20)),
+                        // bottone
                         shape: MaterialStateProperty.all(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                         elevation: MaterialStateProperty.all(0),
@@ -190,8 +194,8 @@ class _ImpactOnboardingState extends State<ImpactOnboarding> {
                         foregroundColor:
                             MaterialStateProperty.all<Color>(Colors.white),
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color(0xFF89453C))),
-                    child: const Text('Authorize'),
+                            const Color.fromARGB(255, 109, 230, 69))),
+                    child: const Text('Push to authorize the connection'),
                   ),
                 ),
               ),

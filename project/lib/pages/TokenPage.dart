@@ -1,3 +1,4 @@
+/*
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:pim_group/utils/server_strings.dart';
@@ -194,3 +195,5 @@ class TokenPage extends StatelessWidget {
 } //HomePage
 
 // VECCHIA PAGINA TOKEN, PROBABILMENTE NON SERVIRà PIU
+
+*/

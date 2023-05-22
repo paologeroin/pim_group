@@ -1,102 +1,108 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/flutter_login.dart';
 import 'package:pim_group/utils/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'root.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+// Inizializzo la classe LoginPage
 class LoginPage extends StatefulWidget {
-  static const route = '/login/';
   static const routeDisplayName = 'LoginPage';
 
   LoginPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginState();
+  State<LoginPage> createState() => LoginPageState();
 }
 
-class _LoginState extends State<LoginPage> {
-  static bool _passwordVisible = false;
-  final TextEditingController userController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+// inizializzo la classe dello stato della pagina LoginPage
+class LoginPageState extends State<LoginPage> {
+  final TextEditingController controllerOfUser =
+      TextEditingController(); // controllore per controllare inserimento nome utente
+  final TextEditingController controllerOfPassword =
+      TextEditingController(); // controllore per controllare inserimento pw
   final _formKey = GlobalKey<FormState>();
+  static bool _passwordVisible =
+      false; // diventa true quando l'user preme pulsante per renderla visibile
+  // metodo per far mostrare password
   void _showPassword() {
     setState(() {
       _passwordVisible = !_passwordVisible;
     });
   }
 
+  // inizio a costruire il Widget
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFE4DFD4),
+      //appBar
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: const Color(0xFFE4DFD4),
-        title: const Text('PolluTrack',
+        backgroundColor: Color.fromARGB(255, 109, 230, 69),
+        centerTitle: true,
+        title: const Text('SoberMan',
             style: TextStyle(
-                color: Color(0xFF83AA99),
-                fontSize: 28,
-                fontWeight: FontWeight.bold)),
+                color: Color.fromARGB(255, 222, 222, 12), fontSize: 32)),
       ),
+      // body della pagina, dovremo andremo ad inserire username and password
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Form(
           key: _formKey,
           child: Column(
             children: <Widget>[
-              const Text('Login',
+              const Text(LoginPage.routeDisplayName,
                   style: TextStyle(
-                      color: Color(0xFF89453C),
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold)),
-              const Text('Please login to use our app',
+                    color: Color.fromARGB(255, 109, 230, 69),
+                    fontSize: 32,
+                  )),
+              const Text('Login to the Soberman app',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 20,
                   )),
               const SizedBox(
-                height: 20,
+                height: 18,
               ),
               const Align(
                 alignment: Alignment.topLeft,
-                child: Text('Username',
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                child: Text('Username', style: TextStyle(fontSize: 20)),
               ),
               const SizedBox(
-                height: 7,
+                height: 6,
               ),
               TextFormField(
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
-                    return 'Username is required';
+                    return 'Insert your username';
                   } else if (value != 'username') {
-                    return 'Username is wrong';
+                    return 'Wrong username';
                   }
                   return null;
                 },
-                controller: userController,
-                cursorColor: const Color(0xFF83AA99),
+                controller:
+                    controllerOfUser, // controlla che l'username inserito rispetti le 'richieste'
+                cursorColor: Color.fromARGB(255, 169, 194, 27),
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: const BorderSide(
-                      color: Color(0xFF89453C),
+                      color: Color.fromARGB(255, 109, 230, 69),
                     ),
                   ),
                   border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0))),
                   prefixIcon: const Icon(
-                    Icons.person,
-                    color: Color(0xFF89453C),
+                    Icons.person_3,
+                    color: Color.fromARGB(255, 109, 230, 69),
                   ),
                   hintText: 'Username',
-                  hintStyle: const TextStyle(color: Color(0xFF89453C)),
+                  hintStyle: const TextStyle(
+                    color: Color.fromARGB(255, 109, 230, 69),
+                  ),
                 ),
               ),
               const SizedBox(
-                height: 15,
+                height: 17,
               ),
+              // ora trattiamo la password
               const Align(
                 alignment: Alignment.topLeft,
                 child: Text('Password',
@@ -104,34 +110,37 @@ class _LoginState extends State<LoginPage> {
                         TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ),
               const SizedBox(
-                height: 7,
+                height: 8,
               ),
               TextFormField(
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
-                    return 'Password is required';
+                    return 'Insert your password';
                   } else if (value != '1234!') {
-                    return 'Password is wrong';
+                    return 'Wrong password';
                   }
                   return null;
                 },
-                controller: passwordController,
+                controller:
+                    controllerOfPassword, // controlla che la password sia ok con le nostre richieste
                 cursorColor: const Color(0xFF83AA99),
-                obscureText: !_passwordVisible,
+                obscureText:
+                    !_passwordVisible, // per rendere visibile o meno la password
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: const BorderSide(
-                      color: Color(0xFF89453C),
+                      color: Color.fromARGB(255, 109, 230, 69),
                     ),
                   ),
                   border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0))),
                   prefixIcon: const Icon(
                     Icons.lock,
-                    color: Color(0xFF89453C),
+                    color: Color.fromARGB(255, 109, 230, 69),
                   ),
                   suffixIcon: IconButton(
+                    // come quello dei prof, se cambio la selezione cambia anche l'icona della password
                     icon: Icon(
                       // Based on passwordVisible state choose the icon
                       _passwordVisible
@@ -140,11 +149,13 @@ class _LoginState extends State<LoginPage> {
                       color: Colors.grey,
                     ),
                     onPressed: () {
+                      // richiama il metodo implementato all'inizio per aggiornare lo stato della password
                       _showPassword();
                     },
                   ),
                   hintText: 'Password',
-                  hintStyle: const TextStyle(color: Color(0xFF89453C)),
+                  hintStyle:
+                      const TextStyle(color: Color.fromARGB(255, 109, 230, 69)),
                 ),
               ),
               const Spacer(),
@@ -154,28 +165,26 @@ class _LoginState extends State<LoginPage> {
                   padding: const EdgeInsets.all(12.0),
                   child: ElevatedButton(
                     onPressed: () {
+                      // se premo il bottone per validare le credenziali inserite
                       if (_formKey.currentState!.validate()) {
-                        var prefs =
-                            Provider.of<Preferences>(context, listen: false);
-                        prefs.username = userController.text;
-                        prefs.password = passwordController.text;
-                        Navigator.pushReplacement(context, MaterialPageRoute(
-                            builder: (context) => BottomNavBarV2()));
+                        var prefs = Provider.of<Preferences>(context,
+                            listen:
+                                false); // provider per gestire le credenziali con le shared_preferences
+                        prefs.username = controllerOfUser.text;
+                        prefs.password = controllerOfPassword.text;
+                        Navigator.pushReplacement(
+                            // se è tutto okay mi manda alla home
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => BottomNavBarV2()));
                       }
                     },
-                    style: ButtonStyle(
-                        //maximumSize: const MaterialStatePropertyAll(Size(50, 20)),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                        elevation: MaterialStateProperty.all(0),
-                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                            const EdgeInsets.symmetric(
-                                horizontal: 80, vertical: 12)),
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.white),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color(0xFF89453C))),
-                    child: const Text('Log In'),
+                    child: const Text(
+                      'Log In to SoberMan',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 222, 222, 12),
+                      ),
+                    ),
                   ),
                 ),
               ),

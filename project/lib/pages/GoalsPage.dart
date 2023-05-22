@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:pim_group/models/goals/goalDB.dart';
 import 'package:pim_group/models/goals/goalProvider.dart';
 import 'package:pim_group/pages/inizializegoals.dart';
-import 'package:pim_group/utils/formats.dart';
 import 'package:provider/provider.dart';
 
 //Homepage screen. It will show the list of goals.

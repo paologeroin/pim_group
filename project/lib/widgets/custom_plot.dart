@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:graphic/graphic.dart';
+
 // Added custom plot from tutoring app
 // Could come in handy for sleep charts, alcohol consumption charts, and more
 class CustomPlot extends StatelessWidget {

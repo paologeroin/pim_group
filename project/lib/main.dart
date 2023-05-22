@@ -3,14 +3,10 @@ import 'package:pim_group/models/drinks/drinkDB.dart';
 import 'package:pim_group/models/goals/goalProvider.dart';
 import 'package:pim_group/models/profile/profileInfo_provider.dart';
 import 'package:pim_group/models/sleep/sleep_provider.dart';
-import 'package:pim_group/pages/HomePage.dart';
-import 'package:pim_group/pages/splash.dart';
+import 'package:pim_group/pages/jump.dart';
 import 'package:pim_group/services/impact.dart';
 import 'package:pim_group/utils/shared_preferences.dart';
-import 'pages/LoginPage.dart';
 import 'package:provider/provider.dart';
-import 'package:pim_group/drink_screens/drinkpage.dart';
-import 'package:pim_group/drink_screens/AddDrinkPage.dart';
 
 void main() {
   runApp(MyApp());
@@ -53,7 +49,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.green,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          home: const Splash()),
+          home: const Jump()),
     );
   }
 }
