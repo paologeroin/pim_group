@@ -2,10 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pim_group/models/goals/goalProvider.dart';
+import 'package:pim_group/pages/LoginPage.dart';
 import 'package:pim_group/pages/TokenPage.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'LoginPage.dart';
 import 'AboutPage.dart';
 import 'SettingsPage.dart';
 import 'package:quickalert/quickalert.dart';
@@ -167,7 +167,7 @@ class _HomePage extends State<HomePage> {
                           builder: (context) => EditProfilePage()));
                 },
               ),
-              /*   IconButton( ROBA FATTA ALL'INIZIO PER I TOKEN, NON SERVE PIU
+              IconButton(
                 icon: Icon(
                   Icons.key,
                   size: 30.0,
@@ -177,7 +177,7 @@ class _HomePage extends State<HomePage> {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => TokenPage()));
                 },
-              )//NON DOVREBBE ESSERE PIù COSI */
+              )
             ],
           ),
         ),

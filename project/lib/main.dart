@@ -3,7 +3,7 @@ import 'package:pim_group/models/drinks/drinkDB.dart';
 import 'package:pim_group/models/goals/goalProvider.dart';
 import 'package:pim_group/models/profile/profileInfo_provider.dart';
 import 'package:pim_group/models/sleep/sleep_provider.dart';
-import 'package:pim_group/pages/jump.dart';
+import 'package:pim_group/pages/LoginPage.dart';
 import 'package:pim_group/services/impact.dart';
 import 'package:pim_group/utils/shared_preferences.dart';
 import 'package:provider/provider.dart';
@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.green,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          home: Jump()),
+          home: LoginPage()),
     );
   }
 }

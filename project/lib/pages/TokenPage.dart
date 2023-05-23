@@ -1,4 +1,3 @@
-/*
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:pim_group/utils/server_strings.dart';
@@ -151,7 +150,10 @@ class TokenPage extends StatelessWidget {
   Future<int> _getAndStoreTokens() async {
     //Create the request
     final url = ServerStrings.baseUrl + ServerStrings.tokenEndpoint;
-    final body = {'username': ServerStrings.username, 'password': ServerStrings.password};
+    final body = {
+      'username': ServerStrings.username,
+      'password': ServerStrings.password
+    };
 
     //Get the response
     print('Calling: $url');
@@ -195,5 +197,3 @@ class TokenPage extends StatelessWidget {
 } //HomePage
 
 // VECCHIA PAGINA TOKEN, PROBABILMENTE NON SERVIRà PIU
-
-*/
