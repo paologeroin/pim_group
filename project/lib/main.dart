@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.green,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          home: const Jump()),
+          home: Jump()),
     );
   }
 }

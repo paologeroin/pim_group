@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pim_group/on_boarding/impact_ob.dart';
+import 'package:pim_group/pages/HomePage.dart';
 import 'package:pim_group/pages/LoginPage.dart';
 import 'package:pim_group/pages/root.dart';
 import 'package:pim_group/services/impact.dart';
@@ -29,8 +30,8 @@ class Jump extends StatelessWidget {
 
   // Metodo per andare alla ImpactPage per scaricare i token
   void _toImpactPage(BuildContext context) {
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: ((context) => ImpactOnboarding())));
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: ((context) => ImpactOnboarding()))); // ImpactOnboarding
   }
 
   // metodo per controllare che sia stata eseguita la autenticazione
@@ -57,11 +58,11 @@ class Jump extends StatelessWidget {
       // controlliamo se abbiamo dei token validi
       if (responseAccessToken || refreshAccessToken) {
         // se ok mando diretto alla HomePage
-        Future.delayed(const Duration(seconds: 2), () => _toHomePage(context));
+        Future.delayed(const Duration(seconds: 1), () => _toHomePage(context));
       } else {
         // altrimenti se entro in questo else vuol dire che devo fare accesso alla ImpactPage
         Future.delayed(
-            const Duration(seconds: 2), () => _toImpactPage(context));
+            const Duration(seconds: 1), () => _toImpactPage(context));
       }
     }
   }
