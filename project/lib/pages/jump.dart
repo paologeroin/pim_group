@@ -1,4 +1,4 @@
-/* import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:pim_group/on_boarding/impact_ob.dart';
 import 'package:pim_group/pages/HomePage.dart';
 import 'package:pim_group/pages/LoginPage.dart';
@@ -16,13 +16,7 @@ class Jump extends StatelessWidget {
 
   const Jump({Key? key}) : super(key: key);
 
-  // Metodo per andare dalla JumpPage alla LoginPage
-  void _toLoginPage(BuildContext context) {
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: ((context) => LoginPage())));
-  } //_toLoginPage
-
-  // etodo per andare dalla JumpPage al nostro root.dart che manderà a sua volta alla Homepage
+  // Metodo per andare dalla JumpPage al nostro root.dart che manderà a sua volta alla Homepage
   void _toHomePage(BuildContext context) {
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: ((context) => BottomNavBarV2())));
@@ -43,33 +37,34 @@ class Jump extends StatelessWidget {
     String? password = prefs.password;
 
     // questo if è per controllare se l'utente ha già fatto il login (in quel caso sarebbero entrambi != null) e quindi si può evitare di mandarlo alla LoginPage
-    if (username == null || password == null) {
+    /* if (username == null || password == null) {
       Future.delayed(
           const Duration(seconds: 2),
           () => _toLoginPage(
               context)); // durata del caricamento ho messo 2 secondi
-    } else {
-      // entriamo in questo else se l'utente è già loggato
-      ImpactService service =
-          Provider.of<ImpactService>(context, listen: false);
-      bool responseAccessToken = service.checkSavedToken();
-      bool refreshAccessToken = service.checkSavedToken(refresh: true);
+    } else {*/
+    // entriamo in questo else se l'utente è già loggato
+    ImpactService service = Provider.of<ImpactService>(context, listen: false);
+    bool responseAccessToken = service.checkSavedToken();
+    bool refreshAccessToken = service.checkSavedToken(refresh: true);
 
-      // controlliamo se abbiamo dei token validi
-      if (responseAccessToken || refreshAccessToken) {
-        // se ok mando diretto alla HomePage
-        Future.delayed(const Duration(seconds: 1), () => _toHomePage(context));
-      } else {
-        // altrimenti se entro in questo else vuol dire che devo fare accesso alla ImpactPage
-        Future.delayed(
-            const Duration(seconds: 1), () => _toImpactPage(context));
-      }
+    // controlliamo se abbiamo dei token validi
+    if (responseAccessToken || refreshAccessToken) {
+      // se ok mando diretto alla HomePage
+      print('ho i token fdp'); // cava prima della consegna ai prof
+      print(responseAccessToken);
+      print(refreshAccessToken);
+      Future.delayed(const Duration(seconds: 1), () => _toHomePage(context));
+    } else {
+      // altrimenti se entro in questo else vuol dire che devo fare accesso alla ImpactPage
+      Future.delayed(const Duration(seconds: 1), () => _toImpactPage(context));
     }
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 2), () => _toLoginPage(context));
+    /* Future.delayed(const Duration(seconds: 2), () => _toLoginPage(context)); */
     Future.delayed(
         const Duration(seconds: 2), () => checkAuthentication(context));
     return Material(
@@ -98,4 +93,3 @@ class Jump extends StatelessWidget {
     );
   }
 }
- */

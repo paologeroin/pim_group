@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'package:pim_group/pages/jump.dart';
 import 'root.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -59,14 +59,14 @@ class _LoginPageState extends State<LoginPage> {
       onSignup: _signUpUser,
       onRecoverPassword: _recoverPassword,
       onSubmitAnimationCompleted: () async {
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => BottomNavBarV2()));
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (context) => Jump()));
       },
     );
   } // build
 
   void _toHomePage(BuildContext context) {
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => BottomNavBarV2()));
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context) => Jump()));
   } //_toHomePage
 } // LoginScreen
