@@ -47,7 +47,7 @@ class _DrinkPageState extends State<DrinkPage> {
   void initState() {
     _choController.text = widget.drinkIndex == -1
         ? ''
-        : widget.drinkDB.drinks[widget.drinkIndex].carbohydrates.toString();
+        : widget.drinkDB.drinks[widget.drinkIndex].drinkType.toString();
     _selectedDate = widget.drinkIndex == -1
         ? DateTime.now()
         : widget.drinkDB.drinks[widget.drinkIndex].dateTime;
@@ -224,7 +224,7 @@ Consumer<MealDB>(
                           leading: Icon(Icons.wine_bar),
                           trailing: Icon(Icons.note_alt),
                           title:
-                              Text('CHO : ${mealDB.meals[mealIndex].carbohydrates}'),
+                              Text('CHO : ${mealDB.meals[mealIndex].drinkType}'),
                           subtitle: Text('${Formats.fullDateFormatNoSeconds.format(mealDB.meals[mealIndex].dateTime)}'),
                          
                         ),
@@ -279,7 +279,7 @@ Consumer<MealDB>(
         });
       } else {
         Drink newDrink = Drink(
-            carbohydrates: (currentSelectedValue!), dateTime: _selectedDate);
+            drinkType: (currentSelectedValue!), dateTime: _selectedDate);
         widget.drinkIndex == -1
             ? widget.drinkDB.addDrink(newDrink)
             : widget.drinkDB.editDrink(widget.drinkIndex, newDrink);

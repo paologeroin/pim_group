@@ -44,7 +44,7 @@ class AddingDrinkPage extends StatelessWidget {
                           leading: Icon(Icons.wine_bar),
                           trailing: Icon(Icons.note_alt),
                           title: Text(
-                              'CHO : ${drinkDB.drinks[drinkIndex].carbohydrates}'),
+                              'CHO : ${drinkDB.drinks[drinkIndex].drinkType}'),
                           subtitle: Text(
                               '${Formats.fullDateFormatNoSeconds.format(drinkDB.drinks[drinkIndex].dateTime)}'),
                           //When a ListTile is tapped, the user is redirected to the DrinkPage, where it will be able to edit it.
