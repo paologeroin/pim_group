@@ -36,14 +36,6 @@ class Jump extends StatelessWidget {
     String? username = prefs.username;
     String? password = prefs.password;
 
-    // questo if è per controllare se l'utente ha già fatto il login (in quel caso sarebbero entrambi != null) e quindi si può evitare di mandarlo alla LoginPage
-    /* if (username == null || password == null) {
-      Future.delayed(
-          const Duration(seconds: 2),
-          () => _toLoginPage(
-              context)); // durata del caricamento ho messo 2 secondi
-    } else {*/
-    // entriamo in questo else se l'utente è già loggato
     ImpactService service = Provider.of<ImpactService>(context, listen: false);
     bool responseAccessToken = service.checkSavedToken();
     bool refreshAccessToken = service.checkSavedToken(refresh: true);

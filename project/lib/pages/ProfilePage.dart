@@ -1,45 +1,81 @@
 import 'package:flutter/material.dart';
-import 'package:pim_group/pages/HomePage.dart';
-import 'editProfilePage.dart';
-//import 'editProfilePage.dart'
+import 'package:pim_group/pages/EditProfilePage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfilePage extends StatelessWidget {
-  // prime righe tutor?
+class ProfilePage extends StatefulWidget {
+  static const routeDisplayName = 'Profile Page';
+  @override
+  ProfilePageState createState() => ProfilePageState();
+}
+
+class ProfilePageState extends State<ProfilePage> {
+  String fullname = '';
+  String username = '';
+  String birthplace = '';
+  String age = '';
+  String email = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfileData();
+  }
+
+  Future<void> _loadProfileData() async {
+    SharedPreferences prefs = await SharedPreferences
+        .getInstance(); // avremo potuto gestirla come una unica lista di stringhe ma ormai è cosi, pace e amen, l'idea mi è venuta troppo tardi
+    setState(() {
+      fullname = prefs.getString('fullname') ?? '';
+      username = prefs.getString('username') ?? '';
+      birthplace = prefs.getString('birthplace') ?? '';
+      age = prefs.getString('age') ?? '';
+      email = prefs.getString('email') ?? '';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 97, 198, 171),
-        elevation: 1,
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.edit,
-              color: Color.fromARGB(255, 255, 255, 255),
+        appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 97, 198, 171),
+          elevation: 1,
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.edit,
+                color: Color.fromARGB(255, 255, 255, 255),
+              ),
+              onPressed: () async {
+                final result =
+                    await Navigator.of(context).push<Map<String, String>>(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => EditProfilePage(),
+                  ),
+                );
+
+                if (result != null) {
+                  setState(() {
+                    fullname = result['fullname'] ?? fullname;
+                    username = result['username'] ?? username;
+                    birthplace = result['birthplace'] ?? birthplace;
+                    age = result['age'] ?? age;
+                    email = result['email'] ?? email;
+                  });
+                }
+              },
             ),
-            onPressed: () async {
-              final result = await Navigator.of(context).push(MaterialPageRoute(
-                builder: (BuildContext context) => EditProfilePage()));
-              ScaffoldMessenger.of(context)
-              ..removeCurrentSnackBar()
-              ..showSnackBar(SnackBar(content: Text('$result')));
-            },
-          ),
-        ],
-        centerTitle: true,
-        title: 
-          const Text(
-            "Your Profile",
+          ],
+          centerTitle: true,
+          title: const Text(
+            "Profile",
             style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+          ),
         ),
-      ),
-      body: Container(
-        padding: EdgeInsets.only(left: 16, top: 25, right: 16),
-          child: ListView(
-            children: [
+        body: Container(
+            padding: EdgeInsets.only(left: 16, top: 25, right: 16),
+            child: ListView(children: [
               Text(
-                "User Name",
+                username,
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
               ),
               SizedBox(
@@ -49,9 +85,9 @@ class ProfilePage extends StatelessWidget {
                 child: Stack(
                   children: [
                     Container(
-                      width: 130,
-                      height: 130,
-                      decoration: BoxDecoration(
+                        width: 130,
+                        height: 130,
+                        decoration: BoxDecoration(
                           border: Border.all(
                               width: 4,
                               color: Theme.of(context).scaffoldBackgroundColor),
@@ -63,12 +99,11 @@ class ProfilePage extends StatelessWidget {
                                 offset: Offset(0, 10))
                           ],
                           shape: BoxShape.circle,
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(
-                                "https://i.pinimg.com/originals/22/91/ba/2291babd9eb9f7a2744b8cc24de1216a.jpg",
-                              ))),
-                    ),
+                          image: const DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage('assets/images/avatar.png'),
+                          ),
+                        )),
                   ],
                 ),
               ),
@@ -76,39 +111,35 @@ class ProfilePage extends StatelessWidget {
                 height: 35,
               ),
               buildTextLabel("Full Name"),
-              buildText("Dama Lama"),
+              buildText(fullname),
+              buildTextLabel("Birth place"),
+              buildText(birthplace),
+              buildTextLabel("Age"),
+              buildText(age),
               buildTextLabel("E-mail"),
-              buildText("hello@lama.com"),
-              buildTextLabel("Withdrawal Date"),
-              buildText("24/04/23"),
+              buildText(email),
               SizedBox(
-                height: 35,
+                height: 270,
               ),
-              buildText("TO DO:"),
-              buildText("- Condivisione dati tra le schermate (profilo, edit, home, ecc);"),
-              buildText("- Widget scelta data e ora;"),
-  ])));
+              buildTextLabel(
+                  "Your information will not be disclosed and will only be used by our app for security purposes"),
+            ])));
   }
 }
 
-Widget buildTextLabel(String textLabel){
+Widget buildTextLabel(String textLabel) {
   return Padding(
-      padding: const EdgeInsets.only(bottom: 0),
-      child:
-        Text(
-          textLabel, 
-          style: TextStyle(fontSize: 12, color: Colors.black45)
-        ),
+    padding: const EdgeInsets.only(bottom: 0),
+    child:
+        Text(textLabel, style: TextStyle(fontSize: 12, color: Colors.black45)),
   );
 }
 
-Widget buildText(String textField){
+Widget buildText(String textField) {
   return Padding(
-      padding: const EdgeInsets.only(bottom: 20.0),
-      child:
-        Text(
-          textField, 
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)
-        ),
+    padding: const EdgeInsets.only(bottom: 20.0),
+    child: Text(textField,
+        style: TextStyle(
+            fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
   );
 }

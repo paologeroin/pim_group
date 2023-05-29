@@ -12,19 +12,18 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 97, 198, 171),
-        elevation: 1, 
-        title: const Text ('Settings', 
-        textAlign: TextAlign.center), 
+        elevation: 1,
+        title: const Text('Settings', textAlign: TextAlign.center),
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
             Navigator.of(context).pop();
-        },
-        icon: Icon(
-          Icons.arrow_back,
-          color: Colors.white,
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
         ),
-      ),
       ),
       body: Container(
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),

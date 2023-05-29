@@ -9,7 +9,7 @@ import 'package:pim_group/widgets/custom_plot.dart';
 import '../models/sleep/sleepDB.dart';
 import '../models/sleep/sleep_provider.dart';
 
-// Creation of a StatefulWidget for the sleep page: 
+// Creation of a StatefulWidget for the sleep page:
 // it requires two classes (at least).
 // Below there is the StatefulWidget class that creates an instance of the Widget itself.
 class SleepPage extends StatefulWidget {
@@ -18,9 +18,9 @@ class SleepPage extends StatefulWidget {
   @override
   State<SleepPage> createState() => _SleepPageState();
 }
+
 // And then there is a State class that manages the state of the StatefulWidget
 class _SleepPageState extends State<SleepPage> {
-
   @override
   Widget build(BuildContext context) {
     // calling the provider responsible for the sleep data
@@ -58,9 +58,9 @@ class _SleepPageState extends State<SleepPage> {
               ),
             ),
             body: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                   Container(
                     padding: EdgeInsets.all(16),
                     child: Text(
@@ -96,21 +96,20 @@ class _SleepPageState extends State<SleepPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.arrow_back),
-                        onPressed: () {
-                          // TO BE IMPLEMENTED (?)
-                          // setState(() {
-                          //   selectedDayIndex--;
-                          //   currentDate = currentDate.subtract(Duration(days: 1));
-                          // });
-                          DateTime day = Provider.of<SleepProvider>(context,
-                                  listen: false)
-                              .dateOfSleep;
-                          Provider.of<SleepProvider>(context, listen: false)
-                              .getDataOfDay(
-                                  day.subtract(const Duration(days: 1)));
-                        }
-                      ),
+                          icon: const Icon(Icons.arrow_back),
+                          onPressed: () {
+                            // TO BE IMPLEMENTED (?)
+                            // setState(() {
+                            //   selectedDayIndex--;
+                            //   currentDate = currentDate.subtract(Duration(days: 1));
+                            // });
+                            DateTime day = Provider.of<SleepProvider>(context,
+                                    listen: false)
+                                .dateOfSleep;
+                            Provider.of<SleepProvider>(context, listen: false)
+                                .getDataOfDay(
+                                    day.subtract(const Duration(days: 1)));
+                          }),
                       // TO BE IMPLEMENTED (?)
                       // Text(
                       //   '${_getFormattedDate(currentDate)}',
@@ -137,8 +136,8 @@ class _SleepPageState extends State<SleepPage> {
                             Provider.of<SleepProvider>(context, listen: false)
                                 .getDataOfDay(day.add(const Duration(days: 1)));
                           })
-                  ],
-                ),
+                    ],
+                  ),
                   // TO BE IMPLEMENTED (?)
                   // SleepCycleChart(
                   //   sleepDataList[selectedDayIndex],
@@ -147,12 +146,8 @@ class _SleepPageState extends State<SleepPage> {
                   builder: (context, value, child) =>
                       CustomPlot(data: _parseData(value.durationValue))
                   )*/
-                ]
-              )
-            )
-          )
-        );
-}
+                ]))));
+  }
 
   List<Map<String, dynamic>> _parseData(List<sleepDuration> data) {
     return data
@@ -168,9 +163,9 @@ class _SleepPageState extends State<SleepPage> {
   // String _getFormattedDate(DateTime date) {
   //   return '${date.day}/${date.month}/${date.year}';
   // }
-}//_SleepPageState
+} //_SleepPageState
 
-// Here it's defined a class dedicated to the sleep graph: sleep duration is represented 
+// Here it's defined a class dedicated to the sleep graph: sleep duration is represented
 // on the x-axis, and sleep stages are represented on the y-axis.
 // To be fixed with the provider and DB
 class SleepCycleChart extends StatelessWidget {
@@ -224,8 +219,9 @@ class SleepCycleChart extends StatelessWidget {
       ),
     );
   }
+
   // In the '_createChartData()' method, I used a variable 'x' to keep track of the position
-  // on the x-axis as I iterate through the sleep stages. 
+  // on the x-axis as I iterate through the sleep stages.
   // Increment the value of 'x' with the duration of each sleep stage to correctly position
   // the points in the chart.
   List<charts.Series<SleepStageData, double>> _createChartData() {
@@ -235,11 +231,14 @@ class SleepCycleChart extends StatelessWidget {
     return [
       charts.Series<SleepStageData, double>(
         id: 'SleepStage',
-        domainFn: (SleepStageData sleepStageData, _) => x += sleepStageData.duration,
-        measureFn: (SleepStageData sleepStageData, _) => sleepStageData.stageIndex,
+        domainFn: (SleepStageData sleepStageData, _) =>
+            x += sleepStageData.duration,
+        measureFn: (SleepStageData sleepStageData, _) =>
+            sleepStageData.stageIndex,
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
         data: data,
-        labelAccessorFn: (SleepStageData sleepStageData, _) => '${sleepStageData.stage}',
+        labelAccessorFn: (SleepStageData sleepStageData, _) =>
+            '${sleepStageData.stage}',
       ),
     ];
   }
@@ -251,7 +250,8 @@ class SleepData {
 
   SleepData(this.date, this.sleepStages);
 }
-// The 'stageIndex' field in the 'SleepStageData' is used to assign a numerical value to each stage of sleep. 
+
+// The 'stageIndex' field in the 'SleepStageData' is used to assign a numerical value to each stage of sleep.
 // This value is used as a measure in the y-axis.
 class SleepStageData {
   final String stage;
@@ -259,7 +259,7 @@ class SleepStageData {
   final double duration;
 
   SleepStageData(this.stage, this.duration);
-  
+
   get stageIndex => null;
   // SleepStageData(this.stage, this.stageIndex, this.duration);
 }
