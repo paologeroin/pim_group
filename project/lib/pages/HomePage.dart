@@ -156,7 +156,7 @@ class _HomePage extends State<HomePage> {
             actions: <Widget>[
               IconButton(
                 icon: Icon(
-                  Icons.manage_accounts_rounded,
+                  Icons.account_circle,
                   size: 30.0,
                   color: Colors.white,
                 ),

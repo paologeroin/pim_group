@@ -24,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   void _checkLogin() async {
     //Get the SharedPreference instance and check if the value of the 'username' filed is set or not
     final sp = await SharedPreferences.getInstance();
-    if (sp.getString('username') != null) {
+    if (sp.getString('email') != null) {
       //If 'username is set, push the HomePage
       _toHomePage(context);
     } //if
@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<String> _loginUser(LoginData data) async {
     if (data.name == 'paolo@cappon.com' && data.password == 'mariairene') {
       final sp = await SharedPreferences.getInstance();
-      sp.setString('username', data.name);
+      sp.setString('email', data.name);
 
       return '';
     } else {
