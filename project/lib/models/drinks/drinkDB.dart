@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pim_group/models/drinks/drink.dart';
+import 'package:pim_group/models/entities_sleep/drink.dart';
 
 //This class extends ChangeNotifier.
 //It will act as data repository for the drinks and will be shared thorugh the application.
