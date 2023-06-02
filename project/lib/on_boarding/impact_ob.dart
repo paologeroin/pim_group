@@ -48,8 +48,8 @@ class _ImpactOnboardingState extends State<ImpactOnboarding> {
           key: _formKey,
           child: Column(
             children: <Widget>[
-              Image.asset(
-                  'assets/impact_logo.png'), // prende il logo di impact da internet, io lo cambierei
+              /*Image.asset(
+                 'assets/impact_logo.png'),*/ // prende il logo di impact da internet, io lo cambierei
               const Text(
                   'We need your authorization to connect to your fitbit', // PER ACCEDERE AI TOKEN serve che l'utente acceda a impact
                   style: TextStyle(
