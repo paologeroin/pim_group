@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:pim_group/models/drinks/drink.dart';
+//import 'package:pim_group/models/drinks/drink.dart';
 import 'package:pim_group/models/drinks/drinkDB.dart';
 import 'package:pim_group/widgetsgoals/formTiles.dart';
 import 'package:pim_group/widgetsgoals/formSeparator.dart';
 import 'package:pim_group/utils/formats.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:provider/provider.dart';
+import 'package:pim_group/models/repo/sleep_repository.dart';
+import 'package:pim_group/models/entities_sleep/drink.dart';
 
 //This is the class that implement the page to be used to edit existing drinks and add new drinks.
 //This is a StatefulWidget since it needs to rebuild when the form fields change.
@@ -36,6 +39,7 @@ class _DrinkPageState extends State<DrinkPage> {
   //Variables that maintain the current form fields values in memory.
   TextEditingController _choController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
+  DateTime today = DateTime.now();
 
   String? currentSelectedValue;
   final ValueNotifier<List<String>> _listNotifier =
@@ -73,7 +77,8 @@ class _DrinkPageState extends State<DrinkPage> {
         title: Text(DrinkPage.routeDisplayName),
         actions: [
           IconButton(
-              onPressed: () => {
+              onPressed: () async => {
+                  
                     checkstate = false,
                     _validateAndSave(context),
                     if (checkstate)
@@ -103,9 +108,130 @@ class _DrinkPageState extends State<DrinkPage> {
               icon: Icon(Icons.done)),
         ],
       ),
-      body: Center(
-        child: _buildForm(context),
-      ),
+      body: 
+          Column(
+            children: [
+              Center(
+                child: SizedBox(
+                  height: 300,
+                  child: 
+                    _buildForm(context),              
+                ),
+              ),
+              Text("Drinks today:"),
+              SizedBox(
+                height: 300,
+                child: Center(
+                      child:
+                        //We will show the todo table with a ListView.
+                        //To do so, we use a Consumer of DatabaseRepository in order to rebuild the widget tree when
+                        //entries are deleted or created.
+                        Consumer<SleepDatabaseRepository>(
+                          builder: (context, dbr, child) {
+                        //The logic is to query the DB for the entire list of Todo using dbr.findAllTodos()
+                        //and then populate the ListView accordingly.
+                        //We need to use a FutureBuilder since the result of dbr.findAllTodos() is a Future.
+                        return FutureBuilder(
+                          initialData: null,
+                          future: dbr.findDrinksOnDate(DateTime(today.year, today.month, today.day, 0, 0),DateTime(today.year, today.month, today.day, 23, 59)),
+                          builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final data = snapshot.data as List<Drink>;
+                  return ListView.builder(
+                      itemCount: data.length,
+                      itemBuilder: (context, drinkIndex) {
+                        final drink = data[drinkIndex];
+                        return Card(
+                          elevation: 5,
+                          //Here we use a Dismissible widget to create a nicer UI.
+                          child: Dismissible(
+                            //Just create a dummy unique key
+                            key: UniqueKey(),
+                            //This is the background to show when the ListTile is swiped
+                            background: Container(color: Colors.red),
+                            //The ListTile is used to show the Todo entry
+                            child: ListTile(
+                              leading: Icon(MdiIcons.note),
+                              title: Text(drink.drinkType),
+                              subtitle: Text('ID: ${drink.id}'),
+                              //If the ListTile is tapped, it is deleted
+                            ),
+                            //This method is called when the ListTile is dismissed
+                            onDismissed: (direction) async {
+                              //No need to use a Consumer, we are just using a method of the DatabaseRepository
+                              await Provider.of<SleepDatabaseRepository>(context,
+                                      listen: false)
+                                  .removeDrink(drink);
+                            },
+                          ),
+                        );
+                      });
+                } else {
+                  //A CircularProgressIndicator is shown while the list of Todo is loading.
+                  return CircularProgressIndicator();
+                } //else
+                          },//builder of FutureBuilder
+                        );
+                      }),
+                    ),
+              ),
+            ],
+          ),
+          /*Center(
+        child:
+          //We will show the todo table with a ListView.
+          //To do so, we use a Consumer of DatabaseRepository in order to rebuild the widget tree when
+          //entries are deleted or created.
+          Consumer<SleepDatabaseRepository>(
+            builder: (context, dbr, child) {
+          //The logic is to query the DB for the entire list of Todo using dbr.findAllTodos()
+          //and then populate the ListView accordingly.
+          //We need to use a FutureBuilder since the result of dbr.findAllTodos() is a Future.
+          return FutureBuilder(
+            initialData: null,
+            future: dbr.findAllDrinks(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final data = snapshot.data as List<Drink>;
+                return ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (context, drinkIndex) {
+                      final drink = data[drinkIndex];
+                      return Card(
+                        elevation: 5,
+                        //Here we use a Dismissible widget to create a nicer UI.
+                        child: Dismissible(
+                          //Just create a dummy unique key
+                          key: UniqueKey(),
+                          //This is the background to show when the ListTile is swiped
+                          background: Container(color: Colors.red),
+                          //The ListTile is used to show the Todo entry
+                          child: ListTile(
+                            leading: Icon(MdiIcons.note),
+                            title: Text(drink.drinkType),
+                            subtitle: Text('ID: ${drink.id}'),
+                            //If the ListTile is tapped, it is deleted
+                          ),
+                          //This method is called when the ListTile is dismissed
+                          onDismissed: (direction) async {
+                            //No need to use a Consumer, we are just using a method of the DatabaseRepository
+                            await Provider.of<SleepDatabaseRepository>(context,
+                                    listen: false)
+                                .removeDrink(drink);
+                          },
+                        ),
+                      );
+                    });
+              } else {
+                //A CircularProgressIndicator is shown while the list of Todo is loading.
+                return CircularProgressIndicator();
+              } //else
+            },//builder of FutureBuilder
+          );
+        }),
+      ),*/
+        
+      
       floatingActionButton: widget.drinkIndex == -1
           ? null
           : FloatingActionButton(
@@ -270,7 +396,7 @@ Consumer<MealDB>(
   } //_selectDate
 
   //Utility method that validate the form and, if it is valid, save the new drink information.
-  void _validateAndSave(BuildContext context) {
+  void _validateAndSave(BuildContext context) async {
     if (formKey.currentState!.validate()) {
       //print(currentSelectedValue);
       if (currentSelectedValue == null) {
@@ -283,6 +409,8 @@ Consumer<MealDB>(
         widget.drinkIndex == -1
             ? widget.drinkDB.addDrink(newDrink)
             : widget.drinkDB.editDrink(widget.drinkIndex, newDrink);
+          await Provider.of<SleepDatabaseRepository>(context, listen: false)
+                .insertDrink(newDrink);
         setState(() {
           checkstate = true;
         });
