@@ -3,13 +3,14 @@ import 'package:floor/floor.dart';
 
 // Ha senso??????
 @Entity(
-  tableName: 'levels', foreignKeys: [
+  tableName: 'levels', 
+  /*foreignKeys: [
     ForeignKey(
       childColumns: ['count', 'minutes', 'thirtyDayAvgMinutes'],
       parentColumns: ['deep', 'light', 'rem', 'awake'],
       entity: Levels,
       )
-  ],
+  ],*/
 )
 class Levels {
 
