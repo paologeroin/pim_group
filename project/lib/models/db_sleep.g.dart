@@ -73,13 +73,15 @@ class _$SleepDatabase extends SleepDatabase {
 
   LevelsDao? _levelsDaoInstance;
 
+  DrinkDao? _drinkDaoInstance;
+
   Future<sqflite.Database> open(
     String path,
     List<Migration> migrations, [
     Callback? callback,
   ]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 4,
+      version: 5,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
         await callback?.onConfigure?.call(database);
@@ -105,7 +107,9 @@ class _$SleepDatabase extends SleepDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Minutes` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `minutesAsleep` INTEGER NOT NULL, `minutesAwake` INTEGER NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `levels` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `deep` TEXT NOT NULL, `light` TEXT NOT NULL, `rem` TEXT NOT NULL, `awake` TEXT NOT NULL, FOREIGN KEY (`count`, `minutes`, `thirtyDayAvgMinutes`) REFERENCES `levels` (`deep`, `light`, `rem`, `awake`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `levels` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `deep` TEXT NOT NULL, `light` TEXT NOT NULL, `rem` TEXT NOT NULL, `awake` TEXT NOT NULL)');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `Drink` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `drinkType` TEXT NOT NULL, `dateTime` INTEGER NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -142,6 +146,11 @@ class _$SleepDatabase extends SleepDatabase {
   @override
   LevelsDao get levelsDao {
     return _levelsDaoInstance ??= _$LevelsDao(database, changeListener);
+  }
+
+  @override
+  DrinkDao get drinkDao {
+    return _drinkDaoInstance ??= _$DrinkDao(database, changeListener);
   }
 }
 
@@ -768,6 +777,82 @@ class _$LevelsDao extends LevelsDao {
   @override
   Future<void> deleteLevels(Levels levels) async {
     await _levelsDeletionAdapter.delete(levels);
+  }
+}
+
+class _$DrinkDao extends DrinkDao {
+  _$DrinkDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
+        _drinkInsertionAdapter = InsertionAdapter(
+            database,
+            'Drink',
+            (Drink item) => <String, Object?>{
+                  'id': item.id,
+                  'drinkType': item.drinkType,
+                  'dateTime': _dateTimeConverter.encode(item.dateTime)
+                }),
+        _drinkDeletionAdapter = DeletionAdapter(
+            database,
+            'Drink',
+            ['id'],
+            (Drink item) => <String, Object?>{
+                  'id': item.id,
+                  'drinkType': item.drinkType,
+                  'dateTime': _dateTimeConverter.encode(item.dateTime)
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<Drink> _drinkInsertionAdapter;
+
+  final DeletionAdapter<Drink> _drinkDeletionAdapter;
+
+  @override
+  Future<List<Drink>> findAllDrinks() async {
+    return _queryAdapter.queryList('SELECT * FROM Drink',
+        mapper: (Map<String, Object?> row) => Drink(
+            id: row['id'] as int?,
+            drinkType: row['drinkType'] as String,
+            dateTime: _dateTimeConverter.decode(row['dateTime'] as int)));
+  }
+
+  @override
+  Future<List<Drink>> findDrinksOnDate(
+    DateTime startTime,
+    DateTime endTime,
+  ) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM Drink WHERE dateTime between ?1 and ?2 ORDER BY dateTime ASC',
+        mapper: (Map<String, Object?> row) => Drink(id: row['id'] as int?, drinkType: row['drinkType'] as String, dateTime: _dateTimeConverter.decode(row['dateTime'] as int)),
+        arguments: [
+          _dateTimeConverter.encode(startTime),
+          _dateTimeConverter.encode(endTime)
+        ]);
+  }
+
+  @override
+  Future<List<Drink>> findMostRecentDrink() async {
+    return _queryAdapter.queryList('SELECT * FROM Drink ORDER BY dateTime ASC',
+        mapper: (Map<String, Object?> row) => Drink(
+            id: row['id'] as int?,
+            drinkType: row['drinkType'] as String,
+            dateTime: _dateTimeConverter.decode(row['dateTime'] as int)));
+  }
+
+  @override
+  Future<void> insertDrink(Drink drink) async {
+    await _drinkInsertionAdapter.insert(drink, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> deleteDrink(Drink task) async {
+    await _drinkDeletionAdapter.delete(task);
   }
 }
 

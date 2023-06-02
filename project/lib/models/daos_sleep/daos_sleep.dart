@@ -4,3 +4,4 @@ export 'dataDao.dart';
 export 'timeLimitDao.dart';
 export 'minutesDao.dart';
 export 'levelsDao.dart';
+export 'drinkDao.dart';

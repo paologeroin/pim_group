@@ -37,6 +37,22 @@ class SleepDatabaseRepository extends ChangeNotifier{
     final results = await sleepdatabase.dataDao.findAllData();
     return results;
   }//findAllData
+    Future<List<Drink>> findAllDrinks() async{
+    final results = await sleepdatabase.drinkDao.findAllDrinks();
+    return results;
+  }//findAllDrinks
+
+  //Wrap findDrinksOnDate
+  Future<List<Drink>> findDrinksOnDate(startTime, endTime) async{
+    final results = await sleepdatabase.drinkDao.findDrinksOnDate(startTime, endTime);
+    return results;
+  }//findAllDrinks
+
+    //Wrap findMostRecentDrink
+  Future<List<Drink>> findMostRecentDrink() async{
+    final results = await sleepdatabase.drinkDao.findMostRecentDrink();
+    return results;
+  }//findAllDrinks
 
   //This method wraps the insertMeal() method of the DAO. 
   //Then, it notifies the listeners that something changed.
@@ -64,6 +80,10 @@ class SleepDatabaseRepository extends ChangeNotifier{
     final results = await sleepdatabase.dataDao.insertData(data);
     return results;
   }//insertData
+  Future<void> insertDrink(Drink drink) async{
+    final results = await sleepdatabase.drinkDao.insertDrink(drink);
+    return results;
+  }//insertDrink
 
   //This method wraps the deleteMeal() method of the DAO. 
   //Then, it notifies the listeners that something changed.
@@ -89,6 +109,11 @@ class SleepDatabaseRepository extends ChangeNotifier{
   }//removeSleepDuration
   Future<void> removeData(Data data) async{
     final results = await sleepdatabase.dataDao.deleteData(data);
+    return results;
+  }//removeData
+
+   Future<void> removeDrink(Drink drink) async{
+    final results = await sleepdatabase.drinkDao.deleteDrink(drink);
     return results;
   }//removeData
 
