@@ -17,6 +17,11 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'EditProfilePage.dart';
 
+import 'package:provider/provider.dart';
+import 'package:pim_group/models/repo/sleep_repository.dart';
+import 'package:pim_group/models/entities_sleep/drink.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
 Random random = new Random();
 int randomNumber = random.nextInt(4); // from 0 upto 99 included
 const Sec = Duration(seconds: 30);
@@ -41,7 +46,14 @@ class HomePage extends StatefulWidget {
 class _HomePage extends State<HomePage> {
   int oldValue = randomNumber;
   Timer? countdownTimer;
+  Timer? updateTimer;
   Duration myDuration = Duration(seconds: 10);
+  Duration updateDuration = Duration(seconds: 1);
+  DateTime today = DateTime.now();
+  DateTime last = DateTime.now();
+  Duration diff = Duration(hours: 0);
+
+  format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
 
   void startTimer() {
     countdownTimer = Timer.periodic(myDuration, (_) => changePhrase());
@@ -63,6 +75,7 @@ class _HomePage extends State<HomePage> {
       randomNumber++;
       print("change: $randomNumber");
     }
+
     //});
     setState(() {
       oldValue = randomNumber;
@@ -70,14 +83,25 @@ class _HomePage extends State<HomePage> {
     });
   }
 
+   void _update() async {
+      last = await lastDrink(context);
+      setState(() {
+        today = DateTime.now();
+      });
+      print(diff);
+    }
+
   @override
   void initState() {
+    _update();
+    updateTimer = Timer.periodic(updateDuration, (timer) => _update()); 
     startTimer();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    diff = -(last.difference(today));
     DateTime now = DateTime.now();
     String convertedDateTime = "";
     convertedDateTime =
@@ -192,11 +216,16 @@ class _HomePage extends State<HomePage> {
             Column(
               children: [
                 Container(
-                    child: Text('You are sober from:',
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.lato(
-                            fontSize: 30,
-                            color: Color.fromARGB(255, 30, 121, 0))),
+                    child: Column(
+                      children: [
+                        Text('You are sober from:',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.lato(
+                                fontSize: 30,
+                                color: Color.fromARGB(255, 30, 121, 0))),
+                                Text(format(diff))
+                      ],
+                    ),
                     // Border to visualize the container
                     width: MediaQuery.of(context).size.width / 1.2,
                     height: 155,
@@ -403,4 +432,11 @@ class RoundShape extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(CustomClipper oldClipper) => true;
+}
+
+Future<DateTime> lastDrink(BuildContext context) async {
+  List<Drink> lastDrinks = await Provider.of<SleepDatabaseRepository>(context, listen: false).findMostRecentDrink();
+  DateTime lastDrinkDate = lastDrinks.last.dateTime;
+  print(lastDrinkDate);
+  return lastDrinkDate;
 }
