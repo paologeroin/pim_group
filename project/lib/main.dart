@@ -7,10 +7,29 @@ import 'package:pim_group/pages/LoginPage.dart';
 import 'package:pim_group/services/impact.dart';
 import 'package:pim_group/utils/shared_preferences.dart';
 import 'package:provider/provider.dart';
+import 'package:pim_group/models/db_sleep.dart';
+import 'package:pim_group/models/repo/sleep_repository.dart';
 
-void main() {
-  runApp(MyApp());
-}
+
+Future<void> main() async {
+  //This is a special method that use WidgetFlutterBinding to interact with the Flutter engine. 
+  //This is needed when you need to interact with the native core of the app.
+  //Here, we need it since when need to initialize the DB before running the app.
+  WidgetsFlutterBinding.ensureInitialized();
+
+  //This opens the database.
+  final SleepDatabase database =
+      await $FloorSleepDatabase.databaseBuilder('app_database.db').build();
+  //This creates a new DatabaseRepository from the AppDatabase instance just initialized
+  final databaseRepository = SleepDatabaseRepository(sleepdatabase: database);
+
+  //Here, we run the app and we provide to the whole widget tree the instance of the DatabaseRepository. 
+  //That instance will be then shared through the platform and will be unique.
+  runApp(ChangeNotifierProvider<SleepDatabaseRepository>(
+    create: (context) => databaseRepository,
+    child: MyApp(),
+  ));
+} //main
 
 /// Defition of MyApp class
 class MyApp extends StatelessWidget {
