@@ -435,7 +435,7 @@ class RoundShape extends CustomClipper<Path> {
 }
 
 Future<DateTime> lastDrink(BuildContext context) async {
-  List<Drink> lastDrinks = await Provider.of<SleepDatabaseRepository>(context, listen: false).findMostRecentDrink();
+  List<Drink> lastDrinks = await Provider.of<AppDatabaseRepository>(context, listen: false).findMostRecentDrink();
   DateTime lastDrinkDate = lastDrinks.last.dateTime;
   print(lastDrinkDate);
   return lastDrinkDate;

@@ -126,7 +126,7 @@ class _DrinkPageState extends State<DrinkPage> {
                         //We will show the todo table with a ListView.
                         //To do so, we use a Consumer of DatabaseRepository in order to rebuild the widget tree when
                         //entries are deleted or created.
-                        Consumer<SleepDatabaseRepository>(
+                        Consumer<AppDatabaseRepository>(
                           builder: (context, dbr, child) {
                         //The logic is to query the DB for the entire list of Todo using dbr.findAllTodos()
                         //and then populate the ListView accordingly.
@@ -159,7 +159,7 @@ class _DrinkPageState extends State<DrinkPage> {
                             //This method is called when the ListTile is dismissed
                             onDismissed: (direction) async {
                               //No need to use a Consumer, we are just using a method of the DatabaseRepository
-                              await Provider.of<SleepDatabaseRepository>(context,
+                              await Provider.of<AppDatabaseRepository>(context,
                                       listen: false)
                                   .removeDrink(drink);
                             },
@@ -409,7 +409,7 @@ Consumer<MealDB>(
         widget.drinkIndex == -1
             ? widget.drinkDB.addDrink(newDrink)
             : widget.drinkDB.editDrink(widget.drinkIndex, newDrink);
-          await Provider.of<SleepDatabaseRepository>(context, listen: false)
+          await Provider.of<AppDatabaseRepository>(context, listen: false)
                 .insertDrink(newDrink);
         setState(() {
           checkstate = true;

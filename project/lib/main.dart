@@ -18,14 +18,14 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   //This opens the database.
-  final SleepDatabase database =
+  final AppDatabase database =
       await $FloorSleepDatabase.databaseBuilder('app_database.db').build();
   //This creates a new DatabaseRepository from the AppDatabase instance just initialized
-  final databaseRepository = SleepDatabaseRepository(sleepdatabase: database);
+  final databaseRepository = AppDatabaseRepository(database: database);
 
   //Here, we run the app and we provide to the whole widget tree the instance of the DatabaseRepository. 
   //That instance will be then shared through the platform and will be unique.
-  runApp(ChangeNotifierProvider<SleepDatabaseRepository>(
+  runApp(ChangeNotifierProvider<AppDatabaseRepository>(
     create: (context) => databaseRepository,
     child: MyApp(),
   ));
