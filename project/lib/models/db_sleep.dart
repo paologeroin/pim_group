@@ -14,8 +14,11 @@ part 'db_sleep.g.dart'; // the generated code will be there
 //We also added a TypeConverter to manage the DateTime of a Meal entry, since DateTimes are not natively
 //supported by Floor.
 @TypeConverters([DateTimeConverter])
-@Database(version: 5, entities: [Drink]) //Efficiency, Data, TimeLimit])
+@Database(version: 5, entities: [Drink, Sleep, Levels, Data])
 abstract class AppDatabase extends FloorDatabase {
   //Add all the daos as getters here
   DrinkDao get drinkDao;
+  SleepDao get sleepDao;
+  LevelsDao get levelDao;
+  DataDao get dataDao;
 }//AppDatabase

@@ -1,5 +1,7 @@
+import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:dio/dio.dart';
+import 'package:pim_group/models/entities_sleep/entities_sleep.dart';
 import 'package:pim_group/utils/shared_preferences.dart';
 import 'package:pim_group/utils/server_strings.dart';
 
@@ -113,4 +115,121 @@ class ImpactService {
       return false;
     }
   }
+
+  Future<bool> refreshTokens() async {
+    String? refToken = await retrieveSavedToken(true);
+    try {
+      Response response = await _dio.post(
+          '${ServerStrings.authServerUrl}refresh/',
+          data: {'refresh': refToken},
+          options: Options(
+              contentType: 'application/json',
+              followRedirects: false,
+              validateStatus: (status) => true,
+              headers: {"Accept": "application/json"}));
+
+      if (ImpactService.checkToken(response.data['access']) &&
+          ImpactService.checkToken(response.data['refresh'])) {
+        prefs.impactRefreshToken = response.data['refresh'];
+        prefs.impactAccessToken = response.data['access'];
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<void> updateBearer() async {
+    if (!await checkSavedToken()) {
+      await refreshTokens();
+    }
+    String? token = await prefs.impactAccessToken;
+    if (token != null) {
+      _dio.options.headers = {'Authorization': 'Bearer $token'};
+    }
+  }
+
+Future<List<Sleep>> getDataFromDay(DateTime dateOfSleep) async {
+  await updateBearer();
+  
+  // Calcola startTime ed endTime basandomi sulla data di riferimento
+  DateTime startTime = DateTime(dateOfSleep.year, dateOfSleep.month, dateOfSleep.day, 0, 0, 0);
+  DateTime endTime = DateTime(dateOfSleep.year, dateOfSleep.month, dateOfSleep.day, 23, 59, 59);
+  
+  Response r = await _dio.get(
+    '/data/v1/sleep/${prefs.username}/daterange/start_date/${DateFormat('y-M-d').format(startTime)}/end_date/${DateFormat('y-M-d').format(endTime)}/'
+  );
+
+  // Verifica se la richiesta ha avuto successo
+  if (r.statusCode == 200) {
+    // Recupera i dati dal corpo della risposta
+    List<dynamic> sleepData = r.data['data'];
+
+    // Mappa i dati recuperati in oggetti Sleep
+    List<Sleep> sleepList = sleepData.map((data) {
+      return Sleep(
+        null, // id generato automaticamente dal database
+        DateTime.parse(data['dateOfSleep']),
+        DateTime.parse(data['startTime']),
+        DateTime.parse(data['endTime']),
+        data['duration'],
+        data['minutesToFallAsleep'],
+        data['minutesAsleep'],
+        data['minutesAwake'],
+        data['efficiency'],
+        data['mainSleep'],
+        data['levelName'],
+      );
+    }).toList();
+
+    return sleepList;
+  } else {
+    // La richiesta non è andata a buon fine, gestisci l'errore di conseguenza
+    throw Exception('Failed to retrieve sleep data');
+  }
 }
+
+
+// DA SISTEMARE: ma da fare per tutti i dati????
+  // Future<List<Sleep>> getDataFromDay(DateTime dateOfSleep) async {
+  //   await updateBearer();
+  //   Response r = await _dio.get(
+  //       '/data/v1/sleep/${prefs.username}/daterange/start_date/${DateFormat('y-M-d').format(startTime)}/end_date/${DateFormat('y-M-d').format(endTime)}/');
+  //   List<dynamic> data = r.data['data'];
+  //   List<Sleep> sleepData = [];
+  //   for (var daydata in data) {
+  //     String day = daydata['date'];
+  //     for (var dataday in daydata['data']) {
+  //       String hour = dataday['time'];
+  //       String datetime = '${day}T$hour';
+  //       DateTime endTime = _truncateSeconds(DateTime.parse(datetime));
+  //       Sleep sleepDataNew = Sleep(null,
+  //           dateOfSleep, // dateOfSleep
+  //           startTime, // Inserisci un valore appropriato per startTime
+  //           endTime, // endTime - Assumendo che endTime sia uguale a timestamp
+  //           dataday['value'], // duration
+  //           0, // minutesToFallAsleep - Inserisci un valore appropriato
+  //           0, // minutesAsleep - Inserisci un valore appropriato
+  //           0, // minutesAwake - Inserisci un valore appropriato
+  //           0, // efficiency - Inserisci un valore appropriato
+  //           false, // mainSleep - Inserisci un valore appropriato
+  //           '', // levelName - Inserisci un valore appropriato);
+  //       );
+  //       if (!sleepData.any((e) => e.dateOfSleep.isAtSameMomentAs(sleepDataNew.dateOfSleep))) {
+  //         sleepData.add(sleepDataNew);
+  //       }
+  //     }
+  //   }
+  //   var sleepDataList = sleepData.toList()..sort((a, b) => a.dateOfSleep.compareTo(b.dateOfSleep));
+  //   return sleepDataList;
+  // }
+
+  // DateTime _truncateSeconds(DateTime input) {
+  //   return DateTime(
+  //       input.year, input.month, input.day, input.hour, input.minute);
+  // }
+
+}//ImpactService

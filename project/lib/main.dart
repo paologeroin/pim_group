@@ -19,7 +19,7 @@ Future<void> main() async {
 
   //This opens the database.
   final AppDatabase database =
-      await $FloorSleepDatabase.databaseBuilder('app_database.db').build();
+      await $FloorAppDatabase.databaseBuilder('app_database.db').build();
   //This creates a new DatabaseRepository from the AppDatabase instance just initialized
   final databaseRepository = AppDatabaseRepository(database: database);
 
@@ -44,9 +44,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<GoalProvider>(
           create: (context) => GoalProvider(),
         ), //GoalProvider
-        ChangeNotifierProvider<SleepProvider>(
-          create: (context) => SleepProvider(),
-        ), //SleepProvider
+        // ChangeNotifierProvider<SleepProvider>(
+        //   create: (context) => SleepProvider(),
+        // ), //SleepProvider
         ChangeNotifierProvider<ProfileProvider>(
           create: (context) => ProfileProvider(),
         ), //Profile Provider
