@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:floor/floor.dart';
 import 'package:pim_group/models/typeConverters/dateTimeConverter.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
-import 'package:pim_group/models/daos_sleep/daos_sleep.dart';
-import 'entities_sleep/entities_sleep.dart';
+import 'package:pim_group/models/daos/daos.dart';
+import 'entities/entities.dart';
 
 //Here, we are importing the entities and the daos of the database
 

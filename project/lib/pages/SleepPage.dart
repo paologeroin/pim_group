@@ -7,7 +7,7 @@ import 'package:pim_group/services/impact.dart';
 import 'package:provider/provider.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pim_group/widgets/custom_plot.dart';
-import '../models/entities_sleep/entities_sleep.dart';
+import '../models/entities/entities.dart';
 import '../models/sleep/sleep_provider.dart';
 
 // Creation of a StatefulWidget for the sleep page:
@@ -46,7 +46,8 @@ class _SleepState extends State<SleepPage> {
               ),
             ),
           ),
-          body: SingleChildScrollView(
+          body: Padding(
+              padding: EdgeInsets.all(8.0),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -66,9 +67,9 @@ class _SleepState extends State<SleepPage> {
                   child: Consumer<SleepProvider>(
                   builder: (context, sleepProvider, child) {
                     Sleep? sleepData = sleepProvider.getDataOfDay(DateTime.now()) as Sleep?;
-                    //Future<int> awakenings = sleepProvider.getAwakeCount(sleepDao.sleepId);
+                    int? awakenings = sleepProvider.awakeCount as int?;
                     if (sleepData != null) {
-                    return Column(
+                    return ListView(
                       children: [
                         ListTile(
                             title: Text('Sleep Duration'),
@@ -81,13 +82,28 @@ class _SleepState extends State<SleepPage> {
                           ListTile(
                             title: Text('Awakenings'),
                             trailing:
-                              Text('') //$awakenings times
+                              Text('${awakenings}') //oppure sleepProvider.awakeCount e commento riga 69
                           ),
                       ],
                     );
                     }else{
-                      return // mettere eventuale messaggio di errore
-                        Text('Loading Error'); //$awakenings times
+                      return ListView(
+                      children: [
+                        ListTile(
+                            title: Text('Sleep Duration'),
+                            trailing: Text('No entry today!'),
+                          ),
+                          ListTile(
+                            title: Text('Time to Fall Asleep'),
+                            trailing: Text('No entry today!'),
+                          ),
+                          ListTile(
+                            title: Text('Awakenings'),
+                            trailing:
+                              Text('No entry today!')
+                          ),
+                      ],
+                    );
                     }
                   })
                 ),
@@ -118,7 +134,7 @@ class _SleepState extends State<SleepPage> {
                         })
                   ],
                 ),
-                // Da capire grafico perché vi dà errore il widget
+                // Da capire grafico perché dà errore il widget
                 // Consumer<SleepProvider>(
                 //   builder: (context, sleepProvider, child) {
                 //     List<Levels> data = sleepProvider.level; // Assumi che sleepLevels sia la lista dei livelli di sonno

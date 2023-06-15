@@ -7,8 +7,8 @@ import 'package:pim_group/widgetsgoals/formSeparator.dart';
 import 'package:pim_group/utils/formats.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:provider/provider.dart';
-import 'package:pim_group/models/repo/sleep_repository.dart';
-import 'package:pim_group/models/entities_sleep/drink.dart';
+import 'package:pim_group/models/repo/app_repository.dart';
+import 'package:pim_group/models/entities/drink.dart';
 
 //This is the class that implement the page to be used to edit existing drinks and add new drinks.
 //This is a StatefulWidget since it needs to rebuild when the form fields change.

@@ -1,5 +1,5 @@
 import 'package:floor/floor.dart';
-import 'package:pim_group/models/entities_sleep/entities_sleep.dart';
+import 'package:pim_group/models/entities/entities.dart';
 
 @dao
 abstract class DataDao {

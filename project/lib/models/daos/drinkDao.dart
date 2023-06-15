@@ -1,4 +1,4 @@
-import 'package:pim_group/models/entities_sleep/drink.dart';
+import 'package:pim_group/models/entities/drink.dart';
 import 'package:floor/floor.dart';
 
 //Here, we are saying that the following class defines a dao.

@@ -1,10 +1,10 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:pim_group/models/entities_sleep/entities_sleep.dart';
+import 'package:pim_group/models/entities/entities.dart';
 import 'package:pim_group/models/db_sleep.dart';
 import 'package:pim_group/services/impact.dart';
 import 'package:pim_group/utils/server_strings.dart';
-import '../daos_sleep/daos_sleep.dart';
+import '../daos/daos.dart';
 
 // this is the change notifier. it will manage all the logic of the home page:
 // fetching the correct data from the database and on
@@ -16,6 +16,7 @@ class SleepProvider extends ChangeNotifier{
   late List<Levels> level;
   late List<Data> data;
   final AppDatabase sleepDB;
+  late int? awakeCount;
 
   // There will be a privite part that is used only by the sleep_provider
   // data fetched from external services or db
@@ -36,7 +37,7 @@ class SleepProvider extends ChangeNotifier{
   // constructor of provider which manages the fetching of all data
   // from the servers and then notifies the ui to build
   Future<void> _init() async {
-    await _fetch();
+    await _fetchAndCalculate();
     await getDataOfDay(dateOfSleep);
     doneInit = true;
     notifyListeners();
@@ -51,7 +52,7 @@ class SleepProvider extends ChangeNotifier{
     }//_getLastFetch
   
   // method to fetch all data
-  Future<void> _fetch() async {
+  Future<void> _fetchAndCalculate() async {
     lastFetch = await _getLastFetch() ??
         DateTime.now().subtract(const Duration(days: 2));
     // do nothing if already fetched
@@ -71,11 +72,13 @@ class SleepProvider extends ChangeNotifier{
     for (var element in _data) {
       sleepDB.dataDao.insertData(element);
     }
+
+    awakeCount = _getAwakeCount(_level.last.sleepId) as int?;
   }
 
   // method to trigger a new data fetching
   Future<void> refresh() async {
-    await _fetch();
+    await _fetchAndCalculate();
     await getDataOfDay(dateOfSleep);
   }//refresh
 
@@ -102,7 +105,7 @@ class SleepProvider extends ChangeNotifier{
     );
   }//getDataOfDay
 
-  Future<Future<int?>> getAwakeCount(int sleepId) async {
+  Future<Future<int?>> _getAwakeCount(int sleepId) async {
     final sleepDao = sleepDB.levelDao;
     return sleepDao.getAwakeCount(sleepId);
   }

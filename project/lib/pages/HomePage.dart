@@ -18,8 +18,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'EditProfilePage.dart';
 
 import 'package:provider/provider.dart';
-import 'package:pim_group/models/repo/sleep_repository.dart';
-import 'package:pim_group/models/entities_sleep/drink.dart';
+import 'package:pim_group/models/repo/app_repository.dart';
+import 'package:pim_group/models/entities/drink.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 Random random = new Random();

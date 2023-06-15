@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:dio/dio.dart';
-import 'package:pim_group/models/entities_sleep/entities_sleep.dart';
+import 'package:pim_group/models/entities/entities.dart';
 import 'package:pim_group/utils/shared_preferences.dart';
 import 'package:pim_group/utils/server_strings.dart';
 
@@ -152,84 +152,77 @@ class ImpactService {
     }
   }
 
-Future<List<Sleep>> getDataFromDay(DateTime dateOfSleep) async {
-  await updateBearer();
+  Future<List<Sleep>> getDataFromDay(DateTime dateOfSleep) async {
+    await updateBearer();
+
+  // Calcolo startTime ed endTime basandomi sulla data di riferimento
+  // DateTime startTime = DateTime(dateOfSleep.year, dateOfSleep.month, dateOfSleep.day, 0, 0, 0);
+  // DateTime endTime = DateTime(dateOfSleep.year, dateOfSleep.month, dateOfSleep.day, 23, 59, 59);
   
-  // Calcola startTime ed endTime basandomi sulla data di riferimento
-  DateTime startTime = DateTime(dateOfSleep.year, dateOfSleep.month, dateOfSleep.day, 0, 0, 0);
-  DateTime endTime = DateTime(dateOfSleep.year, dateOfSleep.month, dateOfSleep.day, 23, 59, 59);
-  
-  Response r = await _dio.get(
-    '/data/v1/sleep/${prefs.username}/daterange/start_date/${DateFormat('y-M-d').format(startTime)}/end_date/${DateFormat('y-M-d').format(endTime)}/'
-  );
 
-  // Verifica se la richiesta ha avuto successo
-  if (r.statusCode == 200) {
-    // Recupera i dati dal corpo della risposta
-    List<dynamic> sleepData = r.data['data'];
+    Response r = await _dio.get(
+      'data/v1/sleep/username/${prefs.username}/day/${DateFormat('y-M-d').format(dateOfSleep)}');
+       
+       //'/data/v1/sleep/${prefs.username}/daterange/start_date/${DateFormat('y-M-d').format(startTime)}/end_date/${DateFormat('y-M-d').format(endTime)}/');
+    
+    // Verifica se la richiesta ha avuto successo
+      if (r.statusCode == 200) {
+        // Recupera i dati dal corpo della risposta
+        List<dynamic> sleepData = r.data['data'];
+    // List<dynamic> data = r.data['data'];
+    // List<Sleep> sleepData = [];
+    // for (var daydata in data) {
+    //   String day = daydata['date'];
+    //   for (var dataday in daydata['data']) {
+    //     String hour = dataday['time'];
+    //     String datetime = '${day}T$hour';
+    //     DateTime endTime = _truncateSeconds(DateTime.parse(datetime));
+    //     // devo definire gli altri 7 campi per definire sleepDataNew...
+    //     //int duration = 
+    //     Sleep sleepDataNew = Sleep(
+    //       null,
+    //       dateOfSleep,
+    //       startTime,
+    //       endTime
+          //,
+          // duration,
+          // minutesToFallAsleep,
+          // minutesAsleep,
+          // minutesAwake,
+          // efficiency,
+          // mainSleep,
+          // levelName
+          //);
+        
+      // Mappa i dati recuperati in oggetti Sleep
+        List<Sleep> sleepList = sleepData.map((data) {
+          return Sleep(
+            null, // id generato automaticamente dal database
+            DateTime.parse(data['dateOfSleep']),
+            DateTime.parse(data['startTime']),
+            DateTime.parse(data['endTime']),
+            data['duration'],
+            data['minutesToFallAsleep'],
+            data['minutesAsleep'],
+            data['minutesAwake'],
+            data['efficiency'],
+            data['mainSleep'],
+            data['levelName'],
+          );
+        }).toList();
 
-    // Mappa i dati recuperati in oggetti Sleep
-    List<Sleep> sleepList = sleepData.map((data) {
-      return Sleep(
-        null, // id generato automaticamente dal database
-        DateTime.parse(data['dateOfSleep']),
-        DateTime.parse(data['startTime']),
-        DateTime.parse(data['endTime']),
-        data['duration'],
-        data['minutesToFallAsleep'],
-        data['minutesAsleep'],
-        data['minutesAwake'],
-        data['efficiency'],
-        data['mainSleep'],
-        data['levelName'],
-      );
-    }).toList();
-
-    return sleepList;
-  } else {
-    // La richiesta non è andata a buon fine, gestisci l'errore di conseguenza
-    throw Exception('Failed to retrieve sleep data');
+        return sleepList;
+      } else {
+        // La richiesta non è andata a buon fine, gestisci l'errore di conseguenza
+        throw Exception('Failed to retrieve sleep data');
+      }
+    } //getDataFromDay
+    // var sleepDataList = sleepData.toList()..sort((a, b) => a.dateOfSleep.compareTo(b.dateOfSleep));
+    // return sleepDataList;
   }
-}
 
-
-// DA SISTEMARE: ma da fare per tutti i dati????
-  // Future<List<Sleep>> getDataFromDay(DateTime dateOfSleep) async {
-  //   await updateBearer();
-  //   Response r = await _dio.get(
-  //       '/data/v1/sleep/${prefs.username}/daterange/start_date/${DateFormat('y-M-d').format(startTime)}/end_date/${DateFormat('y-M-d').format(endTime)}/');
-  //   List<dynamic> data = r.data['data'];
-  //   List<Sleep> sleepData = [];
-  //   for (var daydata in data) {
-  //     String day = daydata['date'];
-  //     for (var dataday in daydata['data']) {
-  //       String hour = dataday['time'];
-  //       String datetime = '${day}T$hour';
-  //       DateTime endTime = _truncateSeconds(DateTime.parse(datetime));
-  //       Sleep sleepDataNew = Sleep(null,
-  //           dateOfSleep, // dateOfSleep
-  //           startTime, // Inserisci un valore appropriato per startTime
-  //           endTime, // endTime - Assumendo che endTime sia uguale a timestamp
-  //           dataday['value'], // duration
-  //           0, // minutesToFallAsleep - Inserisci un valore appropriato
-  //           0, // minutesAsleep - Inserisci un valore appropriato
-  //           0, // minutesAwake - Inserisci un valore appropriato
-  //           0, // efficiency - Inserisci un valore appropriato
-  //           false, // mainSleep - Inserisci un valore appropriato
-  //           '', // levelName - Inserisci un valore appropriato);
-  //       );
-  //       if (!sleepData.any((e) => e.dateOfSleep.isAtSameMomentAs(sleepDataNew.dateOfSleep))) {
-  //         sleepData.add(sleepDataNew);
-  //       }
-  //     }
-  //   }
-  //   var sleepDataList = sleepData.toList()..sort((a, b) => a.dateOfSleep.compareTo(b.dateOfSleep));
-  //   return sleepDataList;
-  // }
-
-  // DateTime _truncateSeconds(DateTime input) {
-  //   return DateTime(
-  //       input.year, input.month, input.day, input.hour, input.minute);
-  // }
+  DateTime _truncateSeconds(DateTime input) {
+    return DateTime(
+        input.year, input.month, input.day, input.hour, input.minute);
 
 }//ImpactService

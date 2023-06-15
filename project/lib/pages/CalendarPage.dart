@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:provider/provider.dart';
-import 'package:pim_group/models/repo/sleep_repository.dart';
-import 'package:pim_group/models/entities_sleep/drink.dart';
+import 'package:pim_group/models/repo/app_repository.dart';
+import 'package:pim_group/models/entities/drink.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class ProgressPage extends StatefulWidget {

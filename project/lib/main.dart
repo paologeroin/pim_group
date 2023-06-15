@@ -8,7 +8,7 @@ import 'package:pim_group/services/impact.dart';
 import 'package:pim_group/utils/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:pim_group/models/db_sleep.dart';
-import 'package:pim_group/models/repo/sleep_repository.dart';
+import 'package:pim_group/models/repo/app_repository.dart';
 
 
 Future<void> main() async {
