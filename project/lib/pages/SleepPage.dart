@@ -10,27 +10,38 @@ import 'package:pim_group/widgets/custom_plot.dart';
 import '../models/entities/entities.dart';
 import '../models/sleep/sleep_provider.dart';
 
-// Creation of a StatefulWidget for the sleep page:
-// it requires two classes (at least).
-// Below there is the StatefulWidget class that creates an instance of the Widget itself.
-class SleepPage extends StatefulWidget {
-  const SleepPage({super.key});
+// // Creation of a StatefulWidget for the sleep page:
+// // it requires two classes (at least).
+// // Below there is the StatefulWidget class that creates an instance of the Widget itself.
+// class SleepPage extends StatefulWidget {
+//   const SleepPage({super.key});
 
-  @override
-  State<SleepPage> createState() => _SleepState();
-}
+//   @override
+//   State<SleepPage> createState() => _SleepState();
+// }
 
-// And then there is a State class that manages the state of the StatefulWidget
-class _SleepState extends State<SleepPage> {
+// // And then there is a State class that manages the state of the StatefulWidget
+// class _SleepState extends State<SleepPage> {
+
+class SleepPage extends StatelessWidget {
+  const SleepPage({Key? key}) : super(key: key);
+    
+        // Access the data from SleepProvider
+        // and build your UI based on the provider's data
+        
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<SleepProvider>(
-      create: (context) => SleepProvider(
-        Provider.of<ImpactService>(context, listen: false),
-        Provider.of<AppDatabase>(context, listen: false),
-      ),
-      lazy: false,
-      builder: (context, child) => Scaffold(
+    return  Consumer<SleepProvider>(
+      builder: (context, sleepProvider, child) {
+      return Scaffold(
+  // @override
+  // Widget build(BuildContext context) {
+  //   return ChangeNotifierProvider<SleepProvider>(
+      // here we use a consumer to react to the changes in the provider, which are triggered by the notifyListener method
+      // child: Consumer<SleepProvider>(
+        // Provider.of<ImpactService>(context, listen: false),
+        // Provider.of<AppDatabase>(context, listen: false),
+      // lazy: false,
           appBar: AppBar(
             backgroundColor: Color.fromARGB(255, 109, 230, 69),
             elevation: 1,
@@ -141,8 +152,11 @@ class _SleepState extends State<SleepPage> {
                 //     return CustomPlot(data: _parseData(data));
                 //   },
                 // )
-              ]))));
-  }
+              ]))
+      );//Scaffold
+      });//Consumer e builder
+            }//Widget
+  }//StatelessWidget
 
   List<Map<String, dynamic>> _parseData(List<Levels> data) {
     return data
@@ -154,4 +168,3 @@ class _SleepState extends State<SleepPage> {
         )
         .toList();
   }
-}//_SleepPageState

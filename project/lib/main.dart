@@ -31,6 +31,7 @@ Future<void> main() async {
   ));
 } //main
 
+
 /// Defition of MyApp class
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -45,7 +46,9 @@ class MyApp extends StatelessWidget {
           create: (context) => GoalProvider(),
         ), //GoalProvider
         // ChangeNotifierProvider<SleepProvider>(
-        //   create: (context) => SleepProvider(),
+        //   create: (context) => SleepProvider(
+        //     Provider.of<ImpactService>(context, listen: false),
+        //     Provider.of<AppDatabaseRepository>(context, listen: false).database,),
         // ), //SleepProvider
         ChangeNotifierProvider<ProfileProvider>(
           create: (context) => ProfileProvider(),
@@ -56,10 +59,10 @@ class MyApp extends StatelessWidget {
           lazy: false,
         ),
         Provider(
-            create: (context) => ImpactService(
-                  // We pass the newly created preferences to the service
-                  Provider.of<Preferences>(context, listen: false),
-                )),
+          create: (context) => ImpactService(
+            // We pass the newly created preferences to the service
+            Provider.of<Preferences>(context, listen: false),
+          )),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,

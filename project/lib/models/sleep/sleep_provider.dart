@@ -27,7 +27,7 @@ class SleepProvider extends ChangeNotifier{
   // selected day of data to be shown
   DateTime dateOfSleep = DateTime.now().subtract(const Duration(days: 1));
   late DateTime lastFetch;
-  final ImpactService impactService; // mi ha fatto aggiungere il late(?)
+  final ImpactService impactService;
   bool doneInit = false;
 
   SleepProvider(this.impactService, this.sleepDB) {
