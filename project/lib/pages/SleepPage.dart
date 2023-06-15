@@ -31,17 +31,9 @@ class SleepPage extends StatelessWidget {
         
   @override
   Widget build(BuildContext context) {
-    return  Consumer<SleepProvider>(
+    return Consumer<SleepProvider>(
       builder: (context, sleepProvider, child) {
       return Scaffold(
-  // @override
-  // Widget build(BuildContext context) {
-  //   return ChangeNotifierProvider<SleepProvider>(
-      // here we use a consumer to react to the changes in the provider, which are triggered by the notifyListener method
-      // child: Consumer<SleepProvider>(
-        // Provider.of<ImpactService>(context, listen: false),
-        // Provider.of<AppDatabase>(context, listen: false),
-      // lazy: false,
           appBar: AppBar(
             backgroundColor: Color.fromARGB(255, 109, 230, 69),
             elevation: 1,
