@@ -63,6 +63,12 @@ class MyApp extends StatelessWidget {
             // We pass the newly created preferences to the service
             Provider.of<Preferences>(context, listen: false),
           )),
+        ChangeNotifierProvider(
+          create: (context) => SleepProvider(
+            // We pass the newly created preferences to the service
+            Provider.of<ImpactService>(context, listen: false),
+            Provider.of<AppDatabaseRepository>(context, listen: false).database)
+          ),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
