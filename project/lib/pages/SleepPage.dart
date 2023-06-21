@@ -25,14 +25,13 @@ import '../models/sleep/sleep_provider.dart';
 
 class SleepPage extends StatelessWidget {
   const SleepPage({Key? key}) : super(key: key);
-    
-        // Access the data from SleepProvider
-        // and build your UI based on the provider's data
-        
+
+  // Access the data from SleepProvider
+  // and build your UI based on the provider's data
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<SleepProvider>(
-      builder: (context, sleepProvider, child) {
+    return Consumer<SleepProvider>(builder: (context, sleepProvider, child) {
       return Scaffold(
           appBar: AppBar(
             backgroundColor: Color.fromARGB(255, 109, 230, 69),
@@ -54,109 +53,108 @@ class SleepPage extends StatelessWidget {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                Container(
-                  padding: EdgeInsets.all(16),
-                  child: Text(
-                    'Today',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                    Container(
+                      padding: EdgeInsets.all(16),
+                      child: Text(
+                        'Today',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                // List of various parameters measured during the last night
-                Card(
-                  margin: EdgeInsets.symmetric(horizontal: 16),
-                  child: Consumer<SleepProvider>(
-                  builder: (context, sleepProvider, child) {
-                    Sleep? sleepData = sleepProvider.getDataOfDay(DateTime.now()) as Sleep?;
-                    int? awakenings = sleepProvider.awakeCount as int?;
-                    if (sleepData != null) {
-                    return ListView(
+                    // List of various parameters measured during the last night
+                    Card(
+                        margin: EdgeInsets.symmetric(horizontal: 16),
+                        child: Consumer<SleepProvider>(
+                            builder: (context, sleepProvider, child) {
+                          Sleep? sleepData = sleepProvider
+                              .getDataOfDay(DateTime.now()) as Sleep?;
+                          int? awakenings = sleepProvider.awakeCount as int?;
+                          if (sleepData != null) {
+                            return ListView(
+                              children: [
+                                ListTile(
+                                  title: Text('Sleep Duration'),
+                                  trailing: Text('${sleepData.duration}'),
+                                ),
+                                ListTile(
+                                  title: Text('Time to Fall Asleep'),
+                                  trailing: Text(
+                                      '${sleepData.minutesToFallAsleep} minutes'),
+                                ),
+                                ListTile(
+                                    title: Text('Awakenings'),
+                                    trailing: Text(
+                                        '${awakenings}') //oppure sleepProvider.awakeCount e commento riga 69
+                                    ),
+                              ],
+                            );
+                          } else {
+                            return ListView(
+                              children: [
+                                ListTile(
+                                  title: Text('Sleep Duration'),
+                                  trailing: Text('No entry today!'),
+                                ),
+                                ListTile(
+                                  title: Text('Time to Fall Asleep'),
+                                  trailing: Text('No entry today!'),
+                                ),
+                                ListTile(
+                                    title: Text('Awakenings'),
+                                    trailing: Text('No entry today!')),
+                              ],
+                            );
+                          }
+                        })),
+                    // I make a Row widget to create navigation between days
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ListTile(
-                            title: Text('Sleep Duration'),
-                            trailing: Text('${sleepData.duration}'),
-                          ),
-                          ListTile(
-                            title: Text('Time to Fall Asleep'),
-                            trailing: Text('${sleepData.minutesToFallAsleep} minutes'),
-                          ),
-                          ListTile(
-                            title: Text('Awakenings'),
-                            trailing:
-                              Text('${awakenings}') //oppure sleepProvider.awakeCount e commento riga 69
-                          ),
+                        IconButton(
+                            icon: const Icon(Icons.navigate_before),
+                            onPressed: () {
+                              // here we use the access method to retrieve the Provider and use its values and methods
+                              final sleepProvider = Provider.of<SleepProvider>(
+                                  context,
+                                  listen: false);
+                              DateTime day = sleepProvider.dateOfSleep;
+                              sleepProvider.getDataOfDay(
+                                  day.subtract(const Duration(days: 1)));
+                            }),
+                        Consumer<SleepProvider>(
+                            builder: (context, value, child) => Text(
+                                DateFormat('dd MMMM yyyy')
+                                    .format(value.dateOfSleep))),
+                        IconButton(
+                            icon: const Icon(Icons.navigate_next),
+                            onPressed: () {
+                              final sleepProvider = Provider.of<SleepProvider>(
+                                  context,
+                                  listen: false);
+                              DateTime day = sleepProvider.dateOfSleep;
+                              sleepProvider.getDataOfDay(
+                                  day.add(const Duration(days: 1)));
+                            })
                       ],
-                    );
-                    }else{
-                      return ListView(
-                      children: [
-                        ListTile(
-                            title: Text('Sleep Duration'),
-                            trailing: Text('No entry today!'),
-                          ),
-                          ListTile(
-                            title: Text('Time to Fall Asleep'),
-                            trailing: Text('No entry today!'),
-                          ),
-                          ListTile(
-                            title: Text('Awakenings'),
-                            trailing:
-                              Text('No entry today!')
-                          ),
-                      ],
-                    );
-                    }
-                  })
-                ),
-                // I make a Row widget to create navigation between days
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                        icon: const Icon(Icons.navigate_before),
-                        onPressed: () {
-                          // here we use the access method to retrieve the Provider and use its values and methods
-                          final sleepProvider =
-                            Provider.of<SleepProvider>(context, listen: false);
-                          DateTime day = sleepProvider.dateOfSleep;
-                          sleepProvider.getDataOfDay(day.subtract(const Duration(days: 1)));
-                        }),
-                    Consumer<SleepProvider>(
-                        builder: (context, value, child) => Text(
-                            DateFormat('dd MMMM yyyy')
-                                .format(value.dateOfSleep))),
-                    IconButton(
-                        icon: const Icon(Icons.navigate_next),
-                        onPressed: () {
-                          final sleepProvider =
-                          Provider.of<SleepProvider>(context, listen: false);
-                          DateTime day = sleepProvider.dateOfSleep;
-                          sleepProvider.getDataOfDay(day.add(const Duration(days: 1)));
-                        })
-                  ],
-                ),
-                // Da capire grafico perché dà errore il widget
-                // Consumer<SleepProvider>(
-                //   builder: (context, sleepProvider, child) {
-                //     List<Levels> data = sleepProvider.level; // Assumi che sleepLevels sia la lista dei livelli di sonno
-                //     return CustomPlot(data: _parseData(data));
-                //   },
-                // )
-              ]))
-      );//Scaffold
-      });//Consumer e builder
-            }//Widget
-  }//StatelessWidget
+                    ),
+                    // Da capire grafico perché dà errore il widget
+                    // Consumer<SleepProvider>(
+                    //   builder: (context, sleepProvider, child) {
+                    //     List<Levels> data = sleepProvider.level; // Assumi che sleepLevels sia la lista dei livelli di sonno
+                    //     return CustomPlot(data: _parseData(data));
+                    //   },
+                    // )
+                  ]))); //Scaffold
+    }); //Consumer e builder
+  } //Widget
+} //StatelessWidget
 
-  List<Map<String, dynamic>> _parseData(List<Levels> data) {
-    return data
-        .map(
-          (e) => {
-            'level': e.levelName,
-            'time': e.minutes
-          },
-        )
-        .toList();
-  }
+List<Map<String, dynamic>> _parseData(List<Levels> data) {
+  return data
+      .map(
+        (e) => {'level': e.levelName, 'time': e.minutes},
+      )
+      .toList();
+}

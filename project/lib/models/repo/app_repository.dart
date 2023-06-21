@@ -79,5 +79,5 @@ class AppDatabaseRepository extends ChangeNotifier {
   Future<void> updateGoal(Goal goal) async {
     await database.goalDao.updateGoal(goal);
     notifyListeners();
-  } //updateMeal
+  } //updateGoal
 } //SleepDatabaseRepository
