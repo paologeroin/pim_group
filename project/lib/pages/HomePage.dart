@@ -12,11 +12,9 @@ import 'package:quickalert/quickalert.dart';
 import 'dart:math';
 import 'ProfilePage.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'EditProfilePage.dart';
-
 import 'package:provider/provider.dart';
 import 'package:pim_group/models/repo/app_repository.dart';
 import 'package:pim_group/models/entities/drink.dart';
@@ -52,6 +50,16 @@ class _HomePage extends State<HomePage> {
   DateTime today = DateTime.now();
   DateTime last = DateTime.now();
   Duration diff = Duration(hours: 0);
+  String fullname = '';
+
+  Future<void> _loadProfileData() async {
+    SharedPreferences prefs = await SharedPreferences
+        .getInstance(); // avremo potuto gestirla come una unica lista di stringhe ma ormai è cosi, pace e amen, l'idea mi è venuta troppo tardi
+    setState(() {
+      fullname = prefs.getString('fullname') ?? '';
+    });
+  }
+ 
 
   format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
 
@@ -97,10 +105,12 @@ class _HomePage extends State<HomePage> {
     updateTimer = Timer.periodic(updateDuration, (timer) => _update()); 
     startTimer();
     super.initState();
+    _loadProfileData();
   }
 
   @override
   Widget build(BuildContext context) {
+    _loadProfileData();
     diff = -(last.difference(today));
     DateTime now = DateTime.now();
     String convertedDateTime = "";
@@ -169,7 +179,7 @@ class _HomePage extends State<HomePage> {
           preferredSize: Size.fromHeight(40.0),
           child: AppBar(
             title: Column(children: [
-              Text("Ciao NOME,", style: GoogleFonts.lato()),
+              Text("Ciao $fullname", style: GoogleFonts.lato()),
               GestureDetector(
                 child: Text(frasedisplay, style: GoogleFonts.lato()),
               )
