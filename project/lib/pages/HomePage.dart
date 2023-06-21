@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:pim_group/models/goals/goalProvider.dart';
 import 'package:pim_group/pages/LoginPage.dart';
 import 'package:pim_group/pages/TokenPage.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/entities/goals.dart';
 import 'AboutPage.dart';
 import 'SettingsPage.dart';
 import 'package:quickalert/quickalert.dart';
@@ -59,7 +59,6 @@ class _HomePage extends State<HomePage> {
       fullname = prefs.getString('fullname') ?? '';
     });
   }
- 
 
   format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
 
@@ -91,18 +90,18 @@ class _HomePage extends State<HomePage> {
     });
   }
 
-   void _update() async {
-      last = await lastDrink(context);
-      setState(() {
-        today = DateTime.now();
-      });
-      print(diff);
-    }
+  void _update() async {
+    last = await lastDrink(context);
+    setState(() {
+      today = DateTime.now();
+    });
+    print(diff);
+  }
 
   @override
   void initState() {
     _update();
-    updateTimer = Timer.periodic(updateDuration, (timer) => _update()); 
+    updateTimer = Timer.periodic(updateDuration, (timer) => _update());
     startTimer();
     super.initState();
     _loadProfileData();
@@ -233,7 +232,7 @@ class _HomePage extends State<HomePage> {
                             style: GoogleFonts.lato(
                                 fontSize: 30,
                                 color: Color.fromARGB(255, 30, 121, 0))),
-                                Text(format(diff))
+                        Text(format(diff))
                       ],
                     ),
                     // Border to visualize the container
@@ -359,49 +358,37 @@ class _HomePage extends State<HomePage> {
                 Center(
                   //We are using a Consumer because we want that the UI showing
                   //the list of goals to rebuild every time the Goal DB updates.
-                  child: Consumer<GoalProvider>(
-                    builder: (context, goalProvider, child) {
-                      //If the list of goals is empty, show a simple Text, otherwise show the list of goals using a ListView.
-                      return goalProvider.goals.isEmpty
-                          ? const Text(
-                              'You have no Goals now, insert one of yours Goals here')
-                          : Card(
-                              child: Column(
-                                children: <Widget>[
-                                  ListTile(
-                                    leading: Icon(MdiIcons.flag),
-                                    trailing: Icon(MdiIcons.noteEdit),
-                                    title:
-                                        Text('${goalProvider.goals[0].name}'),
-                                    subtitle: Text(
-                                        'objective to reach: ${goalProvider.goals[0].money} €'),
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: EdgeInsets.all(15),
-                                        child: LinearPercentIndicator(
-                                          width:
-                                              330, //MediaQuery.of(context).size.width = 50,
-                                          animation: true,
-                                          lineHeight: 30.0,
-                                          animationDuration: 2500,
-                                          percent:
-                                              0.8, // percent: $soldi_risparmiati / ${goalDB.goals[mealIndex].money}
-                                          center: Text(
-                                              "80 %"), // center: Text($soldi_risparmiati / ${goalDB.goals[mealIndex].money}) QUANDO AVREMO I DATI
-                                          // barRadius: Radius.circular(15),
-                                          // backgroundColor: Colors.grey,
-                                          progressColor:
-                                              Color.fromARGB(255, 109, 230, 69),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            );
+                  child: Consumer<AppDatabaseRepository>(
+                    builder: (context, goal, child) {
+                      return FutureBuilder(
+                        initialData: null,
+                        future: goal.findAllGoals(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            final data = snapshot.data as List<Goal>;
+                            //If the Goal table is empty, show a simple Text, otherwise show the list of goals using a ListView.
+                            return data.length == 0
+                                ? const Text(
+                                    'The goals list is currently empty')
+                                :
+                                //Here, we are using a Card to show a Meal
+                                Card(
+                                    elevation: 5,
+                                    child: ListTile(
+                                      leading: const Icon(MdiIcons.flag),
+                                      trailing: const Icon(MdiIcons.noteEdit),
+                                      title: Text(data[0].name),
+                                      subtitle: Text(
+                                          'objective to reach: ${data[0].money} €'),
+                                    ),
+                                    // andrebbe qua
+                                  );
+                          } //if
+                          else {
+                            return const CircularProgressIndicator();
+                          } //else
+                        }, //FutureBuilder builder
+                      );
                     },
                   ),
                 ), // FINE CODICE INSERITO DA PAOLO
@@ -445,7 +432,9 @@ class RoundShape extends CustomClipper<Path> {
 }
 
 Future<DateTime> lastDrink(BuildContext context) async {
-  List<Drink> lastDrinks = await Provider.of<AppDatabaseRepository>(context, listen: false).findMostRecentDrink();
+  List<Drink> lastDrinks =
+      await Provider.of<AppDatabaseRepository>(context, listen: false)
+          .findMostRecentDrink();
   DateTime lastDrinkDate = lastDrinks.last.dateTime;
   print(lastDrinkDate);
   return lastDrinkDate;

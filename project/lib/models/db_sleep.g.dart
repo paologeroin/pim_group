@@ -69,6 +69,8 @@ class _$AppDatabase extends AppDatabase {
 
   DataDao? _dataDaoInstance;
 
+  GoalDao? _goalDaoInstance;
+
   Future<sqflite.Database> open(
     String path,
     List<Migration> migrations, [
@@ -98,6 +100,8 @@ class _$AppDatabase extends AppDatabase {
             'CREATE TABLE IF NOT EXISTS `Levels` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `levelName` TEXT NOT NULL, `count` INTEGER NOT NULL, `minutes` INTEGER NOT NULL, `thirtyDayAvgMinutes` INTEGER NOT NULL, `sleepId` INTEGER NOT NULL, FOREIGN KEY (`sleepId`) REFERENCES `Levels` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Data` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `dateTime` INTEGER NOT NULL, `level` INTEGER NOT NULL, `seconds` INTEGER NOT NULL, `sleepId` INTEGER NOT NULL, FOREIGN KEY (`sleepId`) REFERENCES `Data` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `Goal` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `money` REAL NOT NULL, `dateTime` INTEGER NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -123,6 +127,11 @@ class _$AppDatabase extends AppDatabase {
   @override
   DataDao get dataDao {
     return _dataDaoInstance ??= _$DataDao(database, changeListener);
+  }
+
+  @override
+  GoalDao get goalDao {
+    return _goalDaoInstance ??= _$GoalDao(database, changeListener);
   }
 }
 
@@ -594,6 +603,89 @@ class _$DataDao extends DataDao {
   @override
   Future<void> deleteData(Data data) async {
     await _dataDeletionAdapter.delete(data);
+  }
+}
+
+class _$GoalDao extends GoalDao {
+  _$GoalDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
+        _goalInsertionAdapter = InsertionAdapter(
+            database,
+            'Goal',
+            (Goal item) => <String, Object?>{
+                  'id': item.id,
+                  'name': item.name,
+                  'money': item.money,
+                  'dateTime': _dateTimeConverter.encode(item.dateTime)
+                }),
+        _goalUpdateAdapter = UpdateAdapter(
+            database,
+            'Goal',
+            ['id'],
+            (Goal item) => <String, Object?>{
+                  'id': item.id,
+                  'name': item.name,
+                  'money': item.money,
+                  'dateTime': _dateTimeConverter.encode(item.dateTime)
+                }),
+        _goalDeletionAdapter = DeletionAdapter(
+            database,
+            'Goal',
+            ['id'],
+            (Goal item) => <String, Object?>{
+                  'id': item.id,
+                  'name': item.name,
+                  'money': item.money,
+                  'dateTime': _dateTimeConverter.encode(item.dateTime)
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<Goal> _goalInsertionAdapter;
+
+  final UpdateAdapter<Goal> _goalUpdateAdapter;
+
+  final DeletionAdapter<Goal> _goalDeletionAdapter;
+
+  @override
+  Future<List<Goal>> findAllGoals() async {
+    return _queryAdapter.queryList('SELECT * FROM Goal',
+        mapper: (Map<String, Object?> row) => Goal(
+            id: row['id'] as int?,
+            name: row['name'] as String,
+            money: row['money'] as double,
+            dateTime: _dateTimeConverter.decode(row['dateTime'] as int)));
+  }
+
+  @override
+  Future<List<Goal>> findMostRecentGoal() async {
+    return _queryAdapter.queryList('SELECT * FROM Goal ORDER BY dateTime ASC',
+        mapper: (Map<String, Object?> row) => Goal(
+            id: row['id'] as int?,
+            name: row['name'] as String,
+            money: row['money'] as double,
+            dateTime: _dateTimeConverter.decode(row['dateTime'] as int)));
+  }
+
+  @override
+  Future<void> insertGoal(Goal goal) async {
+    await _goalInsertionAdapter.insert(goal, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> updateGoal(Goal goal) async {
+    await _goalUpdateAdapter.update(goal, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> deleteGoal(Goal task) async {
+    await _goalDeletionAdapter.delete(task);
   }
 }
 

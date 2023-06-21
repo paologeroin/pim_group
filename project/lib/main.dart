@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pim_group/models/drinks/drinkDB.dart';
-import 'package:pim_group/models/goals/goalProvider.dart';
 import 'package:pim_group/models/profile/profileInfo_provider.dart';
 import 'package:pim_group/models/sleep/sleep_provider.dart';
 import 'package:pim_group/pages/LoginPage.dart';
@@ -10,9 +9,8 @@ import 'package:provider/provider.dart';
 import 'package:pim_group/models/db_sleep.dart';
 import 'package:pim_group/models/repo/app_repository.dart';
 
-
 Future<void> main() async {
-  //This is a special method that use WidgetFlutterBinding to interact with the Flutter engine. 
+  //This is a special method that use WidgetFlutterBinding to interact with the Flutter engine.
   //This is needed when you need to interact with the native core of the app.
   //Here, we need it since when need to initialize the DB before running the app.
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,14 +21,13 @@ Future<void> main() async {
   //This creates a new DatabaseRepository from the AppDatabase instance just initialized
   final databaseRepository = AppDatabaseRepository(database: database);
 
-  //Here, we run the app and we provide to the whole widget tree the instance of the DatabaseRepository. 
+  //Here, we run the app and we provide to the whole widget tree the instance of the DatabaseRepository.
   //That instance will be then shared through the platform and will be unique.
   runApp(ChangeNotifierProvider<AppDatabaseRepository>(
     create: (context) => databaseRepository,
     child: MyApp(),
   ));
 } //main
-
 
 /// Defition of MyApp class
 class MyApp extends StatelessWidget {
@@ -42,9 +39,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<DrinkDB>(
           create: (context) => DrinkDB(),
         ), //DrinkProvider
-        ChangeNotifierProvider<GoalProvider>(
-          create: (context) => GoalProvider(),
-        ), //GoalProvider
         // ChangeNotifierProvider<SleepProvider>(
         //   create: (context) => SleepProvider(
         //     Provider.of<ImpactService>(context, listen: false),
@@ -59,16 +53,16 @@ class MyApp extends StatelessWidget {
           lazy: false,
         ),
         Provider(
-          create: (context) => ImpactService(
-            // We pass the newly created preferences to the service
-            Provider.of<Preferences>(context, listen: false),
-          )),
+            create: (context) => ImpactService(
+                  // We pass the newly created preferences to the service
+                  Provider.of<Preferences>(context, listen: false),
+                )),
         ChangeNotifierProvider(
-          create: (context) => SleepProvider(
-            // We pass the newly created preferences to the service
-            Provider.of<ImpactService>(context, listen: false),
-            Provider.of<AppDatabaseRepository>(context, listen: false).database)
-          ),
+            create: (context) => SleepProvider(
+                // We pass the newly created preferences to the service
+                Provider.of<ImpactService>(context, listen: false),
+                Provider.of<AppDatabaseRepository>(context, listen: false)
+                    .database)),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,

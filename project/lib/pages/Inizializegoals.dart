@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:pim_group/models/goals/goalDB.dart';
-import 'package:pim_group/models/goals/goalProvider.dart';
+import 'package:pim_group/models/repo/app_repository.dart';
 import 'package:pim_group/widgetsgoals/formTiles.dart';
 import 'package:pim_group/widgetsgoals/formSeparator.dart';
 import 'package:pim_group/utils/formats.dart';
+import 'package:provider/provider.dart';
+import '../models/entities/goals.dart';
 
 //This is the class that implement the page to be used to edit existing goals and add new goals.
 //This is a StatefulWidget since it needs to rebuild when the form fields change.
 
 class CreateGoalsPage extends StatefulWidget {
   //GoalPage needs to know the index of the goal we are editing (it is equal to -1 if the goal is new)
-  final int goalIndex;
-  //For simplicity, even if it is not necessary, we are also passing the instance of GoalDB.
-  //This choice is not mandatory and maybe redundant, but it will allow us to initialize easily the form values.
-  final GoalProvider goalDB;
+  final Goal? goal;
 
   //GoalPage constructor
-  CreateGoalsPage({Key? key, required this.goalDB, required this.goalIndex})
-      : super(key: key);
+  CreateGoalsPage({Key? key, required this.goal}) : super(key: key);
 
   static const routeDisplayName = 'Goal\'s specification';
 
@@ -46,22 +43,16 @@ class _GoalPageState extends State<CreateGoalsPage> {
   //  In this case, initialize them to empty and now(), respectively, otherwise set them to the respective values.
   @override
   void initState() {
-    _NameController.text = widget.goalIndex == -1
-        ? ''
-        : widget.goalDB.goals[widget.goalIndex].name;
-    // se l'indice è uguale a -1 (vuol dire che sto inizializzando un nuovo goal)
+    _NameController.text = widget.goal == null ? '' : widget.goal!.name;
+
     // inizializzo _NameController come vuoto '', altrimenti lo imposto al rispettivo valore
 
-    _Controller.text = widget.goalIndex == -1
-        ? ''
-        : widget.goalDB.goals[widget.goalIndex].money.toString();
-    // se l'indice è uguale a -1 (vuol dire che sto inizializzando un nuovo goal)
+    _Controller.text = widget.goal == null ? '' : widget.goal!.money.toString();
+
     // inizializzo _Controller come vuoto '', altrimenti lo imposto al rispettivo valore
 
-    _selectedDate = widget.goalIndex == -1
-        ? DateTime.now()
-        : widget.goalDB.goals[widget.goalIndex].dateTime;
-    // se l'indice è uguale a -1 (vuol dire che sto inizializzando un nuovo goal)
+    _selectedDate =
+        widget.goal == null ? DateTime.now() : widget.goal!.dateTime;
     // inizializzo _selectDate alla data di oggi, altrimenti lo imposto al rispettivo valore
 
     super.initState();
@@ -98,7 +89,7 @@ class _GoalPageState extends State<CreateGoalsPage> {
       body: Center(
         child: _buildForm(context),
       ),
-      floatingActionButton: widget.goalIndex == -1
+      floatingActionButton: widget.goal == null
           ? null
           : FloatingActionButton(
               onPressed: () => _deleteAndPop(context),
@@ -172,7 +163,8 @@ class _GoalPageState extends State<CreateGoalsPage> {
   } //_selectDate
 
   //Utility method that validate the form and, if it is valid, save the new goal information.
-  void _validateAndSave(BuildContext context) {
+  // VECCHIO
+  /* void _validateAndSave(BuildContext context) {
     if (formKey.currentState!.validate()) {
       // MANCA IL FATTO CHE L'UTENTE DEVE SCRIVERE QUALCOSA NEL NOME PER ACCETTARE credo sia nelle condizioni qua
       Goal newGoal = Goal(
@@ -187,11 +179,43 @@ class _GoalPageState extends State<CreateGoalsPage> {
               newGoal); // altrimenti vuol dire che ho editato il goal
       Navigator.pop(context);
     }
+  } // _validateAndSave */
+  void _validateAndSave(BuildContext context) async {
+    if (formKey.currentState!.validate()) {
+      //If the original Meal passed to the MealPage was null, then add a new Meal...
+      if (widget.goal == null) {
+        Goal newGoal = Goal(
+            id: null,
+            name: _NameController.text,
+            money: double.parse(_Controller.text),
+            dateTime: _selectedDate);
+        await Provider.of<AppDatabaseRepository>(context, listen: false)
+            .insertGoal(newGoal);
+      } //i
+      //...otherwise, edit it.
+      else {
+        Goal updatedGoal = Goal(
+            id: widget.goal!.id,
+            name: _NameController.text,
+            money: double.parse(_Controller.text),
+            dateTime: _selectedDate);
+        await Provider.of<AppDatabaseRepository>(context, listen: false)
+            .updateGoal(updatedGoal);
+      } //else
+      Navigator.pop(context);
+    } //if
   } // _validateAndSave
 
   //Utility method that deletes a goal entry.
-  void _deleteAndPop(BuildContext context) {
+  // VECCHIO
+  /* void _deleteAndPop(BuildContext context) {
     widget.goalDB.deleteGoal(widget.goalIndex);
     Navigator.pop(context); // pop per tornare a schermata precedente
+  } //_deleteAndPop */
+
+  void _deleteAndPop(BuildContext context) async {
+    await Provider.of<AppDatabaseRepository>(context, listen: false)
+        .removeGoal(widget.goal!);
+    Navigator.pop(context);
   } //_deleteAndPop
 } //GoalPage
