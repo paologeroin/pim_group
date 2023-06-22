@@ -5,7 +5,6 @@ import 'package:pim_group/pages/LoginPage.dart';
 import 'package:pim_group/pages/TokenPage.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../models/entities/entities.dart';
 import 'AboutPage.dart';
 import 'SettingsPage.dart';
