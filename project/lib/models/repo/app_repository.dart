@@ -1,7 +1,6 @@
 import 'package:pim_group/models/db_sleep.dart';
 import 'package:pim_group/models/entities/entities.dart';
 import 'package:flutter/material.dart';
-import 'package:pim_group/models/entities/goals.dart';
 
 // inspo from the repository design pattern -> fare grafico ER
 

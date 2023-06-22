@@ -1,8 +1,6 @@
 //Imports that are necessary to the code generator of floor
 import 'dart:async';
 import 'package:floor/floor.dart';
-import 'package:pim_group/models/daos/goalsDao.dart';
-import 'package:pim_group/models/entities/goals.dart';
 import 'package:pim_group/models/typeConverters/dateTimeConverter.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 import 'package:pim_group/models/daos/daos.dart';

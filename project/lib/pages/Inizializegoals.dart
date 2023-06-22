@@ -7,6 +7,7 @@ import 'package:pim_group/utils/formats.dart';
 import 'package:provider/provider.dart';
 import '../models/entities/goals.dart';
 
+
 //This is the class that implement the page to be used to edit existing goals and add new goals.
 //This is a StatefulWidget since it needs to rebuild when the form fields change.
 

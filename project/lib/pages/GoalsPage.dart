@@ -3,7 +3,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:pim_group/models/repo/app_repository.dart';
 import 'package:pim_group/pages/inizializegoals.dart';
 import 'package:provider/provider.dart';
-import '../models/entities/goals.dart';
+import '../models/entities/entities.dart';
 
 //Homepage screen. It will show the list of goals.
 class GoalsPage extends StatelessWidget {
