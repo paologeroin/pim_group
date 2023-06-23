@@ -435,7 +435,13 @@ Future<DateTime> lastDrink(BuildContext context) async {
   List<Drink> lastDrinks =
       await Provider.of<AppDatabaseRepository>(context, listen: false)
           .findMostRecentDrink();
-  DateTime lastDrinkDate = lastDrinks.last.dateTime;
+          DateTime lastDrinkDate; 
+          if (lastDrinks.length == 0){
+            lastDrinkDate = DateTime.now();
+          } else {
+           lastDrinkDate = lastDrinks.last.dateTime;
+          }
+  
   print(lastDrinkDate);
   return lastDrinkDate;
 }
