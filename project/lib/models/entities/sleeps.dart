@@ -1,4 +1,6 @@
 import 'package:floor/floor.dart';
+import 'package:intl/intl.dart';
+import 'package:pim_group/models/entities/entities.dart';
 
 //Here, we are saying to floor that this is a class that defines an entity
 // The entity is the duration of the sleep session in ms (attenzione millisecondi!!!)
@@ -27,11 +29,31 @@ class Sleep {
 
   final bool mainSleep;
 
-  final String levelName;
+  // final Levels level; //Non sono sicura sia giusto
   
-  // final data;
+  // final Data data; //Non sono sicura sia giusto
 
+  //Perché sono due foreingkeys per la entity sleeps -ire
 
   // Default constructor
-  Sleep(this.id, this.dateOfSleep, this.startTime, this.endTime, this.duration, this.minutesToFallAsleep, this.minutesAsleep, this.minutesAwake, this.efficiency, this.mainSleep, this.levelName);
+  Sleep(this.id, this.dateOfSleep, this.startTime, this.endTime,
+    this.duration, this.minutesToFallAsleep, this.minutesAsleep,
+    this.minutesAwake, this.efficiency, this.mainSleep,);
+  
+    // this.level, this.data); //da aggiungere
+  
+  //Penso vada qui ma non sono sicura, dobbiamo creare un json array
+  //N.B.: JSON array: an ordered list of zero or more elements, each of
+  // which may be of any type. Arrays use square bracket notation with comma-separated elements.
+  // (vedi Theory part 4)
+  // quel parametro "json" è quindi un array di coppie chiave:valore + coppie chiave:lista per
+  // levels e data (queste liste contengono a loro volta array di coppie chiave:valore) 
+  // (vedi pagina web impact)
+
+  // Qui dà errore perché data = int.parse(json["data"]) non è un parametro della classe Sleep quindi direi
+  // che si può fare una mini classe tipo "SleepData" che copia lo "Steps" del prof e vedere se così funziona
+  // N.B.: Non chiamerei il file sleeps.dart o comunque anche la classe Sleeps per non fare confusione con i 
+  // file e le classi che ci sono già. File lo chiamerei "sleepDataJson.dart" e poi la classe "SleepData"
+  // come avevo scritto sopra
+
 }//Sleep

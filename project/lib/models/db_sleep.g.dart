@@ -95,7 +95,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Drink` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `drinkType` TEXT NOT NULL, `dateTime` INTEGER NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Sleep` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `dateOfSleep` INTEGER NOT NULL, `startTime` INTEGER NOT NULL, `endTime` INTEGER NOT NULL, `duration` INTEGER NOT NULL, `minutesToFallAsleep` INTEGER NOT NULL, `minutesAsleep` INTEGER NOT NULL, `minutesAwake` INTEGER NOT NULL, `efficiency` INTEGER NOT NULL, `mainSleep` INTEGER NOT NULL, `levelName` TEXT NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `Sleep` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `dateOfSleep` INTEGER NOT NULL, `startTime` INTEGER NOT NULL, `endTime` INTEGER NOT NULL, `duration` INTEGER NOT NULL, `minutesToFallAsleep` INTEGER NOT NULL, `minutesAsleep` INTEGER NOT NULL, `minutesAwake` INTEGER NOT NULL, `efficiency` INTEGER NOT NULL, `mainSleep` INTEGER NOT NULL)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Levels` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `levelName` TEXT NOT NULL, `count` INTEGER NOT NULL, `minutes` INTEGER NOT NULL, `thirtyDayAvgMinutes` INTEGER NOT NULL, `sleepId` INTEGER NOT NULL, FOREIGN KEY (`sleepId`) REFERENCES `Levels` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
@@ -229,8 +229,7 @@ class _$SleepDao extends SleepDao {
                   'minutesAsleep': item.minutesAsleep,
                   'minutesAwake': item.minutesAwake,
                   'efficiency': item.efficiency,
-                  'mainSleep': item.mainSleep ? 1 : 0,
-                  'levelName': item.levelName
+                  'mainSleep': item.mainSleep ? 1 : 0
                 }),
         _sleepUpdateAdapter = UpdateAdapter(
             database,
@@ -246,8 +245,7 @@ class _$SleepDao extends SleepDao {
                   'minutesAsleep': item.minutesAsleep,
                   'minutesAwake': item.minutesAwake,
                   'efficiency': item.efficiency,
-                  'mainSleep': item.mainSleep ? 1 : 0,
-                  'levelName': item.levelName
+                  'mainSleep': item.mainSleep ? 1 : 0
                 }),
         _sleepDeletionAdapter = DeletionAdapter(
             database,
@@ -263,8 +261,7 @@ class _$SleepDao extends SleepDao {
                   'minutesAsleep': item.minutesAsleep,
                   'minutesAwake': item.minutesAwake,
                   'efficiency': item.efficiency,
-                  'mainSleep': item.mainSleep ? 1 : 0,
-                  'levelName': item.levelName
+                  'mainSleep': item.mainSleep ? 1 : 0
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -286,7 +283,7 @@ class _$SleepDao extends SleepDao {
   ) async {
     return _queryAdapter.queryList(
         'SELECT * FROM Sleep WHERE dateTime between ?1 and ?2 ORDER BY dateTime ASC',
-        mapper: (Map<String, Object?> row) => Sleep(row['id'] as int?, _dateTimeConverter.decode(row['dateOfSleep'] as int), _dateTimeConverter.decode(row['startTime'] as int), _dateTimeConverter.decode(row['endTime'] as int), row['duration'] as int, row['minutesToFallAsleep'] as int, row['minutesAsleep'] as int, row['minutesAwake'] as int, row['efficiency'] as int, (row['mainSleep'] as int) != 0, row['levelName'] as String),
+        mapper: (Map<String, Object?> row) => Sleep(row['id'] as int?, _dateTimeConverter.decode(row['dateOfSleep'] as int), _dateTimeConverter.decode(row['startTime'] as int), _dateTimeConverter.decode(row['endTime'] as int), row['duration'] as int, row['minutesToFallAsleep'] as int, row['minutesAsleep'] as int, row['minutesAwake'] as int, row['efficiency'] as int, (row['mainSleep'] as int) != 0),
         arguments: [
           _dateTimeConverter.encode(startTime),
           _dateTimeConverter.encode(endTime)
@@ -306,8 +303,7 @@ class _$SleepDao extends SleepDao {
             row['minutesAsleep'] as int,
             row['minutesAwake'] as int,
             row['efficiency'] as int,
-            (row['mainSleep'] as int) != 0,
-            row['levelName'] as String));
+            (row['mainSleep'] as int) != 0));
   }
 
   @override
@@ -324,8 +320,7 @@ class _$SleepDao extends SleepDao {
             row['minutesAsleep'] as int,
             row['minutesAwake'] as int,
             row['efficiency'] as int,
-            (row['mainSleep'] as int) != 0,
-            row['levelName'] as String));
+            (row['mainSleep'] as int) != 0));
   }
 
   @override
@@ -342,8 +337,7 @@ class _$SleepDao extends SleepDao {
             row['minutesAsleep'] as int,
             row['minutesAwake'] as int,
             row['efficiency'] as int,
-            (row['mainSleep'] as int) != 0,
-            row['levelName'] as String));
+            (row['mainSleep'] as int) != 0));
   }
 
   @override

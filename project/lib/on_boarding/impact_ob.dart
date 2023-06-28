@@ -3,6 +3,15 @@ import 'package:pim_group/pages/root.dart';
 import 'package:pim_group/services/impact.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/shared_preferences.dart';
+
+
+//Secondo ma questo login all'impact si può tenere basta capire
+// come definire il metodo getToken 
+// OPPURE spostare questo login nel file impact.dart così
+// utilizziamo i metodi privati direttamene -ire
+
+
 class ImpactOnboarding extends StatefulWidget {
   // inizializzo la classe ImpactOnboarding
   static const routeDisplayName = 'ImpactOnboardingPage';
@@ -30,13 +39,21 @@ class _ImpactOnboardingState extends State<ImpactOnboarding> {
 
   Future<bool> _loginImpact(
       // metodo per eseguire il login
-      String name,
+      String username,
       String password,
       BuildContext context) async {
     ImpactService service = Provider.of<ImpactService>(context, listen: false);
-    bool logged = await service.getTokens(name, password);
+    bool logged = await service.authorize(username, password);
     return logged; // ritorna i tokens
   }
+
+  void _toDownloadPage(BuildContext context) {
+    var prefs = Provider.of<Preferences>(context,
+        listen: false); // per usare le SharedPreferences
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: ((context) => ImpactService(prefs))));
+  } //_toDownloadPage
+
 
   @override // costruiamo la pagina in modo molto simile alla loginpage
   Widget build(BuildContext context) {
@@ -175,12 +192,11 @@ class _ImpactOnboardingState extends State<ImpactOnboarding> {
                           duration: Duration(seconds: 3),
                         ));
                       } else {
+                        
                         // se è andato a buon fine ci riporta nella homepage, perchè la connessione è avvenuta e abbiamo ottenuto i token per i dati
                         Future.delayed(
                             const Duration(milliseconds: 300),
-                            () => Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) => BottomNavBarV2())));
+                            () => _toDownloadPage(context));
                       }
                     },
                     style: ButtonStyle(

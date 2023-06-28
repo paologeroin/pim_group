@@ -1,35 +1,155 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:dio/dio.dart';
 import 'package:pim_group/models/entities/entities.dart';
+import 'package:pim_group/services/sleepData.dart';
 import 'package:pim_group/utils/shared_preferences.dart';
 import 'package:pim_group/utils/server_strings.dart';
+import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-// Impact è okay
+import '../models/sleep/sleep_provider.dart';
+import '../pages/root.dart';
+
+
+// Questo impact è fatto come quello del professore
+// Devo capire se al posto di SleepProvider devo mettere Sleep
+// dell'entity o boh.
+//
+// Non serve un file tipo steps.dart, il prof l'ha fatto perché
+// non c'è un db in quella app, noi usiamo SQLite -ire
+
+// Occhio alla riga 83
 
 // creo la classe ImpactService
-class ImpactService {
+class ImpactService extends StatelessWidget {
   ImpactService(this.prefs);
   Preferences prefs; // inizializzo Preferences
 
-  final Dio _dio = Dio(
-      BaseOptions(baseUrl: ServerStrings.backendBaseUrl)); // inizializzo Dio
-  // A powerful HTTP client for Dart/Flutter, which supports global configuration,
-  // interceptors, FormData, request cancellation, file uploading/downloading, timeout, and custom adapters etc
 
-  // per recuperare i Token, inizializzo come String perchè dovrà restituire il token
-  String? retrieveSavedToken(bool refresh) {
-    if (refresh) {
-      // se refresh = true allora vuol dire che bisogna refreshare
-      // i token, perchè access Token è scaduto e quindi ritorna il token di refresh (che è salvato nelle shared Preferences)
-      return prefs.impactRefreshToken;
-    } else {
-      // altrimenti l'access token è valido e ritorna l'access token stesso (che è salvato nelle shared Preferences)
-      return prefs.impactAccessToken;
+  
+  //This method allows to obtain the JWT token pair from IMPACT and store it in SharedPreferences
+  Future<int> _refreshTokens() async {
+
+    //Create the request
+    final url = ServerStrings.baseUrl + ServerStrings.refreshEndpoint;
+    final sp = await SharedPreferences.getInstance();
+    final refresh = sp.getString('refresh');
+    final body = {'refresh': refresh};
+
+    //Get the respone
+    print('Calling: $url');
+    final response = await http.post(Uri.parse(url), body: body);
+
+    //If 200 set the tokens
+    if (response.statusCode == 200) {
+      final decodedResponse = jsonDecode(response.body);
+      final sp = await SharedPreferences.getInstance();
+      sp.setString('access', decodedResponse['access']);
+      sp.setString('refresh', decodedResponse['refresh']);
+    } //if
+
+    //Return just the status code
+    return response.statusCode;
+
+  } //_refreshTokens
+
+  // metodo che si usa in jump per il fetch dei dati
+  //This method allows to obtain the JWT token pair from IMPACT and store it in SharedPreferences
+  Future<List<SleepData>?> _requestData() async {
+    //Initialize the result
+    List<SleepData>? result;
+
+    //Get the stored access token (Note that this code does not work if the tokens are null)
+    final sp = await SharedPreferences.getInstance();
+    var access = sp.getString('access');
+
+    //If access token is expired, refresh it
+    if(JwtDecoder.isExpired(access!)){
+      await _refreshTokens();
+      access = sp.getString('access');
+    }//if
+
+    //Create the (representative) request
+    final day = '2023-05-04';
+    final url = ServerStrings.baseUrl + ServerStrings.sleepEndpoint + ServerStrings.patientUsername + '/day/$day/';
+    final headers = {HttpHeaders.authorizationHeader: 'Bearer $access'};
+
+    //Get the response
+    print('Calling: $url');
+    final response = await http.get(Uri.parse(url), headers: headers);
+    print(response.statusCode);
+    //if OK parse the response, otherwise return null
+    if (response.statusCode == 200) {
+      final decodedResponse = jsonDecode(response.body);
+      result = [];
+      print(decodedResponse.toString());
+      print(decodedResponse['data']['data'].length);
+
+      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['dateOfSleep']));
+      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['startTime']));
+      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['endTime']));
+      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['duration']));
+      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['minutesToFallAsleep']));
+      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['minutesAsleep']));
+      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['minutesAwake']));
+      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['minutesAfterWakeup']));
+      result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['efficiency']));
+      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['logType']));
+      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['mainSleep']));
+      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['levels']));
+      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['data']));
+      //qui c'è problema
+      // for (var i = 0 ; i < decodedResponse['data']['data'].length; i++) {
+      //   print(decodedResponse['data']['data']['dateOfSleep']);
+      print(result);
+      //   result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data'][i]));
+      // }//for
+    } //if
+    else{
+      result = null;
+    }//else
+
+    //Return the result
+    return result;
+
+  } //_requestData
+
+
+  // metodi da usare in impact_ob
+  //This method allows to obtain the JWT token pair from IMPACT 
+  Future<bool> authorize(String username, String password) async {
+
+    //Create the request
+    final url = ServerStrings.baseUrl + ServerStrings.tokenEndpoint;
+    final body = {'username': username, 'password': password};
+
+    //Get the response
+    print('Calling: $url');
+    final response = await http.post(Uri.parse(url), body: body);
+
+    //If 200, set the token
+    if (response.statusCode == 200) {
+      final decodedResponse = jsonDecode(response.body);
+      final sp = await SharedPreferences.getInstance();
+      sp.setString('access', decodedResponse['access']);
+      sp.setString('refresh', decodedResponse['refresh']);
+      prefs.impactAccessToken = sp.getString('access');
+      prefs.impactRefreshToken = sp.getString('refresh');
+      print('Ho i token');
+      
+      return true;
+    } //if
+    else{
+      return false;
     }
-  }
+  } //authorize
 
-  // per controllare il tok
   bool checkSavedToken({bool refresh = false}) {
     // inizializzo refresh come false
     // perchè all'inizio si controlla se abbiamo i token. Se vediamo che token == null,
@@ -58,171 +178,54 @@ class ImpactService {
       // controllo se il token è scaduto, se è scaduto allora qua è true e si entra nell'if
       return false; // si ritorna false
     }
-    // altrimenti si va avanti e si controlla se il ruolo connesso al token è patient
-    Map<String, dynamic> decodedToken = JwtDecoder.decode(
-        token); // decoded token è la componente decode del token
-    // questa parte di token contiene che ruolo ha l'user che accede con questo token (patient è quello che serve a noi)
-
-    // Controllo che l'user sia un patient
-    if (decodedToken['role'] == null) {
-      // ritorno false role del token è null --> dovrebbe essere null se non ho il token, non sono sicuro però
-      return false; // ritorno false, perchè non va bene, il ruolo deve essere patient, non null
-    } else {
-      // altrimenti se role è != da null entro in questo else e controllo se l'user è effettivamente un patient
-      if (decodedToken['role'] != ServerStrings.patientRoleIdentifier) {
-        // qua è true se l'user non è un patient
-        return false; // se l'user non è un patient ritorno false
-      } //else
-    } //if-else
-
     return true; // quindi se il token è valido e se l'user è effettivamente un patient ritorno true
   } //checkToken
 
-  // Eseguo la chiamata per ottenere i token
-  Future<bool> getTokens(String username, String password) async {
-    // inizializzo username e password
-    try {
-      // QUA INSERISCI cose della TOKENPAGE  PER ACCEDERE AI TOKEN SE VEDI CHE PROPRIO NON VA, perche è qua che fa la chiamata
-      // provo a fare la chiamata
-      Response response = await _dio.post(
-          '${ServerStrings.authServerUrl}token/',
-          data: {
-            'username': username,
-            'password': password
-          }, // inizializzo username e password
-          options: Options(
-              contentType: 'application/json',
-              followRedirects: false,
-              validateStatus: (status) => true,
-              headers: {"Accept": "application/json"}));
-
-      if (ImpactService.checkToken(response.data[
-              'access']) && // se entrambi i token di accesso & refresh sono okay entro nell'if, qui nella funzione checkToken ho controllato anche il ruolo del patient connesso al
-          ImpactService.checkToken(response.data['refresh'])) {
-        // se entrambi i token di accesso & refresh sono okay entro nell'if, qui nella funzione checkToken
-        // controllo anche il ruolo del patient connesso ai token
-        prefs.impactRefreshToken = response.data[
-            'refresh']; // salvo il refresh token nelle shared preferences perchè è ok
-        prefs.impactAccessToken = response.data[
-            'access']; // salvo l'access token nelle shared preferences perchè è ok
-        return true; // ritorno true vuol dire che è okay
-      } else {
-        return false; // vuol dire che uno dei due token non è okay (probabilmente l'access token)
-      }
-    } catch (e) {
-      // entro in catch se non ha funzionato qualcosa nella chiamata all'impact
-      print(e); // stampo 'e' e ritorno false, qualcosa non è andato
-      return false;
+  String? retrieveSavedToken(bool refresh) {
+    if (refresh) {
+      // se refresh = true allora vuol dire che bisogna refreshare
+      // i token, perchè access Token è scaduto e quindi ritorna il token di refresh (che è salvato nelle shared Preferences)
+      return prefs.impactRefreshToken;
+    } else {
+      // altrimenti l'access token è valido e ritorna l'access token stesso (che è salvato nelle shared Preferences)
+      return prefs.impactAccessToken;
     }
   }
 
-  Future<bool> refreshTokens() async {
-    String? refToken = await retrieveSavedToken(true);
-    try {
-      Response response = await _dio.post(
-          '${ServerStrings.authServerUrl}refresh/',
-          data: {'refresh': refToken},
-          options: Options(
-              contentType: 'application/json',
-              followRedirects: false,
-              validateStatus: (status) => true,
-              headers: {"Accept": "application/json"}));
+  @override
+  Widget build(BuildContext context) {
 
-      if (ImpactService.checkToken(response.data['access']) &&
-          ImpactService.checkToken(response.data['refresh'])) {
-        prefs.impactRefreshToken = response.data['refresh'];
-        prefs.impactAccessToken = response.data['access'];
-        return true;
-      } else {
-        return false;
-      }
-    } catch (e) {
-      print(e);
-      return false;
-    }
-  }
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Download'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+                onPressed: () async {
 
-  Future<void> updateBearer() async {
-    if (!await checkSavedToken()) {
-      await refreshTokens();
-    }
-    String? token = await prefs.impactAccessToken;
-    if (token != null) {
-      _dio.options.headers = {'Authorization': 'Bearer $token'};
-    }
-  }
-
-  Future<List<Sleep>> getDataFromDay(DateTime dateOfSleep) async {
-    await updateBearer();
-
-  // Calcolo startTime ed endTime basandomi sulla data di riferimento
-  // DateTime startTime = DateTime(dateOfSleep.year, dateOfSleep.month, dateOfSleep.day, 0, 0, 0);
-  // DateTime endTime = DateTime(dateOfSleep.year, dateOfSleep.month, dateOfSleep.day, 23, 59, 59);
-  
-
-    Response r = await _dio.get(
-      'data/v1/sleep/username/${prefs.username}/day/${DateFormat('y-M-d').format(dateOfSleep)}');
-       
-       //'/data/v1/sleep/${prefs.username}/daterange/start_date/${DateFormat('y-M-d').format(startTime)}/end_date/${DateFormat('y-M-d').format(endTime)}/');
-    
-    // Verifica se la richiesta ha avuto successo
-      if (r.statusCode == 200) {
-        // Recupera i dati dal corpo della risposta
-        List<dynamic> sleepData = r.data['data'];
-    // List<dynamic> data = r.data['data'];
-    // List<Sleep> sleepData = [];
-    // for (var daydata in data) {
-    //   String day = daydata['date'];
-    //   for (var dataday in daydata['data']) {
-    //     String hour = dataday['time'];
-    //     String datetime = '${day}T$hour';
-    //     DateTime endTime = _truncateSeconds(DateTime.parse(datetime));
-    //     // devo definire gli altri 7 campi per definire sleepDataNew...
-    //     //int duration = 
-    //     Sleep sleepDataNew = Sleep(
-    //       null,
-    //       dateOfSleep,
-    //       startTime,
-    //       endTime
-          //,
-          // duration,
-          // minutesToFallAsleep,
-          // minutesAsleep,
-          // minutesAwake,
-          // efficiency,
-          // mainSleep,
-          // levelName
-          //);
-        
-      // Mappa i dati recuperati in oggetti Sleep
-        List<Sleep> sleepList = sleepData.map((data) {
-          return Sleep(
-            null, // id generato automaticamente dal database
-            DateTime.parse(data['dateOfSleep']),
-            DateTime.parse(data['startTime']),
-            DateTime.parse(data['endTime']),
-            data['duration'],
-            data['minutesToFallAsleep'],
-            data['minutesAsleep'],
-            data['minutesAwake'],
-            data['efficiency'],
-            data['mainSleep'],
-            data['levelName'],
-          );
-        }).toList();
-
-        return sleepList;
-      } else {
-        // La richiesta non è andata a buon fine, gestisci l'errore di conseguenza
-        throw Exception('Failed to retrieve sleep data');
-      }
-    } //getDataFromDay
-    // var sleepDataList = sleepData.toList()..sort((a, b) => a.dateOfSleep.compareTo(b.dateOfSleep));
-    // return sleepDataList;
-  }
-
-  DateTime _truncateSeconds(DateTime input) {
-    return DateTime(
-        input.year, input.month, input.day, input.hour, input.minute);
-
+                  final result = await _requestData();
+                  print(result);
+                  final message =
+                      result == null ? 'Request failed' : 'Request successful';
+                  ScaffoldMessenger.of(context)
+                    ..removeCurrentSnackBar()
+                    ..showSnackBar(SnackBar(content: Text(message)));
+                  if (result != null) {
+                  Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: ((context) => BottomNavBarV2())));
+                }
+                },
+                child: Text('Dowload Data')),
+                
+          ],
+        ),
+      ),
+    );
+  } //build
 }//ImpactService

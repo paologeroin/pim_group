@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:pim_group/pages/jump.dart';
+import 'package:pim_group/services/impact.dart';
 import 'root.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -67,6 +68,12 @@ class _LoginPageState extends State<LoginPage> {
 
   void _toHomePage(BuildContext context) {
     Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) => Jump()));
+        .pushReplacement(MaterialPageRoute(
+          builder: (context) => Jump())); 
+          // qui teniamo la Jump page (da modificare perché h
+          // ancora i metodi vecchi) che nel caso non ci sono i token
+          // manda al login dell'impact, altrimenti (quindi ci sono i
+          // token ma deve solo fare il refresh) manda a root che
+          // manda a HomePage
   } //_toHomePage
 } // LoginScreen

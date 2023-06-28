@@ -4,6 +4,7 @@ import 'package:pim_group/pages/HomePage.dart';
 import 'package:pim_group/pages/LoginPage.dart';
 import 'package:pim_group/pages/root.dart';
 import 'package:pim_group/services/impact.dart';
+import 'package:pim_group/services/sleepData.dart';
 import 'package:pim_group/utils/shared_preferences.dart';
 import 'package:provider/provider.dart';
 
@@ -17,10 +18,12 @@ class Jump extends StatelessWidget {
   const Jump({Key? key}) : super(key: key);
 
   // Metodo per andare dalla JumpPage al nostro root.dart che manderà a sua volta alla Homepage
-  void _toHomePage(BuildContext context) {
+  void _toDownloadPage(BuildContext context) {
+    var prefs = Provider.of<Preferences>(context,
+        listen: false); // per usare le SharedPreferences
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: ((context) => BottomNavBarV2())));
-  } //_toHomePage
+        MaterialPageRoute(builder: ((context) => ImpactService(prefs))));
+  } //_toDownloadPage
 
   // Metodo per andare alla ImpactPage per scaricare i token
   void _toImpactPage(BuildContext context) {
@@ -35,7 +38,6 @@ class Jump extends StatelessWidget {
         listen: false); // per usare le SharedPreferences
     String? username = prefs.username;
     String? password = prefs.password;
-
     ImpactService service = Provider.of<ImpactService>(context, listen: false);
     bool responseAccessToken = service.checkSavedToken();
     bool refreshAccessToken = service.checkSavedToken(refresh: true);
@@ -46,13 +48,13 @@ class Jump extends StatelessWidget {
       print('ho i token fdp'); // cava prima della consegna ai prof
       print(responseAccessToken);
       print(refreshAccessToken);
-      Future.delayed(const Duration(seconds: 1), () => _toHomePage(context));
+      Future.delayed(const Duration(seconds: 1), () => _toDownloadPage(context));
     } else {
       // altrimenti se entro in questo else vuol dire che devo fare accesso alla ImpactPage
       Future.delayed(const Duration(seconds: 1), () => _toImpactPage(context));
     }
-    // }
-  }
+    }
+
 
   @override
   Widget build(BuildContext context) {

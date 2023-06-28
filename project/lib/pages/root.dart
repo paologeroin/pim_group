@@ -19,7 +19,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
   int currentIndex = 0;
   var pages = [
     const HomePage(),
-    SleepPage(),
+    //SleepPage(),
     GoalsPage(),
     ProgressPage(),
   ];
