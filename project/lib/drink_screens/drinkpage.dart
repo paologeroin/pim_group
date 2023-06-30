@@ -70,6 +70,15 @@ class _DrinkPageState extends State<DrinkPage> {
                   
                     checkstate = false,
                     _validateAndSave(context),
+                    if (currentSelectedValue == null) {
+                      setState(() {
+                        checkstate = false;
+                      })
+                    } else {
+                      setState(() {
+                        checkstate = true;
+                      })
+                    },
                     if (checkstate)
                       {
                         showDialog(
