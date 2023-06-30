@@ -24,6 +24,6 @@ abstract class DrinkDao {
 
   //Query #3: DELETE -> this allows to delete a Todo from the table
   @delete
-  Future<void> deleteDrink(Drink task);
+  Future<void> deleteDrink(Drink drink);
 
 }//DrinkDao
