@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pim_group/models/drinks/drinkDB.dart';
 import 'package:pim_group/drink_screens/drinkpage.dart';
 import 'HomePage.dart';
 import 'SleepPage.dart';
@@ -68,8 +67,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                   child: Icon(Icons.add), // Analyze Button
                   elevation: 0.1,
 
-                  onPressed: () => _toDrinkPage(context,
-                      Provider.of<DrinkDB>(context, listen: false), -1),
+                  onPressed: () => _toDrinkPage(context, -1),
                 )),
             Container(
               width: size.width,
@@ -144,12 +142,11 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
 }
 
 //Utility method to navigate to DrinkPage
-void _toDrinkPage(BuildContext context, DrinkDB drinkDB, int drinkIndex) {
+void _toDrinkPage(BuildContext context, int drinkIndex) {
   Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => DrinkPage(
-                drinkDB: drinkDB,
                 drinkIndex: drinkIndex,
               )));
 } //_toDrinkPage

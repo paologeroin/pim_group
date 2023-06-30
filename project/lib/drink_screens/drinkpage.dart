@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-//import 'package:pim_group/models/drinks/drink.dart';
-import 'package:pim_group/models/drinks/drinkDB.dart';
 import 'package:pim_group/widgetsgoals/formTiles.dart';
 import 'package:pim_group/widgetsgoals/formSeparator.dart';
 import 'package:pim_group/utils/formats.dart';
@@ -15,12 +13,9 @@ import 'package:pim_group/models/entities/drink.dart';
 class DrinkPage extends StatefulWidget {
   //DrinkPage needs to know the index of the drink we are editing (it is equal to -1 if the drink is new)
   final int drinkIndex;
-  //For simplicity, even if it is not necessary, we are also passing the instance of DrinkDB.
-  //This choice is not mandatory and maybe redundant, but it will allow us to initialize easily the form values.
-  final DrinkDB drinkDB;
 
   //DrinkPage constructor
-  DrinkPage({Key? key, required this.drinkDB, required this.drinkIndex})
+  DrinkPage({Key? key, required this.drinkIndex})
       : super(key: key);
 
   static const routeDisplayName = 'Add your drink';
@@ -49,12 +44,6 @@ class _DrinkPageState extends State<DrinkPage> {
   //  In this case, initilize them to empty and now(), respectively, otherwise set them to the respective values.
   @override
   void initState() {
-    _choController.text = widget.drinkIndex == -1
-        ? ''
-        : widget.drinkDB.drinks[widget.drinkIndex].drinkType.toString();
-    _selectedDate = widget.drinkIndex == -1
-        ? DateTime.now()
-        : widget.drinkDB.drinks[widget.drinkIndex].dateTime;
     super.initState();
   } // initState
 
@@ -406,9 +395,6 @@ Consumer<MealDB>(
       } else {
         Drink newDrink = Drink(
             drinkType: (currentSelectedValue!), dateTime: _selectedDate);
-        widget.drinkIndex == -1
-            ? widget.drinkDB.addDrink(newDrink)
-            : widget.drinkDB.editDrink(widget.drinkIndex, newDrink);
           await Provider.of<AppDatabaseRepository>(context, listen: false)
                 .insertDrink(newDrink);
         setState(() {
@@ -423,8 +409,11 @@ Consumer<MealDB>(
   } // _validateAndSave
 
   //Utility method that deletes a drink entry.
-  void _deleteAndPop(BuildContext context) {
-    widget.drinkDB.deleteDrink(widget.drinkIndex);
+  void _deleteAndPop(BuildContext context) async  {
+    Drink newDrink = Drink(
+            drinkType: (currentSelectedValue!), dateTime: _selectedDate);
+    await Provider.of<AppDatabaseRepository>(context, listen: false)
+                .insertDrink(newDrink);
     Navigator.pop(context);
   } //_deleteAndPop
 } //DrinkPage
