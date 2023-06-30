@@ -89,9 +89,10 @@ class ImpactService extends StatelessWidget {
       final decodedResponse = jsonDecode(response.body);
       result = [];
       print(decodedResponse.toString());
-      print(decodedResponse['data']['data'].length);
+      print("QUI lunghexxa data");
+      print(decodedResponse['data'].length);
 
-      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['dateOfSleep']));
+      result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']));
       // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['startTime']));
       // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['endTime']));
       // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['duration']));
@@ -99,22 +100,23 @@ class ImpactService extends StatelessWidget {
       // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['minutesAsleep']));
       // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['minutesAwake']));
       // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['minutesAfterWakeup']));
-      result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['efficiency']));
+      //  result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']));
       // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['logType']));
       // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['mainSleep']));
       // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['levels']));
       // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['data']));
       //qui c'è problema
-      // for (var i = 0 ; i < decodedResponse['data']['data'].length; i++) {
-      //   print(decodedResponse['data']['data']['dateOfSleep']);
-      print(result);
-      //   result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data'][i]));
-      // }//for
+      //for (var i = 0; i < decodedResponse['data']['data'].length; i++) {
+       // print(decodedResponse['data']['data'][i]);
+      //result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data'][i]));
+        
+      //}//for
     } //if
     else{
       result = null;
     }//else
 
+    print(result);
     //Return the result
     return result;
 

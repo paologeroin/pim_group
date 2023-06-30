@@ -11,43 +11,43 @@ import '../utils/server_strings.dart';
 import 'impact.dart';
 
 class SleepData{
-  // final String dateOfSleep;
-  // final String startTime;
-  // final String endTime;
-  // final int duration;
-  // final int minutesToFallAsleep;
-  // final int minutesAsleep;
-  // final int minutesAwake;
-  // final int minutesAfterWakeup;
-  final int efficiency;
-  // final String logType;
-  // final bool mainSleep;
-  // final List levels;
-  // final List data;
+   final String dateOfSleep;
+   final String startTime;
+   final String endTime;
+   final double duration;
+   final int minutesToFallAsleep;
+   final int minutesAsleep;
+   final int minutesAwake;
+   final int minutesAfterWakeup;
+   final int efficiency;
+   final String logType;
+   final bool mainSleep;
+   final Map levels;
+   //final Map data;
 
 
   // da aggiungere
   // this.dateOfSleep,this.startTime, this.endTime, this.duration, this.minutesToFallAsleep, this.minutesAsleep,
   // this.minutesAwake, this.minutesAfterWakeup
 
-  SleepData(this.efficiency,);
+  SleepData(this.dateOfSleep,this.startTime, this.endTime, this.duration, this.minutesToFallAsleep, this.minutesAsleep,
+  this.minutesAwake, this.minutesAfterWakeup, this.efficiency,this.logType, this.mainSleep, this.levels);
   // this.logType, this.mainSleep, this.levels, this.data -> da inserire poi
 
-  SleepData.fromJson(String date, Map<String, dynamic> json) :
-      // dateOfSleep = ('$date ${json["dateOfSleep"]}'),
-      // startTime = ('$date ${json["startTime"]}'),
-      // endTime = ('$date ${json["endTime"]}'),
-      // duration = int.parse((json["duration"])),
-      // minutesToFallAsleep = int.parse(json["minutesToFallAsleep"]),
-      // minutesAsleep = int.parse(json["minutesAsleep"]),
-      // minutesAwake = int.parse(json["minutesAwake"]),
-      // minutesAfterWakeup = int.parse(json["minutesAfterWakeup"]),
-      efficiency = int.parse(json["efficiency"]);
-      // logType = (json["logType"]).toString(), //capire se è giusto
-      // mainSleep = bool ; //come inizializzare
-      // levels = ; //come inizializzare
-      // data = ; //come inizializzare
-
+  SleepData.fromJson(String date, Map<String, dynamic> jsonMap) :
+      dateOfSleep = ('$date ${jsonMap["dateOfSleep"]}'),
+      startTime = ('$date ${jsonMap["startTime"]}'),
+      endTime = ('$date ${jsonMap["endTime"]}'),
+      duration = jsonMap["duration"],
+      minutesToFallAsleep = jsonMap["minutesToFallAsleep"],
+      minutesAsleep = jsonMap["minutesAsleep"],
+      minutesAwake = jsonMap["minutesAwake"],
+      minutesAfterWakeup = jsonMap["minutesAfterWakeup"],
+      efficiency = jsonMap["efficiency"],
+      logType = jsonMap["logType"].toString(), //capire se è giusto
+      mainSleep = jsonMap["mainSleep"], //come inizializzare
+      levels = jsonMap["levels"]; //come inizializzare
+      //data = jsonMap["data"]; //come inizializzare
       
 
   // @override
