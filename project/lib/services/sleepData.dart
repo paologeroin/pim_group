@@ -25,14 +25,8 @@ class SleepData{
    final Map levels;
    //final Map data;
 
-
-  // da aggiungere
-  // this.dateOfSleep,this.startTime, this.endTime, this.duration, this.minutesToFallAsleep, this.minutesAsleep,
-  // this.minutesAwake, this.minutesAfterWakeup
-
   SleepData(this.dateOfSleep,this.startTime, this.endTime, this.duration, this.minutesToFallAsleep, this.minutesAsleep,
   this.minutesAwake, this.minutesAfterWakeup, this.efficiency,this.logType, this.mainSleep, this.levels);
-  // this.logType, this.mainSleep, this.levels, this.data -> da inserire poi
 
   SleepData.fromJson(String date, Map<String, dynamic> jsonMap) :
       dateOfSleep = ('$date ${jsonMap["dateOfSleep"]}'),
@@ -44,14 +38,15 @@ class SleepData{
       minutesAwake = jsonMap["minutesAwake"],
       minutesAfterWakeup = jsonMap["minutesAfterWakeup"],
       efficiency = jsonMap["efficiency"],
-      logType = jsonMap["logType"].toString(), //capire se è giusto
-      mainSleep = jsonMap["mainSleep"], //come inizializzare
-      levels = jsonMap["levels"]; //come inizializzare
-      //data = jsonMap["data"]; //come inizializzare
+      logType = jsonMap["logType"].toString(),
+      mainSleep = jsonMap["mainSleep"],
+      levels = jsonMap["levels"];
+      // non serve data
+      // data = jsonMap["levels"]["data"]; //come inizializzare
       
 
   // @override
   // String toString() {
-  //   return 'Steps(time: $dateOfSleep, startTime: $startTime, )';
+  //   return 'SleepData(time: $dateOfSleep, startTime: $startTime, )';
   // }//toString
 }//SleepData

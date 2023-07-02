@@ -95,7 +95,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Drink` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `drinkType` TEXT NOT NULL, `dateTime` INTEGER NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Sleep` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `dateOfSleep` INTEGER NOT NULL, `startTime` INTEGER NOT NULL, `endTime` INTEGER NOT NULL, `duration` INTEGER NOT NULL, `minutesToFallAsleep` INTEGER NOT NULL, `minutesAsleep` INTEGER NOT NULL, `minutesAwake` INTEGER NOT NULL, `efficiency` INTEGER NOT NULL, `mainSleep` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `Sleep` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `dateOfSleep` TEXT NOT NULL, `startTime` TEXT NOT NULL, `endTime` TEXT NOT NULL, `duration` REAL NOT NULL, `minutesToFallAsleep` INTEGER NOT NULL, `minutesAsleep` INTEGER NOT NULL, `minutesAwake` INTEGER NOT NULL, `minutesAfterWakeup` INTEGER NOT NULL, `efficiency` INTEGER NOT NULL, `logType` TEXT NOT NULL, `mainSleep` INTEGER NOT NULL)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Levels` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `levelName` TEXT NOT NULL, `count` INTEGER NOT NULL, `minutes` INTEGER NOT NULL, `thirtyDayAvgMinutes` INTEGER NOT NULL, `sleepId` INTEGER NOT NULL, FOREIGN KEY (`sleepId`) REFERENCES `Levels` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
@@ -206,8 +206,8 @@ class _$DrinkDao extends DrinkDao {
   }
 
   @override
-  Future<void> deleteDrink(Drink task) async {
-    await _drinkDeletionAdapter.delete(task);
+  Future<void> deleteDrink(Drink drink) async {
+    await _drinkDeletionAdapter.delete(drink);
   }
 }
 
@@ -221,14 +221,16 @@ class _$SleepDao extends SleepDao {
             'Sleep',
             (Sleep item) => <String, Object?>{
                   'id': item.id,
-                  'dateOfSleep': _dateTimeConverter.encode(item.dateOfSleep),
-                  'startTime': _dateTimeConverter.encode(item.startTime),
-                  'endTime': _dateTimeConverter.encode(item.endTime),
+                  'dateOfSleep': item.dateOfSleep,
+                  'startTime': item.startTime,
+                  'endTime': item.endTime,
                   'duration': item.duration,
                   'minutesToFallAsleep': item.minutesToFallAsleep,
                   'minutesAsleep': item.minutesAsleep,
                   'minutesAwake': item.minutesAwake,
+                  'minutesAfterWakeup': item.minutesAfterWakeup,
                   'efficiency': item.efficiency,
+                  'logType': item.logType,
                   'mainSleep': item.mainSleep ? 1 : 0
                 }),
         _sleepUpdateAdapter = UpdateAdapter(
@@ -237,14 +239,16 @@ class _$SleepDao extends SleepDao {
             ['id'],
             (Sleep item) => <String, Object?>{
                   'id': item.id,
-                  'dateOfSleep': _dateTimeConverter.encode(item.dateOfSleep),
-                  'startTime': _dateTimeConverter.encode(item.startTime),
-                  'endTime': _dateTimeConverter.encode(item.endTime),
+                  'dateOfSleep': item.dateOfSleep,
+                  'startTime': item.startTime,
+                  'endTime': item.endTime,
                   'duration': item.duration,
                   'minutesToFallAsleep': item.minutesToFallAsleep,
                   'minutesAsleep': item.minutesAsleep,
                   'minutesAwake': item.minutesAwake,
+                  'minutesAfterWakeup': item.minutesAfterWakeup,
                   'efficiency': item.efficiency,
+                  'logType': item.logType,
                   'mainSleep': item.mainSleep ? 1 : 0
                 }),
         _sleepDeletionAdapter = DeletionAdapter(
@@ -253,14 +257,16 @@ class _$SleepDao extends SleepDao {
             ['id'],
             (Sleep item) => <String, Object?>{
                   'id': item.id,
-                  'dateOfSleep': _dateTimeConverter.encode(item.dateOfSleep),
-                  'startTime': _dateTimeConverter.encode(item.startTime),
-                  'endTime': _dateTimeConverter.encode(item.endTime),
+                  'dateOfSleep': item.dateOfSleep,
+                  'startTime': item.startTime,
+                  'endTime': item.endTime,
                   'duration': item.duration,
                   'minutesToFallAsleep': item.minutesToFallAsleep,
                   'minutesAsleep': item.minutesAsleep,
                   'minutesAwake': item.minutesAwake,
+                  'minutesAfterWakeup': item.minutesAfterWakeup,
                   'efficiency': item.efficiency,
+                  'logType': item.logType,
                   'mainSleep': item.mainSleep ? 1 : 0
                 });
 
@@ -283,7 +289,7 @@ class _$SleepDao extends SleepDao {
   ) async {
     return _queryAdapter.queryList(
         'SELECT * FROM Sleep WHERE dateTime between ?1 and ?2 ORDER BY dateTime ASC',
-        mapper: (Map<String, Object?> row) => Sleep(row['id'] as int?, _dateTimeConverter.decode(row['dateOfSleep'] as int), _dateTimeConverter.decode(row['startTime'] as int), _dateTimeConverter.decode(row['endTime'] as int), row['duration'] as int, row['minutesToFallAsleep'] as int, row['minutesAsleep'] as int, row['minutesAwake'] as int, row['efficiency'] as int, (row['mainSleep'] as int) != 0),
+        mapper: (Map<String, Object?> row) => Sleep(row['id'] as int?, row['dateOfSleep'] as String, row['startTime'] as String, row['endTime'] as String, row['duration'] as double, row['minutesToFallAsleep'] as int, row['minutesAsleep'] as int, row['minutesAwake'] as int, row['minutesAfterWakeup'] as int, row['efficiency'] as int, row['logType'] as String, (row['mainSleep'] as int) != 0),
         arguments: [
           _dateTimeConverter.encode(startTime),
           _dateTimeConverter.encode(endTime)
@@ -295,14 +301,16 @@ class _$SleepDao extends SleepDao {
     return _queryAdapter.queryList('SELECT * FROM Sleep',
         mapper: (Map<String, Object?> row) => Sleep(
             row['id'] as int?,
-            _dateTimeConverter.decode(row['dateOfSleep'] as int),
-            _dateTimeConverter.decode(row['startTime'] as int),
-            _dateTimeConverter.decode(row['endTime'] as int),
-            row['duration'] as int,
+            row['dateOfSleep'] as String,
+            row['startTime'] as String,
+            row['endTime'] as String,
+            row['duration'] as double,
             row['minutesToFallAsleep'] as int,
             row['minutesAsleep'] as int,
             row['minutesAwake'] as int,
+            row['minutesAfterWakeup'] as int,
             row['efficiency'] as int,
+            row['logType'] as String,
             (row['mainSleep'] as int) != 0));
   }
 
@@ -312,14 +320,16 @@ class _$SleepDao extends SleepDao {
         'SELECT * FROM Sleep ORDER BY dateTime ASC LIMIT 1',
         mapper: (Map<String, Object?> row) => Sleep(
             row['id'] as int?,
-            _dateTimeConverter.decode(row['dateOfSleep'] as int),
-            _dateTimeConverter.decode(row['startTime'] as int),
-            _dateTimeConverter.decode(row['endTime'] as int),
-            row['duration'] as int,
+            row['dateOfSleep'] as String,
+            row['startTime'] as String,
+            row['endTime'] as String,
+            row['duration'] as double,
             row['minutesToFallAsleep'] as int,
             row['minutesAsleep'] as int,
             row['minutesAwake'] as int,
+            row['minutesAfterWakeup'] as int,
             row['efficiency'] as int,
+            row['logType'] as String,
             (row['mainSleep'] as int) != 0));
   }
 
@@ -329,14 +339,16 @@ class _$SleepDao extends SleepDao {
         'SELECT * FROM Sleep ORDER BY dateTime DESC LIMIT 1',
         mapper: (Map<String, Object?> row) => Sleep(
             row['id'] as int?,
-            _dateTimeConverter.decode(row['dateOfSleep'] as int),
-            _dateTimeConverter.decode(row['startTime'] as int),
-            _dateTimeConverter.decode(row['endTime'] as int),
-            row['duration'] as int,
+            row['dateOfSleep'] as String,
+            row['startTime'] as String,
+            row['endTime'] as String,
+            row['duration'] as double,
             row['minutesToFallAsleep'] as int,
             row['minutesAsleep'] as int,
             row['minutesAwake'] as int,
+            row['minutesAfterWakeup'] as int,
             row['efficiency'] as int,
+            row['logType'] as String,
             (row['mainSleep'] as int) != 0));
   }
 

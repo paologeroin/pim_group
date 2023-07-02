@@ -17,21 +17,16 @@ import '../models/sleep/sleep_provider.dart';
 import '../pages/root.dart';
 
 
-// Questo impact è fatto come quello del professore
-// Devo capire se al posto di SleepProvider devo mettere Sleep
-// dell'entity o boh.
-//
-// Non serve un file tipo steps.dart, il prof l'ha fatto perché
-// non c'è un db in quella app, noi usiamo SQLite -ire
-
-// Occhio alla riga 83
-
 // creo la classe ImpactService
 class ImpactService extends StatelessWidget {
   ImpactService(this.prefs);
   Preferences prefs; // inizializzo Preferences
 
 
+  DateTime _truncateSeconds(DateTime input) {
+    return DateTime(
+        input.year, input.month, input.day, input.hour, input.minute);
+  }
   
   //This method allows to obtain the JWT token pair from IMPACT and store it in SharedPreferences
   Future<int> _refreshTokens() async {
@@ -76,41 +71,38 @@ class ImpactService extends StatelessWidget {
     }//if
 
     //Create the (representative) request
-    final day = '2023-05-04';
-    final url = ServerStrings.baseUrl + ServerStrings.sleepEndpoint + ServerStrings.patientUsername + '/day/$day/';
+    final start_date =  DateTime.now().subtract(const Duration(days: 7));
+    //final day = '2023-05-04';
+    //final url = ServerStrings.baseUrl + ServerStrings.sleepEndpoint + ServerStrings.patientUsername + '/day/$day/';
+    final url = ServerStrings.baseUrl + ServerStrings.sleepEndpoint + ServerStrings.patientUsername + '/daterange/start_date/${DateFormat('y-M-d').format(start_date)}/end_date/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 1)))}/';
     final headers = {HttpHeaders.authorizationHeader: 'Bearer $access'};
 
     //Get the response
     print('Calling: $url');
     final response = await http.get(Uri.parse(url), headers: headers);
     print(response.statusCode);
+    print('Response body:');
+    print(response.body);// qui ci stampa solo il primo giorno
     //if OK parse the response, otherwise return null
+    
     if (response.statusCode == 200) {
       final decodedResponse = jsonDecode(response.body);
       result = [];
       print(decodedResponse.toString());
-      print("QUI lunghexxa data");
+      print("QUI lunghezza data"); //numero di giorni in cui abbiamo dei dati
       print(decodedResponse['data'].length);
 
-      result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']));
-      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['startTime']));
-      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['endTime']));
-      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['duration']));
-      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['minutesToFallAsleep']));
-      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['minutesAsleep']));
-      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['minutesAwake']));
-      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['minutesAfterWakeup']));
-      //  result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']));
-      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['logType']));
-      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['mainSleep']));
-      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['levels']));
-      // result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data']['data']));
-      //qui c'è problema
-      //for (var i = 0; i < decodedResponse['data']['data'].length; i++) {
-       // print(decodedResponse['data']['data'][i]);
-      //result.add(SleepData.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data'][i]));
-        
-      //}//for
+      //result.add(SleepData.fromJson(decodedResponse['data'][DateTime.now().subtract(const Duration(days: 7))], decodedResponse['data']['data']));
+      //result.add(SleepData.fromJson(decodedResponse['data'][DateTime.now().subtract(const Duration(days: 6))], decodedResponse['data']['data']));
+     if (response.statusCode == 200) {
+      final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
+      for (int i = 0; i < decodedResponse['data'].length; i++) {
+        result.add(SleepData.fromJson(decodedResponse['data'][i],decodedResponse['data']['data']));
+        //print(day.duration);
+      }
+    }
+      print('Result:');
+      print(result);
     } //if
     else{
       result = null;
@@ -121,7 +113,6 @@ class ImpactService extends StatelessWidget {
     return result;
 
   } //_requestData
-
 
   // metodi da usare in impact_ob
   //This method allows to obtain the JWT token pair from IMPACT 
@@ -192,6 +183,7 @@ class ImpactService extends StatelessWidget {
       // altrimenti l'access token è valido e ritorna l'access token stesso (che è salvato nelle shared Preferences)
       return prefs.impactAccessToken;
     }
+
   }
 
   @override

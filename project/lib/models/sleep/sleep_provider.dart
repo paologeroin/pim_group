@@ -8,10 +8,6 @@ import 'package:intl/intl.dart';
 import '../daos/daos.dart';
 
 
-//Sapete che forse non serve più? 
-//Si fa la chiamata generale e si hanno già tutti
-// i dati nel database no? -ire
-
 // this is the change notifier. it will manage all the logic of the home page:
 // fetching the correct data from the database and on
 // startup fetching the data from the online services
