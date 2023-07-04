@@ -10,43 +10,58 @@ import 'package:http/http.dart' as http;
 import '../utils/server_strings.dart';
 import 'impact.dart';
 
-class SleepData{
-   final String dateOfSleep;
-   final String startTime;
-   final String endTime;
-   final double duration;
-   final int minutesToFallAsleep;
-   final int minutesAsleep;
-   final int minutesAwake;
-   final int minutesAfterWakeup;
-   final int efficiency;
-   final String logType;
-   final bool mainSleep;
-   final Map levels;
-   //final Map data;
+class SleepData {
+  late String date;
+  late String? dateOfSleep;
+  late String? startTime;
+  late String? endTime;
+  late double? duration;
+  late int? minutesToFallAsleep;
+  late int? minutesAsleep;
+  late int? minutesAwake;
+  late int? minutesAfterWakeup;
+  late int? efficiency;
+  late String? logType;
+  late bool? mainSleep;
+  late Map? levels;
+  // late Map? levelsSummary;
+  bool DailyData = true;
 
-  SleepData(this.dateOfSleep,this.startTime, this.endTime, this.duration, this.minutesToFallAsleep, this.minutesAsleep,
-  this.minutesAwake, this.minutesAfterWakeup, this.efficiency,this.logType, this.mainSleep, this.levels);
+  SleepData.fromJson(Map<String, dynamic> json) {
+    date = json['date'];
+    if (json['data'] != null && json['data'].runtimeType != List) {
+      dateOfSleep = json['data']["dateOfSleep"];
+      startTime = json['data']["startTime"];
+      endTime = json['data']["endTime"];
+      duration = json['data']['duration'].toDouble() / 1000;
+      minutesToFallAsleep = json['data']["minutesToFallAsleep"];
+      minutesAsleep = json['data']['minutesAsleep'];
+      minutesAwake = json['data']['minutesAwake'];
+      minutesAfterWakeup = json['data']["minutesAfterWakeup"];
+      efficiency = json['data']["efficiency"];
+      logType = json['data']["logType"].toString();
+      mainSleep = json['data']["mainSleep"];
+      levels = json['data']["levels"];
+      // levelsSummary = json['data']["levels"]['summary'];
+      if (duration == null) {
+        DailyData = false;
+      }
+    } else {
+      dateOfSleep = null;
+      startTime = null;
+      endTime = null;
+      duration = null;
+      minutesToFallAsleep = null;
+      minutesAsleep = null;
+      minutesAwake = null;
+      minutesAfterWakeup = null;
+      efficiency = null;
+      logType = null;
+      mainSleep = null;
+      levels = null;
+      DailyData = false;
+    }
+  }
+} //SleepData
 
-  SleepData.fromJson(String date, Map<String, dynamic> jsonMap) :
-      dateOfSleep = ('$date ${jsonMap["dateOfSleep"]}'),
-      startTime = ('$date ${jsonMap["startTime"]}'),
-      endTime = ('$date ${jsonMap["endTime"]}'),
-      duration = jsonMap["duration"],
-      minutesToFallAsleep = jsonMap["minutesToFallAsleep"],
-      minutesAsleep = jsonMap["minutesAsleep"],
-      minutesAwake = jsonMap["minutesAwake"],
-      minutesAfterWakeup = jsonMap["minutesAfterWakeup"],
-      efficiency = jsonMap["efficiency"],
-      logType = jsonMap["logType"].toString(),
-      mainSleep = jsonMap["mainSleep"],
-      levels = jsonMap["levels"];
-      // non serve data
-      // data = jsonMap["levels"]["data"]; //come inizializzare
-      
 
-  // @override
-  // String toString() {
-  //   return 'SleepData(time: $dateOfSleep, startTime: $startTime, )';
-  // }//toString
-}//SleepData

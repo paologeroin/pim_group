@@ -7,7 +7,7 @@ import 'package:pim_group/utils/server_strings.dart';
 import 'package:intl/intl.dart';
 import '../daos/daos.dart';
 
-
+/*
 // this is the change notifier. it will manage all the logic of the home page:
 // fetching the correct data from the database and on
 // startup fetching the data from the online services
@@ -42,3 +42,4 @@ class SleepProvider extends ChangeNotifier{
 
 
 } //SleepProvider
+*/

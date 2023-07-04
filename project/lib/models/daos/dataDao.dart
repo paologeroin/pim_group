@@ -3,9 +3,10 @@ import 'package:pim_group/models/entities/entities.dart';
 
 @dao
 abstract class DataDao {
-  @Query('SELECT * FROM Data WHERE dateTime between :startTime and :endTime ORDER BY dateTime ASC')
+  @Query(
+      'SELECT * FROM Data WHERE dateTime between :startTime and :endTime ORDER BY dateTime ASC')
   Future<List<Data>> findDatabyDate(DateTime startTime, DateTime endTime);
-  
+
   @Query('SELECT * FROM Data')
   Future<List<Data>> findAllData();
 

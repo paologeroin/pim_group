@@ -65,10 +65,6 @@ class _$AppDatabase extends AppDatabase {
 
   SleepDao? _sleepDaoInstance;
 
-  LevelsDao? _levelDaoInstance;
-
-  DataDao? _dataDaoInstance;
-
   GoalDao? _goalDaoInstance;
 
   Future<sqflite.Database> open(
@@ -95,11 +91,11 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Drink` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `drinkType` TEXT NOT NULL, `dateTime` INTEGER NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Sleep` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `dateOfSleep` TEXT NOT NULL, `startTime` TEXT NOT NULL, `endTime` TEXT NOT NULL, `duration` REAL NOT NULL, `minutesToFallAsleep` INTEGER NOT NULL, `minutesAsleep` INTEGER NOT NULL, `minutesAwake` INTEGER NOT NULL, `minutesAfterWakeup` INTEGER NOT NULL, `efficiency` INTEGER NOT NULL, `logType` TEXT NOT NULL, `mainSleep` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `Sleep` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `date` TEXT NOT NULL, `dateOfSleep` TEXT, `startTime` TEXT, `endTime` TEXT, `duration` REAL, `minutesToFallAsleep` INTEGER, `minutesAsleep` INTEGER, `minutesAwake` INTEGER, `minutesAfterWakeup` INTEGER, `efficiency` INTEGER, `logType` TEXT, `mainSleep` INTEGER, `levels` TEXT, `DailyData` INTEGER NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Levels` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `levelName` TEXT NOT NULL, `count` INTEGER NOT NULL, `minutes` INTEGER NOT NULL, `thirtyDayAvgMinutes` INTEGER NOT NULL, `sleepId` INTEGER NOT NULL, FOREIGN KEY (`sleepId`) REFERENCES `Levels` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `levels` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `data` TEXT NOT NULL, `summary` TEXT NOT NULL, `sleep_id` TEXT NOT NULL, FOREIGN KEY (`sleep_id`) REFERENCES `Sleep` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Data` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `dateTime` INTEGER NOT NULL, `level` INTEGER NOT NULL, `seconds` INTEGER NOT NULL, `sleepId` INTEGER NOT NULL, FOREIGN KEY (`sleepId`) REFERENCES `Data` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `data` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `dateTime` INTEGER NOT NULL, `level` INTEGER NOT NULL, `seconds` INTEGER NOT NULL, `levels_id` TEXT NOT NULL, FOREIGN KEY (`levels_id`) REFERENCES `levels` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Goal` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `money` REAL NOT NULL, `dateTime` INTEGER NOT NULL)');
 
@@ -117,16 +113,6 @@ class _$AppDatabase extends AppDatabase {
   @override
   SleepDao get sleepDao {
     return _sleepDaoInstance ??= _$SleepDao(database, changeListener);
-  }
-
-  @override
-  LevelsDao get levelDao {
-    return _levelDaoInstance ??= _$LevelsDao(database, changeListener);
-  }
-
-  @override
-  DataDao get dataDao {
-    return _dataDaoInstance ??= _$DataDao(database, changeListener);
   }
 
   @override
@@ -221,6 +207,7 @@ class _$SleepDao extends SleepDao {
             'Sleep',
             (Sleep item) => <String, Object?>{
                   'id': item.id,
+                  'date': item.date,
                   'dateOfSleep': item.dateOfSleep,
                   'startTime': item.startTime,
                   'endTime': item.endTime,
@@ -231,7 +218,10 @@ class _$SleepDao extends SleepDao {
                   'minutesAfterWakeup': item.minutesAfterWakeup,
                   'efficiency': item.efficiency,
                   'logType': item.logType,
-                  'mainSleep': item.mainSleep ? 1 : 0
+                  'mainSleep':
+                      item.mainSleep == null ? null : (item.mainSleep! ? 1 : 0),
+                  'levels': item.levels,
+                  'DailyData': item.DailyData ? 1 : 0
                 }),
         _sleepUpdateAdapter = UpdateAdapter(
             database,
@@ -239,6 +229,7 @@ class _$SleepDao extends SleepDao {
             ['id'],
             (Sleep item) => <String, Object?>{
                   'id': item.id,
+                  'date': item.date,
                   'dateOfSleep': item.dateOfSleep,
                   'startTime': item.startTime,
                   'endTime': item.endTime,
@@ -249,7 +240,10 @@ class _$SleepDao extends SleepDao {
                   'minutesAfterWakeup': item.minutesAfterWakeup,
                   'efficiency': item.efficiency,
                   'logType': item.logType,
-                  'mainSleep': item.mainSleep ? 1 : 0
+                  'mainSleep':
+                      item.mainSleep == null ? null : (item.mainSleep! ? 1 : 0),
+                  'levels': item.levels,
+                  'DailyData': item.DailyData ? 1 : 0
                 }),
         _sleepDeletionAdapter = DeletionAdapter(
             database,
@@ -257,6 +251,7 @@ class _$SleepDao extends SleepDao {
             ['id'],
             (Sleep item) => <String, Object?>{
                   'id': item.id,
+                  'date': item.date,
                   'dateOfSleep': item.dateOfSleep,
                   'startTime': item.startTime,
                   'endTime': item.endTime,
@@ -267,7 +262,10 @@ class _$SleepDao extends SleepDao {
                   'minutesAfterWakeup': item.minutesAfterWakeup,
                   'efficiency': item.efficiency,
                   'logType': item.logType,
-                  'mainSleep': item.mainSleep ? 1 : 0
+                  'mainSleep':
+                      item.mainSleep == null ? null : (item.mainSleep! ? 1 : 0),
+                  'levels': item.levels,
+                  'DailyData': item.DailyData ? 1 : 0
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -289,7 +287,7 @@ class _$SleepDao extends SleepDao {
   ) async {
     return _queryAdapter.queryList(
         'SELECT * FROM Sleep WHERE dateTime between ?1 and ?2 ORDER BY dateTime ASC',
-        mapper: (Map<String, Object?> row) => Sleep(row['id'] as int?, row['dateOfSleep'] as String, row['startTime'] as String, row['endTime'] as String, row['duration'] as double, row['minutesToFallAsleep'] as int, row['minutesAsleep'] as int, row['minutesAwake'] as int, row['minutesAfterWakeup'] as int, row['efficiency'] as int, row['logType'] as String, (row['mainSleep'] as int) != 0),
+        mapper: (Map<String, Object?> row) => Sleep(id: row['id'] as int?, date: row['date'] as String, dateOfSleep: row['dateOfSleep'] as String?, startTime: row['startTime'] as String?, endTime: row['endTime'] as String?, duration: row['duration'] as double?, minutesToFallAsleep: row['minutesToFallAsleep'] as int?, minutesAsleep: row['minutesAsleep'] as int?, minutesAwake: row['minutesAwake'] as int?, minutesAfterWakeup: row['minutesAfterWakeup'] as int?, efficiency: row['efficiency'] as int?, logType: row['logType'] as String?, mainSleep: row['mainSleep'] == null ? null : (row['mainSleep'] as int) != 0),
         arguments: [
           _dateTimeConverter.encode(startTime),
           _dateTimeConverter.encode(endTime)
@@ -300,18 +298,21 @@ class _$SleepDao extends SleepDao {
   Future<List<Sleep>> findAllSleep() async {
     return _queryAdapter.queryList('SELECT * FROM Sleep',
         mapper: (Map<String, Object?> row) => Sleep(
-            row['id'] as int?,
-            row['dateOfSleep'] as String,
-            row['startTime'] as String,
-            row['endTime'] as String,
-            row['duration'] as double,
-            row['minutesToFallAsleep'] as int,
-            row['minutesAsleep'] as int,
-            row['minutesAwake'] as int,
-            row['minutesAfterWakeup'] as int,
-            row['efficiency'] as int,
-            row['logType'] as String,
-            (row['mainSleep'] as int) != 0));
+            id: row['id'] as int?,
+            date: row['date'] as String,
+            dateOfSleep: row['dateOfSleep'] as String?,
+            startTime: row['startTime'] as String?,
+            endTime: row['endTime'] as String?,
+            duration: row['duration'] as double?,
+            minutesToFallAsleep: row['minutesToFallAsleep'] as int?,
+            minutesAsleep: row['minutesAsleep'] as int?,
+            minutesAwake: row['minutesAwake'] as int?,
+            minutesAfterWakeup: row['minutesAfterWakeup'] as int?,
+            efficiency: row['efficiency'] as int?,
+            logType: row['logType'] as String?,
+            mainSleep: row['mainSleep'] == null
+                ? null
+                : (row['mainSleep'] as int) != 0));
   }
 
   @override
@@ -319,37 +320,21 @@ class _$SleepDao extends SleepDao {
     return _queryAdapter.query(
         'SELECT * FROM Sleep ORDER BY dateTime ASC LIMIT 1',
         mapper: (Map<String, Object?> row) => Sleep(
-            row['id'] as int?,
-            row['dateOfSleep'] as String,
-            row['startTime'] as String,
-            row['endTime'] as String,
-            row['duration'] as double,
-            row['minutesToFallAsleep'] as int,
-            row['minutesAsleep'] as int,
-            row['minutesAwake'] as int,
-            row['minutesAfterWakeup'] as int,
-            row['efficiency'] as int,
-            row['logType'] as String,
-            (row['mainSleep'] as int) != 0));
-  }
-
-  @override
-  Future<Sleep?> findLastDayInDb() async {
-    return _queryAdapter.query(
-        'SELECT * FROM Sleep ORDER BY dateTime DESC LIMIT 1',
-        mapper: (Map<String, Object?> row) => Sleep(
-            row['id'] as int?,
-            row['dateOfSleep'] as String,
-            row['startTime'] as String,
-            row['endTime'] as String,
-            row['duration'] as double,
-            row['minutesToFallAsleep'] as int,
-            row['minutesAsleep'] as int,
-            row['minutesAwake'] as int,
-            row['minutesAfterWakeup'] as int,
-            row['efficiency'] as int,
-            row['logType'] as String,
-            (row['mainSleep'] as int) != 0));
+            id: row['id'] as int?,
+            date: row['date'] as String,
+            dateOfSleep: row['dateOfSleep'] as String?,
+            startTime: row['startTime'] as String?,
+            endTime: row['endTime'] as String?,
+            duration: row['duration'] as double?,
+            minutesToFallAsleep: row['minutesToFallAsleep'] as int?,
+            minutesAsleep: row['minutesAsleep'] as int?,
+            minutesAwake: row['minutesAwake'] as int?,
+            minutesAfterWakeup: row['minutesAfterWakeup'] as int?,
+            efficiency: row['efficiency'] as int?,
+            logType: row['logType'] as String?,
+            mainSleep: row['mainSleep'] == null
+                ? null
+                : (row['mainSleep'] as int) != 0));
   }
 
   @override
@@ -363,252 +348,8 @@ class _$SleepDao extends SleepDao {
   }
 
   @override
-  Future<void> deleteSleep(Sleep sleep) async {
-    await _sleepDeletionAdapter.delete(sleep);
-  }
-}
-
-class _$LevelsDao extends LevelsDao {
-  _$LevelsDao(
-    this.database,
-    this.changeListener,
-  )   : _queryAdapter = QueryAdapter(database),
-        _levelsInsertionAdapter = InsertionAdapter(
-            database,
-            'Levels',
-            (Levels item) => <String, Object?>{
-                  'id': item.id,
-                  'levelName': item.levelName,
-                  'count': item.count,
-                  'minutes': item.minutes,
-                  'thirtyDayAvgMinutes': item.thirtyDayAvgMinutes,
-                  'sleepId': item.sleepId
-                }),
-        _levelsUpdateAdapter = UpdateAdapter(
-            database,
-            'Levels',
-            ['id'],
-            (Levels item) => <String, Object?>{
-                  'id': item.id,
-                  'levelName': item.levelName,
-                  'count': item.count,
-                  'minutes': item.minutes,
-                  'thirtyDayAvgMinutes': item.thirtyDayAvgMinutes,
-                  'sleepId': item.sleepId
-                }),
-        _levelsDeletionAdapter = DeletionAdapter(
-            database,
-            'Levels',
-            ['id'],
-            (Levels item) => <String, Object?>{
-                  'id': item.id,
-                  'levelName': item.levelName,
-                  'count': item.count,
-                  'minutes': item.minutes,
-                  'thirtyDayAvgMinutes': item.thirtyDayAvgMinutes,
-                  'sleepId': item.sleepId
-                });
-
-  final sqflite.DatabaseExecutor database;
-
-  final StreamController<String> changeListener;
-
-  final QueryAdapter _queryAdapter;
-
-  final InsertionAdapter<Levels> _levelsInsertionAdapter;
-
-  final UpdateAdapter<Levels> _levelsUpdateAdapter;
-
-  final DeletionAdapter<Levels> _levelsDeletionAdapter;
-
-  @override
-  Future<List<Levels>> findLevelsbyDate(
-    DateTime startTime,
-    DateTime endTime,
-  ) async {
-    return _queryAdapter.queryList(
-        'SELECT * FROM Levels WHERE dateTime between ?1 and ?2 ORDER BY dateTime ASC',
-        mapper: (Map<String, Object?> row) => Levels(row['id'] as int, row['levelName'] as String, row['count'] as int, row['minutes'] as int, row['thirtyDayAvgMinutes'] as int, row['sleepId'] as int),
-        arguments: [
-          _dateTimeConverter.encode(startTime),
-          _dateTimeConverter.encode(endTime)
-        ]);
-  }
-
-  @override
-  Future<List<Levels>> findAllLevels() async {
-    return _queryAdapter.queryList('SELECT * FROM Levels',
-        mapper: (Map<String, Object?> row) => Levels(
-            row['id'] as int,
-            row['levelName'] as String,
-            row['count'] as int,
-            row['minutes'] as int,
-            row['thirtyDayAvgMinutes'] as int,
-            row['sleepId'] as int));
-  }
-
-  @override
-  Future<Levels?> getLevelsById(int id) async {
-    return _queryAdapter.query('SELECT * FROM Level WHERE id = ?1',
-        mapper: (Map<String, Object?> row) => Levels(
-            row['id'] as int,
-            row['levelName'] as String,
-            row['count'] as int,
-            row['minutes'] as int,
-            row['thirtyDayAvgMinutes'] as int,
-            row['sleepId'] as int),
-        arguments: [id]);
-  }
-
-  @override
-  Future<List<Levels>> getLevelsForSleep(int sleepId) async {
-    return _queryAdapter.queryList('SELECT * FROM Level WHERE sleepId = ?1',
-        mapper: (Map<String, Object?> row) => Levels(
-            row['id'] as int,
-            row['levelName'] as String,
-            row['count'] as int,
-            row['minutes'] as int,
-            row['thirtyDayAvgMinutes'] as int,
-            row['sleepId'] as int),
-        arguments: [sleepId]);
-  }
-
-  @override
-  Future<int?> getAwakeCount(int sleepId) async {
-    return _queryAdapter.query(
-        'SELECT count FROM Levels WHERE levelName = \"awake\" AND sleepId = ?1',
-        mapper: (Map<String, Object?> row) => row.values.first as int,
-        arguments: [sleepId]);
-  }
-
-  @override
-  Future<void> insertLevels(Levels levels) async {
-    await _levelsInsertionAdapter.insert(levels, OnConflictStrategy.replace);
-  }
-
-  @override
-  Future<void> updateLevels(Levels levels) async {
-    await _levelsUpdateAdapter.update(levels, OnConflictStrategy.replace);
-  }
-
-  @override
-  Future<void> deleteLevels(Levels levels) async {
-    await _levelsDeletionAdapter.delete(levels);
-  }
-}
-
-class _$DataDao extends DataDao {
-  _$DataDao(
-    this.database,
-    this.changeListener,
-  )   : _queryAdapter = QueryAdapter(database),
-        _dataInsertionAdapter = InsertionAdapter(
-            database,
-            'Data',
-            (Data item) => <String, Object?>{
-                  'id': item.id,
-                  'dateTime': _dateTimeConverter.encode(item.dateTime),
-                  'level': item.level,
-                  'seconds': item.seconds,
-                  'sleepId': item.sleepId
-                }),
-        _dataUpdateAdapter = UpdateAdapter(
-            database,
-            'Data',
-            ['id'],
-            (Data item) => <String, Object?>{
-                  'id': item.id,
-                  'dateTime': _dateTimeConverter.encode(item.dateTime),
-                  'level': item.level,
-                  'seconds': item.seconds,
-                  'sleepId': item.sleepId
-                }),
-        _dataDeletionAdapter = DeletionAdapter(
-            database,
-            'Data',
-            ['id'],
-            (Data item) => <String, Object?>{
-                  'id': item.id,
-                  'dateTime': _dateTimeConverter.encode(item.dateTime),
-                  'level': item.level,
-                  'seconds': item.seconds,
-                  'sleepId': item.sleepId
-                });
-
-  final sqflite.DatabaseExecutor database;
-
-  final StreamController<String> changeListener;
-
-  final QueryAdapter _queryAdapter;
-
-  final InsertionAdapter<Data> _dataInsertionAdapter;
-
-  final UpdateAdapter<Data> _dataUpdateAdapter;
-
-  final DeletionAdapter<Data> _dataDeletionAdapter;
-
-  @override
-  Future<List<Data>> findDatabyDate(
-    DateTime startTime,
-    DateTime endTime,
-  ) async {
-    return _queryAdapter.queryList(
-        'SELECT * FROM Data WHERE dateTime between ?1 and ?2 ORDER BY dateTime ASC',
-        mapper: (Map<String, Object?> row) => Data(row['id'] as int?, _dateTimeConverter.decode(row['dateTime'] as int), row['level'] as int, row['seconds'] as int, row['sleepId'] as int),
-        arguments: [
-          _dateTimeConverter.encode(startTime),
-          _dateTimeConverter.encode(endTime)
-        ]);
-  }
-
-  @override
-  Future<List<Data>> findAllData() async {
-    return _queryAdapter.queryList('SELECT * FROM Data',
-        mapper: (Map<String, Object?> row) => Data(
-            row['id'] as int?,
-            _dateTimeConverter.decode(row['dateTime'] as int),
-            row['level'] as int,
-            row['seconds'] as int,
-            row['sleepId'] as int));
-  }
-
-  @override
-  Future<Data?> getDataById(int id) async {
-    return _queryAdapter.query('SELECT * FROM Data WHERE id = ?1',
-        mapper: (Map<String, Object?> row) => Data(
-            row['id'] as int?,
-            _dateTimeConverter.decode(row['dateTime'] as int),
-            row['level'] as int,
-            row['seconds'] as int,
-            row['sleepId'] as int),
-        arguments: [id]);
-  }
-
-  @override
-  Future<List<Data>> getDataForSleep(int sleepId) async {
-    return _queryAdapter.queryList('SELECT * FROM Level WHERE sleepId = ?1',
-        mapper: (Map<String, Object?> row) => Data(
-            row['id'] as int?,
-            _dateTimeConverter.decode(row['dateTime'] as int),
-            row['level'] as int,
-            row['seconds'] as int,
-            row['sleepId'] as int),
-        arguments: [sleepId]);
-  }
-
-  @override
-  Future<void> insertData(Data data) async {
-    await _dataInsertionAdapter.insert(data, OnConflictStrategy.replace);
-  }
-
-  @override
-  Future<void> updateData(Data data) async {
-    await _dataUpdateAdapter.update(data, OnConflictStrategy.replace);
-  }
-
-  @override
-  Future<void> deleteData(Data data) async {
-    await _dataDeletionAdapter.delete(data);
+  Future<void> deleteSleep(Sleep task) async {
+    await _sleepDeletionAdapter.delete(task);
   }
 }
 
