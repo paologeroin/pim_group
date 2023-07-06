@@ -91,7 +91,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Drink` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `drinkType` TEXT NOT NULL, `dateTime` INTEGER NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Sleep` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `date` TEXT NOT NULL, `dateOfSleep` TEXT, `startTime` TEXT, `endTime` TEXT, `duration` REAL, `minutesToFallAsleep` INTEGER, `minutesAsleep` INTEGER, `minutesAwake` INTEGER, `minutesAfterWakeup` INTEGER, `efficiency` INTEGER, `logType` TEXT, `mainSleep` INTEGER, `levels` TEXT, `DailyData` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `Sleep` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `date` TEXT, `dateOfSleep` TEXT, `startTime` TEXT, `endTime` TEXT, `duration` REAL, `minutesToFallAsleep` INTEGER, `minutesAsleep` INTEGER, `minutesAwake` INTEGER, `minutesAfterWakeup` INTEGER, `efficiency` INTEGER, `logType` TEXT, `mainSleep` INTEGER, `levels` TEXT, `DailyData` INTEGER NOT NULL)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `levels` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `data` TEXT NOT NULL, `summary` TEXT NOT NULL, `sleep_id` TEXT NOT NULL, FOREIGN KEY (`sleep_id`) REFERENCES `Sleep` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
@@ -281,25 +281,11 @@ class _$SleepDao extends SleepDao {
   final DeletionAdapter<Sleep> _sleepDeletionAdapter;
 
   @override
-  Future<List<Sleep>> findSleepbyDate(
-    DateTime startTime,
-    DateTime endTime,
-  ) async {
-    return _queryAdapter.queryList(
-        'SELECT * FROM Sleep WHERE dateTime between ?1 and ?2 ORDER BY dateTime ASC',
-        mapper: (Map<String, Object?> row) => Sleep(id: row['id'] as int?, date: row['date'] as String, dateOfSleep: row['dateOfSleep'] as String?, startTime: row['startTime'] as String?, endTime: row['endTime'] as String?, duration: row['duration'] as double?, minutesToFallAsleep: row['minutesToFallAsleep'] as int?, minutesAsleep: row['minutesAsleep'] as int?, minutesAwake: row['minutesAwake'] as int?, minutesAfterWakeup: row['minutesAfterWakeup'] as int?, efficiency: row['efficiency'] as int?, logType: row['logType'] as String?, mainSleep: row['mainSleep'] == null ? null : (row['mainSleep'] as int) != 0),
-        arguments: [
-          _dateTimeConverter.encode(startTime),
-          _dateTimeConverter.encode(endTime)
-        ]);
-  }
-
-  @override
-  Future<List<Sleep>> findAllSleep() async {
-    return _queryAdapter.queryList('SELECT * FROM Sleep',
+  Future<List<Sleep>> findSleepbyDate(String date) async {
+    return _queryAdapter.queryList('SELECT * FROM Sleep WHERE date = ?1',
         mapper: (Map<String, Object?> row) => Sleep(
             id: row['id'] as int?,
-            date: row['date'] as String,
+            date: row['date'] as String?,
             dateOfSleep: row['dateOfSleep'] as String?,
             startTime: row['startTime'] as String?,
             endTime: row['endTime'] as String?,
@@ -312,7 +298,31 @@ class _$SleepDao extends SleepDao {
             logType: row['logType'] as String?,
             mainSleep: row['mainSleep'] == null
                 ? null
-                : (row['mainSleep'] as int) != 0));
+                : (row['mainSleep'] as int) != 0,
+            levels: row['levels'] as String?),
+        arguments: [date]);
+  }
+
+  @override
+  Future<List<Sleep>> findAllSleep() async {
+    return _queryAdapter.queryList('SELECT * FROM Sleep',
+        mapper: (Map<String, Object?> row) => Sleep(
+            id: row['id'] as int?,
+            date: row['date'] as String?,
+            dateOfSleep: row['dateOfSleep'] as String?,
+            startTime: row['startTime'] as String?,
+            endTime: row['endTime'] as String?,
+            duration: row['duration'] as double?,
+            minutesToFallAsleep: row['minutesToFallAsleep'] as int?,
+            minutesAsleep: row['minutesAsleep'] as int?,
+            minutesAwake: row['minutesAwake'] as int?,
+            minutesAfterWakeup: row['minutesAfterWakeup'] as int?,
+            efficiency: row['efficiency'] as int?,
+            logType: row['logType'] as String?,
+            mainSleep: row['mainSleep'] == null
+                ? null
+                : (row['mainSleep'] as int) != 0,
+            levels: row['levels'] as String?));
   }
 
   @override
@@ -321,7 +331,7 @@ class _$SleepDao extends SleepDao {
         'SELECT * FROM Sleep ORDER BY dateTime ASC LIMIT 1',
         mapper: (Map<String, Object?> row) => Sleep(
             id: row['id'] as int?,
-            date: row['date'] as String,
+            date: row['date'] as String?,
             dateOfSleep: row['dateOfSleep'] as String?,
             startTime: row['startTime'] as String?,
             endTime: row['endTime'] as String?,
@@ -334,7 +344,8 @@ class _$SleepDao extends SleepDao {
             logType: row['logType'] as String?,
             mainSleep: row['mainSleep'] == null
                 ? null
-                : (row['mainSleep'] as int) != 0));
+                : (row['mainSleep'] as int) != 0,
+            levels: row['levels'] as String?));
   }
 
   @override

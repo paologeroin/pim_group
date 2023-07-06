@@ -79,4 +79,29 @@ class AppDatabaseRepository extends ChangeNotifier {
     await database.goalDao.updateGoal(goal);
     notifyListeners();
   } //updateGoal
+
+  //This method wraps the findAllSleeps() method of the DAO
+  Future<List<Sleep>> findAllSleeps() async {
+    final results = await database.sleepDao.findAllSleep();
+    return results;
+  }
+
+  //This method wraps the insertSleep() method of the DAO.
+  Future<void> insertSleep(Sleep sleep) async {
+    final results = await database.sleepDao.insertSleep(sleep);
+    return results;
+  } //insertDrink
+
+  //This method wraps the updateSleep() method of the DAO.
+  Future<void> updateSleep(Sleep sleep) async {
+    await database.sleepDao.updateSleep(sleep);
+    notifyListeners();
+  } //updateGoal
+
+  //Wrap findDrinksOnDate
+  Future<List<Sleep>> findSleepbyDate(date) async {
+    final results =
+        await database.sleepDao.findSleepbyDate(date);
+    return results;
+  }
 } //SleepDatabaseRepository

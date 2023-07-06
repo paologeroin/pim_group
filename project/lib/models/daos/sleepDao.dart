@@ -6,8 +6,8 @@ import 'package:pim_group/models/entities/entities.dart';
 abstract class SleepDao {
   //Query #0: SELECT -> this allows to obtain all the entries of the Sleep table of a certain date
   @Query(
-      'SELECT * FROM Sleep WHERE dateTime between :startTime and :endTime ORDER BY dateTime ASC')
-  Future<List<Sleep>> findSleepbyDate(DateTime startTime, DateTime endTime);
+      'SELECT * FROM Sleep WHERE date = :date')
+  Future<List<Sleep>> findSleepbyDate(String date);
 
   //Query #1: SELECT -> this allows to obtain all the entries of the Sleep table
   @Query('SELECT * FROM Sleep')
