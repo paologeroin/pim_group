@@ -28,20 +28,20 @@ class SleepData {
   bool DailyData = true;
 
   SleepData.fromJson(Map<String, dynamic> json) {
-    date = json['date'];
-    if (json['data'] != null && json['data'].runtimeType != List) {
-      dateOfSleep = json['data']["dateOfSleep"];
-      startTime = json['data']["startTime"];
-      endTime = json['data']["endTime"];
-      duration = json['data']['duration'].toDouble() / 1000;
-      minutesToFallAsleep = json['data']["minutesToFallAsleep"];
-      minutesAsleep = json['data']['minutesAsleep'];
-      minutesAwake = json['data']['minutesAwake'];
-      minutesAfterWakeup = json['data']["minutesAfterWakeup"];
-      efficiency = json['data']["efficiency"];
-      logType = json['data']["logType"].toString();
-      mainSleep = json['data']["mainSleep"];
-      levels = json['data']["levels"];
+    date = json['date'].toString();
+    if (!(json['data'] == null)) {
+      dateOfSleep = json['data'][0]['dateOfSleep'].toString();
+      startTime = json['data'][0]["startTime"].toString();
+      endTime = json['data'][0]["endTime"].toString();
+      duration = json['data'][0]['duration'].toDouble() / 1000;
+      minutesToFallAsleep = json['data'][0]["minutesToFallAsleep"];
+      minutesAsleep = json['data'][0]['minutesAsleep'];
+      minutesAwake = json['data'][0]['minutesAwake'];
+      minutesAfterWakeup = json['data'][0]["minutesAfterWakeup"];
+      efficiency = json['data'][0]["efficiency"];
+      logType = json['data'][0]["logType"].toString();
+      mainSleep = json['data'][0]["mainSleep"];
+      levels = json['data'][0]["levels"];
       // levelsSummary = json['data']["levels"]['summary'];
       if (duration == null) {
         DailyData = false;
