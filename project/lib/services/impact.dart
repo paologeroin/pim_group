@@ -10,6 +10,10 @@ import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../pages/root.dart';
+import 'package:pim_group/models/entities/sleeps.dart';
+import 'package:pim_group/models/repo/app_repository.dart';
+import 'package:pim_group/models/entities/drink.dart';
+import 'package:provider/provider.dart';
 
 // creo la classe ImpactService
 class ImpactService extends StatelessWidget {
@@ -89,12 +93,69 @@ class ImpactService extends StatelessWidget {
       final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
       for (int i = 0; i < decodedResponse['data'].length; i++) {
         SleepData dataDay = SleepData.fromJson(decodedResponse['data'][i]);
-        print(dataDay);
+        print("DATA DAY");
+        print(dataDay.efficiency);
         Result[dataDay.date] = dataDay;
       }
     }
     return Result;
   } //_requestData
+
+  //SAVE DATA in DATABASE 
+  Future<void> saveDataInDatabase(Map<String, SleepData> ResultMap, BuildContext context) async {
+    Map<String, SleepData> Result = ResultMap;
+    print(Result[0]);
+    List<Sleep> allSleep = await Provider.of<AppDatabaseRepository>(context, listen: false).findAllSleeps();
+    Map allSleepMap = {};
+    Iterable keys = Result.keys;
+    for (int i = 0; i < allSleep.length; i++) {
+      allSleep.forEach((sleep) => allSleepMap[sleep.date] = sleep);
+    }
+    for (final key in keys) {
+      print("RESULT DATE");
+      print(Result[key]);
+      if (!(allSleepMap[key] == null)){
+        await Provider.of<AppDatabaseRepository>(context, listen: false).updateSleep(Sleep(
+          id: allSleepMap[key].id, 
+          date: Result[key]!.date.toString(),  
+          dateOfSleep: Result[key]!.dateOfSleep,
+          startTime: Result[key]!.startTime,
+          endTime: Result[key]!.endTime,
+          duration: Result[key]!.duration,
+          minutesToFallAsleep: Result[key]!.minutesToFallAsleep,
+          minutesAsleep: Result[key]!.minutesAsleep,
+          minutesAwake: Result[key]!.minutesAwake,
+          minutesAfterWakeup: Result[key]!.minutesAfterWakeup,
+          efficiency: Result[key]!.efficiency,
+          logType: Result[key]!.logType,
+          mainSleep: Result[key]!.mainSleep,
+          levels: Result[key]!.levels.toString(),
+          )
+          );
+      }
+      else {
+        Sleep sleep = Sleep(
+          //id: allSleepMap[key].id, 
+          date: Result[key]!.date.toString(),  
+          dateOfSleep: Result[key]!.dateOfSleep,
+          startTime: Result[key]!.startTime,
+          endTime: Result[key]!.endTime,
+          duration: Result[key]!.duration,
+          minutesToFallAsleep: Result[key]!.minutesToFallAsleep,
+          minutesAsleep: Result[key]!.minutesAsleep,
+          minutesAwake: Result[key]!.minutesAwake,
+          minutesAfterWakeup: Result[key]!.minutesAfterWakeup,
+          efficiency: Result[key]!.efficiency,
+          logType: Result[key]!.logType,
+          mainSleep: Result[key]!.mainSleep,
+          levels: Result[key]!.levels.toString(),
+          );
+        await Provider.of<AppDatabaseRepository>(context, listen: false).insertSleep(sleep);
+          print("SAVED DATABASE");
+      }
+    }
+  }  
+  
 
   // metodi da usare in impact_ob
   //This method allows to obtain the JWT token pair from IMPACT
@@ -185,6 +246,10 @@ class ImpactService extends StatelessWidget {
                   print(result);
                   final message =
                       result == null ? 'Request failed' : 'Request successful';
+                  if (result.isNotEmpty){
+                    print("NOT NULL");
+                    saveDataInDatabase(result, context);
+                  }
                   ScaffoldMessenger.of(context)
                     ..removeCurrentSnackBar()
                     ..showSnackBar(SnackBar(content: Text(message)));
