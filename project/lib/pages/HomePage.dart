@@ -71,16 +71,16 @@ class _HomePage extends State<HomePage> {
   }
 
   void changePhrase() {
-    print(oldValue);
+    //print(oldValue);
     randomNumber = random.nextInt(4);
-    print(randomNumber);
+    //print(randomNumber);
     //setState(() {
     if (randomNumber == oldValue && randomNumber > 0) {
       randomNumber--;
-      print("change: $randomNumber");
+     // print("change: $randomNumber");
     } else if (randomNumber == oldValue && randomNumber < 3) {
       randomNumber++;
-      print("change: $randomNumber");
+     // print("change: $randomNumber");
     }
 
     //});
@@ -95,7 +95,7 @@ class _HomePage extends State<HomePage> {
     setState(() {
       today = DateTime.now();
     });
-    print(diff);
+   // print(diff);
   }
 
   @override
@@ -271,10 +271,10 @@ class _HomePage extends State<HomePage> {
 
                         // CREO I CIRCULAR PROGRESS NEL CONTAINER
                         child: Row(children: <Widget>[
-                          new Padding(
+                          Padding(
                             padding: EdgeInsets.symmetric(horizontal: 5.0),
                           ),
-                          new CircularPercentIndicator(
+                          CircularPercentIndicator(
                             radius: 140.0,
                             lineWidth: 25.0,
                             percent: 0.7,
@@ -298,33 +298,82 @@ class _HomePage extends State<HomePage> {
                             circularStrokeCap: CircularStrokeCap.round,
                             progressColor: Colors.pink[200],
                           ),
-                          new Padding(
+                          Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20.0),
                           ),
-                          new CircularPercentIndicator(
-                            radius: 140.0,
-                            lineWidth: 25.0,
-                            percent: 0.40,
+                          
+                                  Consumer<AppDatabaseRepository>(
+                                    builder: (context, dbr, child) {
+                                  //The logic is to query the DB for the entire list of Todo using dbr.findAllTodos()
+                                  //and then populate the ListView accordingly.
+                                  //We need to use a FutureBuilder since the result of dbr.findAllTodos() is a Future.
+                                  return FutureBuilder(
+                                    initialData: null,
+                                    //future: dbr.findSleepbyDate("${DateTime.now().subtract(const Duration(days: 1)).year}-0${DateTime.now().subtract(const Duration(days: 1)).month}-0${DateTime.now(). subtract(const Duration(days: 1)).day}"),
+                                    future: dbr.findAllSleeps(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData ) {
+                                        final data = snapshot.data as List<Sleep>;
+                                        print(data[data.length-1].date);
+                                        return CircularPercentIndicator(
+                                          radius: 140.0,
+                                          lineWidth: 25.0,
+                                          percent: data[data.length-1].efficiency! / 100.0,
 
-                            //  header: new Text("Icon header"),
-                            center: Container(
-                                child: Text(
-                                  'Sleep quality',
+                                          //  header: new Text("Icon header"),
+                                          center: Container(
+                                              child: Text(data[data.length-1].efficiency.toString(),
+                                                textDirection: TextDirection.ltr,
+                                                textAlign: TextAlign.center,
+                                                style: GoogleFonts.lato(),),
+                                              width: 70,
+                                              height: 53,
+                                              padding: EdgeInsets.all(7.0),
+                                              //color: Colors.amber,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(20),
+                                              )),
+                                          circularStrokeCap: CircularStrokeCap.round,
+                                          backgroundColor: Color.fromARGB(255, 196, 193, 193),
+                                          progressColor: Colors.teal[200],
+                                        );
+                                        
+                                        } else {
+                                              //A CircularProgressIndicator is shown while the list of Todo is loading.
+                                              return CircularPercentIndicator(
+                                                        radius: 140.0,
+                                                        lineWidth: 25.0,
+                                                        percent: 0.0,
+
+                                                        //  header: new Text("Icon header"),
+                                                        center: Container(
+                                                            child: Text("0",
+                                                              textDirection: TextDirection.ltr,
+                                                              textAlign: TextAlign.center,
+                                                              style: GoogleFonts.lato(),),
+                                                            width: 70,
+                                                            height: 53,
+                                                            padding: EdgeInsets.all(7.0),
+                                                            //color: Colors.amber,
+                                                            decoration: BoxDecoration(
+                                                              borderRadius: BorderRadius.circular(20),
+                                                            )),
+                                                        circularStrokeCap: CircularStrokeCap.round,
+                                                        backgroundColor: Color.fromARGB(255, 196, 193, 193),
+                                                        progressColor: Colors.teal[200],
+                                                      );
+                                            } 
+                                        }
+                                      );
+                                    }
+                                  ),
+                                  //'Sleep quality',
+                                  /*
                                   textDirection: TextDirection.ltr,
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.lato(),
-                                ),
-                                width: 70,
-                                height: 53,
-                                padding: EdgeInsets.all(7.0),
-                                //color: Colors.amber,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                )),
-                            circularStrokeCap: CircularStrokeCap.round,
-                            backgroundColor: Color.fromARGB(255, 196, 193, 193),
-                            progressColor: Colors.teal[200],
-                          ),
+                                ),*/
+                                
                         ])
                         //width: 0.9,
                         )),
@@ -442,6 +491,6 @@ Future<DateTime> lastDrink(BuildContext context) async {
            lastDrinkDate = lastDrinks.last.dateTime;
           }
   
-  print(lastDrinkDate);
+  //(lastDrinkDate);
   return lastDrinkDate;
 }
