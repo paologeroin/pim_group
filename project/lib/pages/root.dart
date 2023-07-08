@@ -51,7 +51,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
       bottomNavigationBar: Container(
         width: size.width,
         height: 80,
-        color: Colors.teal[50],
+        color:Color.fromARGB(255, 255, 255, 255),
         child: Stack(
           //overflow: Overflow.visible,
           children: [
@@ -62,8 +62,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
             Center(
                 heightFactor: 0.6,
                 child: FloatingActionButton(
-                  backgroundColor: Color.fromARGB(
-                      255, 109, 230, 69), // PAOLO Colors.pink[300],
+                  backgroundColor: Color.fromARGB(255, 255, 147, 15), // PAOLO Colors.pink[300],
                   child: Icon(Icons.add), // Analyze Button
                   elevation: 0.1,
 
@@ -79,9 +78,8 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                     icon: Icon(
                       Icons.home,
                       color: currentIndex == 0
-                          ? Color.fromARGB(
-                              255, 109, 230, 69) // PAOLO Colors.teal[400]
-                          : Colors.grey.shade400,
+                          ? Color.fromARGB(255, 131, 7, 214) 
+                          : Color.fromARGB(255, 255, 255, 255),
                     ),
                     onPressed: () {
                       setBottomBarIndex(0);
@@ -92,9 +90,8 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                       icon: Icon(
                         Icons.nights_stay,
                         color: currentIndex == 1
-                            ? Color.fromARGB(
-                                255, 109, 230, 69) // PAOLO Colors.teal[600]
-                            : Colors.grey.shade400,
+                            ? Color.fromARGB(255, 131, 7, 214)
+                            : Color.fromARGB(255, 255, 255, 255),
                       ),
                       onPressed: () {
                         setBottomBarIndex(1);
@@ -106,9 +103,8 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                       icon: Icon(
                         Icons.star,
                         color: currentIndex == 2
-                            ? Color.fromARGB(
-                                255, 109, 230, 69) // PAOLO Colors.teal[600]
-                            : Colors.grey.shade400,
+                            ? Color.fromARGB(255, 131, 7, 214)
+                            : Color.fromARGB(255, 255, 255, 255),
                       ),
                       onPressed: () {
                         setBottomBarIndex(2);
@@ -117,9 +113,8 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                       icon: Icon(
                         Icons.calendar_month_outlined,
                         color: currentIndex == 3
-                            ? Color.fromARGB(
-                                255, 109, 230, 69) // PAOLO Colors.teal[600]
-                            : Colors.grey.shade400,
+                            ? Color.fromARGB(255, 131, 7, 214)
+                            : Color.fromARGB(255, 255, 255, 255),
                       ),
                       onPressed: () {
                         setBottomBarIndex(3);
@@ -155,7 +150,7 @@ class BNBCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = new Paint()
-      ..color = Colors.white
+      ..color = Color.fromARGB(255, 194, 138, 243)
       ..style = PaintingStyle.fill;
 
     Path path = Path();
