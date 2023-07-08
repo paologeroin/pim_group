@@ -74,15 +74,18 @@ class _HomePage extends State<HomePage> {
   void earnMoney() {
     // funzione per aggiornare il portafoglio
     // Aggiungi 5 al portafoglio ogni 24 ore
+    int time = diff.inHours;
     if (countdownTimer != 0) {
-      int time = countdownTimer!.tick;
-      multiplier = time ~/ (24 * 60);
-      print('il moltiplicatore è: $multiplier');
+  
+      multiplier = time ~/ 24;
+  // print('il moltiplicatore nella funzione è: $multiplier');
+ //  print('time nella funzione: $time');
     }
-    if (countdownTimer!.tick % (24 * 60) == 0) {
+
+    if (time / 24 >= 1) {
       setState(() {
         wallet = 10 * multiplier;
-        print('Money added to wallet. Total money earned: $wallet');
+    //  print('Money added to wallet. Total money earned nella funzione: $wallet');
       });
       saveSharedPrefs(); // Salva il nuovo valore nel wallet
     }
@@ -135,7 +138,7 @@ class _HomePage extends State<HomePage> {
     updateTimer = Timer.periodic(updateDuration, (timer) => _update());
     startTimer();
     _loadProfileData();
-    _loadWallet();
+   _loadWallet();
   }
 
   @override
@@ -143,7 +146,9 @@ class _HomePage extends State<HomePage> {
     _loadProfileData();
     _loadWallet();
     earnMoney();
-    diff = -(last.difference(today));
+    diff=-(last.difference(today));
+  //  print('dopo la funzione $wallet');
+  
     DateTime now = DateTime.now();
     String convertedDateTime = "";
     convertedDateTime =
@@ -152,10 +157,10 @@ class _HomePage extends State<HomePage> {
     return Scaffold(
         //backgroundColor: Colors.grey[200],
         //backgroundColor: Color.fromARGB(99, 243, 210, 112),
-        backgroundColor: Colors.white, // CAMBIO COLORE PAOLO Colors.teal[50],
+       backgroundColor: Color.fromARGB(255, 255, 255, 255), // CAMBIO COLORE PAOLO Colors.teal[50],
         drawer: Drawer(
-          backgroundColor: Colors.white, // CAMBIO COLORE PAOLO Colors.teal[50],
-          child: ListView(
+       backgroundColor: Color.fromARGB(255, 255, 255, 255), // CAMBIO COLORE PAOLO Colors.teal[50],
+           child: ListView(
             // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
 
@@ -175,7 +180,7 @@ class _HomePage extends State<HomePage> {
                     text: 'Sure you want to logout?',
                     confirmBtnText: 'Yes',
                     cancelBtnText: 'No',
-                    confirmBtnColor: Colors.green,
+                     confirmBtnColor: Color.fromARGB(255, 194, 138, 243),
                     onConfirmBtnTap: () => _toLoginPage(context),
                   );
                   //  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
@@ -208,7 +213,7 @@ class _HomePage extends State<HomePage> {
           ),
         ),
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(40.0),
+          preferredSize: Size.fromHeight(47.0),
           child: AppBar(
             title: Column(children: [
               Text("Ciao $fullname", style: GoogleFonts.lato()),
@@ -216,8 +221,8 @@ class _HomePage extends State<HomePage> {
                 child: Text(frasedisplay, style: GoogleFonts.lato()),
               )
             ]),
-            backgroundColor: Color.fromARGB(255, 109, 230,
-                69), // CAMBIO COLORE PAOLO Color.fromARGB(255, 97, 198, 171),
+            backgroundColor: Color.fromARGB(255, 194, 138, 243), 
+                
             elevation: 0,
             actions: <Widget>[
               IconButton(
@@ -250,9 +255,8 @@ class _HomePage extends State<HomePage> {
             ClipPath(
               clipper: RoundShape(),
               child: Container(
-                height: 50,
-                color: Color.fromARGB(255, 109, 230,
-                    69), // CAMBIO COLORE PAOLO Color.fromARGB(255, 97, 198, 171),
+                height: 55,
+                color: Color.fromARGB(255, 194, 138, 243), 
               ),
             ),
             Column(
@@ -260,33 +264,42 @@ class _HomePage extends State<HomePage> {
                 Container(
                     child: Column(
                       children: [
-                        Text('You are sober from:',
+                         Text('You have not drink for',
                             textAlign: TextAlign.center,
+                            
                             style: GoogleFonts.lato(
-                                fontSize: 30,
-                                color: Color.fromARGB(255, 30, 121, 0))),
-                        Text(format(diff))
+                                fontSize: 33,
+                                color: Color.fromARGB(255, 255, 255, 255))),
+                        Text(format(diff),
+                        textAlign: TextAlign.center,
+                       
+                         style: GoogleFonts.lato(fontSize: 40,
+                         color: Color.fromARGB(255, 255, 255, 255))),
+                         
                       ],
                     ),
                     // Border to visualize the container
-                    width: MediaQuery.of(context).size.width / 1.2,
-                    height: 155,
+                    width: MediaQuery.of(context).size.width / 1.15,
+                    height: 180,
                     margin: const EdgeInsets.only(top: 10),
                     padding: EdgeInsets.all(25.0),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          Color.fromARGB(255, 109, 230,
-                              69), // CAMBIO COLORE PAOLO Color.fromARGB(96, 138, 242, 211),
-
-                          Colors
-                              .white // CAMBIO COLORE PAOLO Color.fromARGB(134, 47, 192, 156)
-
-//add more colors for gradient
+                         
+                           Color.fromARGB(255, 255, 133, 12),
+                           Color.fromARGB(255, 255, 208, 65) //add more colors for gradient
                         ],
                       ),
-                      border: Border.all(color: Colors.transparent),
-                      borderRadius: BorderRadius.circular(25),
+                    //  border: Border.all(color: Color.fromARGB(55, 255, 123, 0)),
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [BoxShadow(
+                        color: Color.fromARGB(181, 214, 214, 214),
+                        spreadRadius: 2,
+                        blurRadius: 3 ,
+                        offset: Offset(4,8),
+
+                      )]
                     )),
 
                 // CREO IL CONTAINER PER CIRCULAR PROGRESS
@@ -322,101 +335,91 @@ class _HomePage extends State<HomePage> {
                                 width: 70,
                                 height: 45,
                                 padding: EdgeInsets.all(7.0),
-                                //color: Colors.amber,
+                               // color: Colors.amber,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
                                 )),
 
-                            backgroundColor: Color.fromARGB(255, 196, 193, 193),
+                            backgroundColor: Color.fromARGB(255, 238, 237, 237),
                             circularStrokeCap: CircularStrokeCap.round,
-                            progressColor: Colors.pink[200],
+                            progressColor: Color.fromARGB(255, 255, 147, 15),
                           ),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20.0),
                           ),
+                          
+                                  Consumer<AppDatabaseRepository>(
+                                    builder: (context, dbr, child) {
+                                  //The logic is to query the DB for the entire list of Todo using dbr.findAllTodos()
+                                  //and then populate the ListView accordingly.
+                                  //We need to use a FutureBuilder since the result of dbr.findAllTodos() is a Future.
+                                  return FutureBuilder(
+                                    initialData: null,
+                                    //future: dbr.findSleepbyDate("${DateTime.now().subtract(const Duration(days: 1)).year}-0${DateTime.now().subtract(const Duration(days: 1)).month}-0${DateTime.now(). subtract(const Duration(days: 1)).day}"),
+                                    future: dbr.findAllSleeps(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData ) {
+                                        final data = snapshot.data as List<Sleep>;
+                                      //  print(data[data.length-1].date);
+                                        return CircularPercentIndicator(
+                                          radius: 140.0,
+                                          lineWidth: 25.0,
+                                          percent: data[data.length-1].efficiency! / 100.0,
 
-                          Consumer<AppDatabaseRepository>(
-                              builder: (context, dbr, child) {
-                            //The logic is to query the DB for the entire list of Todo using dbr.findAllTodos()
-                            //and then populate the ListView accordingly.
-                            //We need to use a FutureBuilder since the result of dbr.findAllTodos() is a Future.
-                            return FutureBuilder(
-                                initialData: null,
-                                //future: dbr.findSleepbyDate("${DateTime.now().subtract(const Duration(days: 1)).year}-0${DateTime.now().subtract(const Duration(days: 1)).month}-0${DateTime.now(). subtract(const Duration(days: 1)).day}"),
-                                future: dbr.findAllSleeps(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    final data = snapshot.data as List<Sleep>;
-                                    print(data[data.length - 1].date);
-                                    return CircularPercentIndicator(
-                                      radius: 140.0,
-                                      lineWidth: 25.0,
-                                      percent:
-                                          data[data.length - 1].efficiency! /
-                                              100.0,
+                                          //  header: new Text("Icon header"),
+                                          center: Container(
+                                              child: Text( data[data.length-1].efficiency.toString(),
+                                                textDirection: TextDirection.ltr,
+                                                textAlign: TextAlign.center,
+                                                style: GoogleFonts.lato(),),
+                                              width: 70,
+                                              height: 53,
+                                              padding: EdgeInsets.all(7.0),
+                                              //color: Colors.amber,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(10),
+                                              )),
+                                          circularStrokeCap: CircularStrokeCap.round,
+                                          backgroundColor: Color.fromARGB(255, 238, 237, 237),
+                                          progressColor: Color.fromARGB(255, 194, 138, 243),
+                                        );
+                                        
+                                        } else {
+                                              //A CircularProgressIndicator is shown while the list of Todo is loading.
+                                              return CircularPercentIndicator(
+                                                        radius: 140.0,
+                                                        lineWidth: 25.0,
+                                                        percent: 0.0,
 
-                                      //  header: new Text("Icon header"),
-                                      center: Container(
-                                          child: Text(
-                                            data[data.length - 1]
-                                                .efficiency
-                                                .toString(),
-                                            textDirection: TextDirection.ltr,
-                                            textAlign: TextAlign.center,
-                                            style: GoogleFonts.lato(),
-                                          ),
-                                          width: 70,
-                                          height: 53,
-                                          padding: EdgeInsets.all(7.0),
-                                          //color: Colors.amber,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          )),
-                                      circularStrokeCap:
-                                          CircularStrokeCap.round,
-                                      backgroundColor:
-                                          Color.fromARGB(255, 196, 193, 193),
-                                      progressColor: Colors.teal[200],
-                                    );
-                                  } else {
-                                    //A CircularProgressIndicator is shown while the list of Todo is loading.
-                                    return CircularPercentIndicator(
-                                      radius: 140.0,
-                                      lineWidth: 25.0,
-                                      percent: 0.0,
-
-                                      //  header: new Text("Icon header"),
-                                      center: Container(
-                                          child: Text(
-                                            "0",
-                                            textDirection: TextDirection.ltr,
-                                            textAlign: TextAlign.center,
-                                            style: GoogleFonts.lato(),
-                                          ),
-                                          width: 70,
-                                          height: 53,
-                                          padding: EdgeInsets.all(7.0),
-                                          //color: Colors.amber,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          )),
-                                      circularStrokeCap:
-                                          CircularStrokeCap.round,
-                                      backgroundColor:
-                                          Color.fromARGB(255, 196, 193, 193),
-                                      progressColor: Colors.teal[200],
-                                    );
-                                  }
-                                });
-                          }),
-                          //'Sleep quality',
-                          /*
+                                                        //  header: new Text("Icon header"),
+                                                        center: Container(
+                                                            child: Text("0",
+                                                              textDirection: TextDirection.ltr,
+                                                              textAlign: TextAlign.center,
+                                                              style: GoogleFonts.lato(),),
+                                                            width: 70,
+                                                            height: 53,
+                                                            padding: EdgeInsets.all(7.0),
+                                                            //color: Colors.amber,
+                                                            decoration: BoxDecoration(
+                                                              borderRadius: BorderRadius.circular(20),
+                                                            )),
+                                                        circularStrokeCap: CircularStrokeCap.round,
+                                                        backgroundColor: Color.fromARGB(255, 196, 193, 193),
+                                                        progressColor: Colors.teal[200],
+                                                      );
+                                            } 
+                                        }
+                                      );
+                                    }
+                                  ),
+                                  //'Sleep quality',
+                                  /*
                                   textDirection: TextDirection.ltr,
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.lato(),
                                 ),*/
+                                
                         ])
                         //width: 0.9,
                         )),
@@ -424,29 +427,64 @@ class _HomePage extends State<HomePage> {
                 // Widget che mostra quanti soldi abbiamo risparmiato
                 Center(
                     child: Container(
-                  width: MediaQuery.of(context).size.width / 1.5,
-                  margin: const EdgeInsets.only(top: 40),
-                  //color: Colors.blue,
-                  child: Center(
-                      child: const Text(
-                    'For now you saved:',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.normal, fontSize: 30),
-                  )),
-                )),
-                Center(
+                      
+                  width: MediaQuery.of(context).size.width / 1.2,
+                  margin: const EdgeInsets.only(top: 40, left:15, right:15),
+                   padding: EdgeInsets.only(top: 25.0, bottom: 25.0, left:15, right: 15),
+                   
+                    decoration: BoxDecoration(
+                       gradient: LinearGradient(
+                        colors: [
+                         
+                           Color.fromARGB(255, 119, 2, 170),
+                           Color.fromARGB(255, 194, 138, 243) //add more colors for gradient
+                        ],
+                      ),
+                      
+                      border: Border.all(color: Color.fromARGB(255, 194, 138, 243)),
+                 borderRadius: BorderRadius.circular(30),
+                      boxShadow: [BoxShadow(
+                        color: Color.fromARGB(181, 214, 214, 214),
+                        spreadRadius: 2,
+                        blurRadius: 3 ,
+                        offset: Offset(4,8),
+
+                      )]
+                    
+                  ),
+                 // color: Colors.blue,
+                     child:  Column( 
+                      children:[
+                  Center(
+                      child: Text(
+                    'Based on the consecutive days where you did not drink, you saved: \n' , textAlign: TextAlign.center,
+
+                    style: GoogleFonts.lato(
+                        fontWeight: FontWeight.normal, fontSize: 26, color: Color.fromARGB(255, 255, 255, 255),
+                   ))),
+                    Center(
                     child: Container(
                   width: MediaQuery.of(context).size.width / 3,
-                  margin: const EdgeInsets.all(40.0),
-                  color: Color.fromARGB(255, 109, 230, 69),
+                  margin: const EdgeInsets.only(top: 10.0, bottom: 10.0, right: 7.0, left: 7.0),
+                 // color: Color.fromARGB(255, 109, 230, 69),
+               // decoration: BoxDecoration(
+                //    borderRadius: BorderRadius.circular(30),
+                //  ),
                   child: Center(
-                      child: Text(
-                    '$wallet',
+                      child:  Text(
+                    '$wallet €',
                     style: const TextStyle(
-                        fontWeight: FontWeight.normal, fontSize: 30),
+                        fontWeight: FontWeight.bold, fontSize: 30, color: Color.fromARGB(255, 248, 203, 0)),
                   )),
                 )),
-                // INSERITO DA PAOLO PER GOALS, NON CAPISCO COME RISOLVERE ERRORE E NON CAPISCO DOVE POSSO METTERLO SE NO
+                  
+                  ])
+                )),
+
+
+
+              
+
                 Center(
                   //We are using a Consumer because we want that the UI showing
                   //the list of goals to rebuild every time the Goal DB updates.
@@ -467,11 +505,11 @@ class _HomePage extends State<HomePage> {
                                 Card(
                                     elevation: 5,
                                     child: ListTile(
-                                      leading: const Icon(MdiIcons.flag),
-                                      trailing: const Icon(MdiIcons.noteEdit),
+                                      leading: const Icon(MdiIcons.star),
+                                      
                                       title: Text(data[0].name),
                                       subtitle: Text(
-                                          'objective to reach: ${data[0].money} €'),
+                                          'Objective to reach: ${data[0].money} €'),
                                     ),
                                     // andrebbe qua
                                   );
@@ -483,7 +521,7 @@ class _HomePage extends State<HomePage> {
                       );
                     },
                   ),
-                ), // FINE CODICE INSERITO DA PAOLO
+                ), 
               ],
             )
           ]),
@@ -527,13 +565,13 @@ Future<DateTime> lastDrink(BuildContext context) async {
   List<Drink> lastDrinks =
       await Provider.of<AppDatabaseRepository>(context, listen: false)
           .findMostRecentDrink();
-  DateTime lastDrinkDate;
-  if (lastDrinks.length == 0) {
-    lastDrinkDate = DateTime.now();
-  } else {
-    lastDrinkDate = lastDrinks.last.dateTime;
-  }
-
+          DateTime lastDrinkDate; 
+          if (lastDrinks.length == 0){
+            lastDrinkDate = DateTime.now();
+          } else {
+           lastDrinkDate = lastDrinks.last.dateTime;
+          }
+  
   //(lastDrinkDate);
   return lastDrinkDate;
 }
