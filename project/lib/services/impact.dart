@@ -13,6 +13,7 @@ import '../pages/root.dart';
 import 'package:pim_group/models/entities/sleeps.dart';
 import 'package:pim_group/models/repo/app_repository.dart';
 import 'package:pim_group/models/entities/drink.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 // creo la classe ImpactService
@@ -230,17 +231,60 @@ class ImpactService extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Download'),
-      ),
+      
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Container( child: Column(
+             children: [ 
+
+           Padding(
+  padding: EdgeInsets.all(15), //apply padding to all four sides
+  child: Text('W I N E     N O T  ',textAlign: TextAlign.center,
+                            
+                            style: GoogleFonts.lato(
+                                fontSize: 15,
+                              
+                                color: Color.fromARGB(255, 176, 175, 175)))),
+
+              Padding(
+  padding: EdgeInsets.all(15), //apply padding to all four sides
+  child: Text('Download data ',textAlign: TextAlign.center,
+                            
+                            style: GoogleFonts.lato(
+                                fontSize: 40,
+                                color: Color.fromARGB(255, 0, 0, 0)))),
+              
+              Padding(
+  padding: EdgeInsets.only(bottom:15), //apply padding to all four sides
+  child: Text('Before you start using our app we need to download your sleep tracking data. \n Please press the button below.',
+            textAlign: TextAlign.center,
+                            
+                            style: GoogleFonts.lato(
+                                fontSize: 20,
+                                color: Color.fromARGB(255, 0, 0, 0)))
+            )]
+                                ),
+                                width: MediaQuery.of(context).size.width / 1,
+                    height: 280,
+                    margin: const EdgeInsets.only(top: 10),
+                    padding: EdgeInsets.only(top: 25.0, bottom: 30),
+                                ),
+          
+
+
+          // Button
             SizedBox(
-              height: 10,
-            ),
-            ElevatedButton(
+  width: 160.0,
+  height: 43.0,
+  child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+    backgroundColor: Color.fromARGB(255, 142, 76, 255), // background (button) color
+    foregroundColor: Colors.white, // foreground (text) color
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    shadowColor: Color.fromARGB(255, 145, 145, 145),
+  ),
                 onPressed: () async {
                   final result = await _requestData();
                   print(result);
@@ -258,8 +302,21 @@ class ImpactService extends StatelessWidget {
                         builder: ((context) => BottomNavBarV2())));
                   }
                 },
-                child: Text('Dowload Data')),
+                child: Text('Get Started',
+                textAlign: TextAlign.center,
+                            
+                            style: GoogleFonts.lato(
+                                fontSize: 18,
+                                color: Colors.white)),),),
+                
+                  // animated GIF
+            Image.asset(
+                'assets/images/sleepphone.gif',
+                width: 300,
+                height: 500),
           ],
+
+          
         ),
       ),
     );
