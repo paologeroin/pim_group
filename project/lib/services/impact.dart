@@ -66,9 +66,9 @@ class ImpactService extends StatelessWidget {
 
     //Create the (representative) request
     final start_date = DateFormat('y-M-d')
-        .format(DateTime.now().subtract(const Duration(days: 7)));
+        .format(DateTime.now().subtract(const Duration(days: 8)));
     final end_date = DateFormat('y-M-d')
-        .format(DateTime.now().subtract(const Duration(days: 1)));
+        .format(DateTime.now().subtract(const Duration(days: 2)));
     //final day = '2023-05-04';
     //final url = ServerStrings.baseUrl + ServerStrings.sleepEndpoint + ServerStrings.patientUsername + '/day/$day/';
 
@@ -102,11 +102,14 @@ class ImpactService extends StatelessWidget {
     return Result;
   } //_requestData
 
-  //SAVE DATA in DATABASE 
-  Future<void> saveDataInDatabase(Map<String, SleepData> ResultMap, BuildContext context) async {
+  //SAVE DATA in DATABASE
+  Future<void> saveDataInDatabase(
+      Map<String, SleepData> ResultMap, BuildContext context) async {
     Map<String, SleepData> Result = ResultMap;
     print(Result[0]);
-    List<Sleep> allSleep = await Provider.of<AppDatabaseRepository>(context, listen: false).findAllSleeps();
+    List<Sleep> allSleep =
+        await Provider.of<AppDatabaseRepository>(context, listen: false)
+            .findAllSleeps();
     Map allSleepMap = {};
     Iterable keys = Result.keys;
     for (int i = 0; i < allSleep.length; i++) {
@@ -115,10 +118,11 @@ class ImpactService extends StatelessWidget {
     for (final key in keys) {
       print("RESULT DATE");
       print(Result[key]);
-      if (!(allSleepMap[key] == null)){
-        await Provider.of<AppDatabaseRepository>(context, listen: false).updateSleep(Sleep(
-          id: allSleepMap[key].id, 
-          date: Result[key]!.date.toString(),  
+      if (!(allSleepMap[key] == null)) {
+        await Provider.of<AppDatabaseRepository>(context, listen: false)
+            .updateSleep(Sleep(
+          id: allSleepMap[key].id,
+          date: Result[key]!.date.toString(),
           dateOfSleep: Result[key]!.dateOfSleep,
           startTime: Result[key]!.startTime,
           endTime: Result[key]!.endTime,
@@ -131,13 +135,11 @@ class ImpactService extends StatelessWidget {
           logType: Result[key]!.logType,
           mainSleep: Result[key]!.mainSleep,
           levels: Result[key]!.levels.toString(),
-          )
-          );
-      }
-      else {
+        ));
+      } else {
         Sleep sleep = Sleep(
-          //id: allSleepMap[key].id, 
-          date: Result[key]!.date.toString(),  
+          //id: allSleepMap[key].id,
+          date: Result[key]!.date.toString(),
           dateOfSleep: Result[key]!.dateOfSleep,
           startTime: Result[key]!.startTime,
           endTime: Result[key]!.endTime,
@@ -150,13 +152,13 @@ class ImpactService extends StatelessWidget {
           logType: Result[key]!.logType,
           mainSleep: Result[key]!.mainSleep,
           levels: Result[key]!.levels.toString(),
-          );
-        await Provider.of<AppDatabaseRepository>(context, listen: false).insertSleep(sleep);
-          print("SAVED DATABASE");
+        );
+        await Provider.of<AppDatabaseRepository>(context, listen: false)
+            .insertSleep(sleep);
+        print("SAVED DATABASE");
       }
     }
-  }  
-  
+  }
 
   // metodi da usare in impact_ob
   //This method allows to obtain the JWT token pair from IMPACT
@@ -231,66 +233,62 @@ class ImpactService extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container( child: Column(
-             children: [ 
+            Container(
+              child: Column(children: [
+                Padding(
+                    padding:
+                        EdgeInsets.all(15), //apply padding to all four sides
+                    child: Text('W I N E     N O T  ',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.lato(
+                            fontSize: 15,
+                            color: Color.fromARGB(255, 176, 175, 175)))),
+                Padding(
+                    padding:
+                        EdgeInsets.all(15), //apply padding to all four sides
+                    child: Text('Download data ',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.lato(
+                            fontSize: 40,
+                            color: Color.fromARGB(255, 0, 0, 0)))),
+                Padding(
+                    padding: EdgeInsets.only(
+                        bottom: 15), //apply padding to all four sides
+                    child: Text(
+                        'Before you start using our app we need to download your sleep tracking data. \n Please press the button below.',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.lato(
+                            fontSize: 20, color: Color.fromARGB(255, 0, 0, 0))))
+              ]),
+              width: MediaQuery.of(context).size.width / 1,
+              height: 280,
+              margin: const EdgeInsets.only(top: 10),
+              padding: EdgeInsets.only(top: 25.0, bottom: 30),
+            ),
 
-           Padding(
-  padding: EdgeInsets.all(15), //apply padding to all four sides
-  child: Text('W I N E     N O T  ',textAlign: TextAlign.center,
-                            
-                            style: GoogleFonts.lato(
-                                fontSize: 15,
-                              
-                                color: Color.fromARGB(255, 176, 175, 175)))),
-
-              Padding(
-  padding: EdgeInsets.all(15), //apply padding to all four sides
-  child: Text('Download data ',textAlign: TextAlign.center,
-                            
-                            style: GoogleFonts.lato(
-                                fontSize: 40,
-                                color: Color.fromARGB(255, 0, 0, 0)))),
-              
-              Padding(
-  padding: EdgeInsets.only(bottom:15), //apply padding to all four sides
-  child: Text('Before you start using our app we need to download your sleep tracking data. \n Please press the button below.',
-            textAlign: TextAlign.center,
-                            
-                            style: GoogleFonts.lato(
-                                fontSize: 20,
-                                color: Color.fromARGB(255, 0, 0, 0)))
-            )]
-                                ),
-                                width: MediaQuery.of(context).size.width / 1,
-                    height: 280,
-                    margin: const EdgeInsets.only(top: 10),
-                    padding: EdgeInsets.only(top: 25.0, bottom: 30),
-                                ),
-          
-
-
-          // Button
+            // Button
             SizedBox(
-  width: 160.0,
-  height: 43.0,
-  child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-    backgroundColor: Color.fromARGB(255, 142, 76, 255), // background (button) color
-    foregroundColor: Colors.white, // foreground (text) color
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-    shadowColor: Color.fromARGB(255, 145, 145, 145),
-  ),
+              width: 160.0,
+              height: 43.0,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(
+                      255, 142, 76, 255), // background (button) color
+                  foregroundColor: Colors.white, // foreground (text) color
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  shadowColor: Color.fromARGB(255, 145, 145, 145),
+                ),
                 onPressed: () async {
                   final result = await _requestData();
                   print(result);
                   final message =
                       result == null ? 'Request failed' : 'Request successful';
-                  if (result.isNotEmpty){
+                  if (result.isNotEmpty) {
                     print("NOT NULL");
                     saveDataInDatabase(result, context);
                   }
@@ -303,20 +301,15 @@ class ImpactService extends StatelessWidget {
                   }
                 },
                 child: Text('Get Started',
-                textAlign: TextAlign.center,
-                            
-                            style: GoogleFonts.lato(
-                                fontSize: 18,
-                                color: Colors.white)),),),
-                
-                  // animated GIF
-            Image.asset(
-                'assets/images/sleepphone.gif',
-                width: 300,
-                height: 500),
-          ],
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.lato(fontSize: 18, color: Colors.white)),
+              ),
+            ),
 
-          
+            // animated GIF
+            Image.asset('assets/images/sleepphone.gif',
+                width: 300, height: 500),
+          ],
         ),
       ),
     );

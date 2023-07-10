@@ -24,8 +24,8 @@ class _LoginPageState extends State<LoginPage> {
 
   void _checkLogin() async {
     //Get the SharedPreference instance and check if the value of the 'username' filed is set or not
-    final sp = await SharedPreferences.getInstance();
-    if (sp.getString('email') != null) {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.getString('email') != null) {
       //If 'username is set, push the HomePage
       _toHomePage(context);
     } //if
@@ -33,8 +33,9 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<String> _loginUser(LoginData data) async {
     if (data.name == 'paolo@cappon.com' && data.password == 'mariairene') {
-      final sp = await SharedPreferences.getInstance();
-      sp.setString('email', data.name);
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString('email', data.name);
+      prefs.setString('password_user', data.password);
 
       return '';
     } else {
@@ -68,12 +69,11 @@ class _LoginPageState extends State<LoginPage> {
 
   void _toHomePage(BuildContext context) {
     Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(
-          builder: (context) => Jump())); 
-          // qui teniamo la Jump page (da modificare perché h
-          // ancora i metodi vecchi) che nel caso non ci sono i token
-          // manda al login dell'impact, altrimenti (quindi ci sono i
-          // token ma deve solo fare il refresh) manda a root che
-          // manda a HomePage
+        .pushReplacement(MaterialPageRoute(builder: (context) => Jump()));
+    // qui teniamo la Jump page (da modificare perché h
+    // ancora i metodi vecchi) che nel caso non ci sono i token
+    // manda al login dell'impact, altrimenti (quindi ci sono i
+    // token ma deve solo fare il refresh) manda a root che
+    // manda a HomePage
   } //_toHomePage
 } // LoginScreen
