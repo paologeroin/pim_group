@@ -7,7 +7,7 @@ abstract class SleepDao {
   //Query #0: SELECT -> this allows to obtain all the entries of the Sleep table of a certain date
   @Query(
       'SELECT * FROM Sleep WHERE date = :date')
-  Future<List<Sleep>> findSleepbyDate(String date);
+  Future<List<Sleep>> findSleepbyDate(String dateOfSleep);
 
   //Query #1: SELECT -> this allows to obtain all the entries of the Sleep table
   @Query('SELECT * FROM Sleep')
@@ -26,6 +26,9 @@ abstract class SleepDao {
   Future<void> updateSleep(Sleep sleep);
 
   @Query('SELECT * FROM Sleep ORDER BY dateTime ASC LIMIT 1')
-  Future<Sleep?>
-      findFirstDayInDb(); // si mette il nullable ('?') perché può essere che il database sia vuoto
+  Future<Sleep?> findFirstDayInDb(); // si mette il nullable ('?') perché può essere che il database sia vuoto
+
+  @Query('SELECT * FROM Sleep ORDER BY dateTime DESC LIMIT 1')
+  Future<Sleep?> findLastDayInDb();
+    
 } //SleepDao

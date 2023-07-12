@@ -1,6 +1,7 @@
 import 'package:pim_group/models/db_sleep.dart';
 import 'package:pim_group/models/entities/entities.dart';
 import 'package:flutter/material.dart';
+import 'package:pim_group/services/sleepData.dart';
 
 // inspo from the repository design pattern -> fare grafico ER
 
@@ -10,6 +11,9 @@ class AppDatabaseRepository extends ChangeNotifier {
 
   //Default constructor
   AppDatabaseRepository({required this.database});
+
+  DateTime showDate = DateTime.now().subtract(const Duration(days: 1));
+  late List<Sleep> sleepData;
 
   //This method wraps the findAllEfficiencies() method of the DAO
   Future<List<Drink>> findAllDrinks() async {
@@ -104,4 +108,31 @@ class AppDatabaseRepository extends ChangeNotifier {
         await database.sleepDao.findSleepbyDate(date);
     return results;
   }
+
+  Future<Sleep?> findFirstDayInDb() async {
+    final results =
+        await database.sleepDao.findFirstDayInDb();
+    return results;
+  }
+
+  Future<Sleep?> findLastDayInDb() async {
+    final results =
+        await database.sleepDao.findLastDayInDb();
+    return results;
+  }
+
+  Future<void> getDataOfDay(DateTime showDate) async {
+    // check if the day we want to show has data
+    var firstDay = await database.sleepDao.findFirstDayInDb();
+    var lastDay = await database.sleepDao.findLastDayInDb();
+    if (showDate.isAfter(lastDay!.startTime as DateTime) ||
+        showDate.isBefore(firstDay!.endTime as DateTime)) return;
+        
+    this.showDate = showDate;
+    sleepData = await database.sleepDao.findSleepbyDate(
+        DateUtils.dateOnly(showDate) as String,
+        // DateTime(showDate.year, showDate.month, showDate.day, 23, 59)
+        );
+  }//getDataOfDay
+
 } //SleepDatabaseRepository

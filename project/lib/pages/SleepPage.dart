@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pim_group/models/db_sleep.dart';
 import 'package:pim_group/services/impact.dart';
+import 'package:pim_group/services/sleepData.dart';
 import 'package:provider/provider.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pim_group/widgets/custom_plot.dart';
@@ -64,12 +65,15 @@ class SleepPage extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.hasData){
                 final data = snapshot.data as List<Sleep>;
-                String durationHour = (data[data.length - 1].duration).toString(); // da ms a ore,devo fare diviso 3600000 ma dà 0...
+                //DateTime showDate = DateTime.now().subtract(const Duration(days: 1));
+                String durationHour = (((data[data.length - 1].duration)!.toDouble())/3600).toString();
                 String timeFallAsleep = data[data.length - 1].minutesToFallAsleep.toString(); // già in minuti
                // String remDuration = data[data.length - 1].levels.toString(); //capire come accedere a levels->summary->rem->duration
                 //String awakenings =; da calcolare
                 //  print(data[data.length-1].date);
-                return Column(
+                
+              return Container(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
@@ -84,85 +88,73 @@ class SleepPage extends StatelessWidget {
                     ),
                     // List of various parameters measured during the last night
                     Card(
-                        margin: EdgeInsets.symmetric(horizontal: 16),
-                        child: Column(
-                          children: [
-                            ListTile(
-                              title: Text('Sleep Duration'),
-                              trailing: Text('$durationHour hours'),
-                            ),
-                            ListTile(
-                              title: Text('Time to Fall Asleep'),
-                              trailing: Text(
-                                  '$timeFallAsleep minutes'),// qui vediamo se mettere questo dato perché mi sa che è quasi sempre 0
-                            ),
-                            ListTile(
-                                title: Text('REM state duration'),
-                                trailing: Text(
-                                    'durata fase rem') // oppure si mette una percentuale
-                            ),
-                            ListTile(
-                                title: Text('Awakenings'),
-                                trailing: Text(
-                                    'numero di risvegli')
-                            ),
-                          ],
-                        )
-                    )]);
-                    //questa parte di codice era per gestire il fatto dei dati nulli
-                  } else {
-                    return Container(
-                          padding: EdgeInsets.all(16),
-                          child: const Text(
-                            'Can\'t read the data of todai :(',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
+                      margin: EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        children: [
+                          ListTile(
+                            title: Text('Sleep Duration'),
+                            trailing: Text('$durationHour hours'),
                           ),
-                    );
-                  }//else
-  //                     // I make a Row widget to create navigation between days
-                              // Row(
-                              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              //   children: [
-                              //     IconButton(
-                              //         icon: const Icon(Icons.navigate_before),
-                              //         onPressed: () {
-                              //           //Qui devo modificare!!
-                              //           // here we use the access method to retrieve the Provider and use its values and methods
-                              //           // final sleepProvider = Provider.of<SleepProvider>(
-                              //           //     context,
-                              //           //     listen: false);
-                              //           // DateTime day = sleepProvider.dateOfSleep;
-                              //           // sleepProvider.getDataOfDay(
-                              //           //     day.subtract(const Duration(days: 1)));
-                              //         }),
-                              //         // Da sistemare anche qui
-                              //     // Consumer<SleepProvider>(
-                              //     //     builder: (context, value, child) => Text(
-                              //     //         DateFormat('dd MMMM yyyy')
-                              //     //             .format(value.dateOfSleep))),
-                              //     IconButton(
-                              //         icon: const Icon(Icons.navigate_next),
-                              //         onPressed: () {
-                              //           //Come sopra
-                              //           // final sleepProvider = Provider.of<SleepProvider>(
-                              //           //     context,
-                              //           //     listen: false);
-                              //           // DateTime day = sleepProvider.dateOfSleep;
-                              //           // sleepProvider.getDataOfDay(
-                              //           //     day.add(const Duration(days: 1)));
-                              //         })
-                              //   ],
-                              // ),//Row
-        //                     // Da capire grafico perché dà errore il widget
-        //                     // Consumer<SleepProvider>(
-        //                     //   builder: (context, sleepProvider, child) {
-        //                     //     List<Levels> data = sleepProvider.level; // Assumi che sleepLevels sia la lista dei livelli di sonno
-        //                     //     return CustomPlot(data: _parseData(data));
-        //                     //   },
-        //                     // )
+                          ListTile(
+                            title: Text('Time to Fall Asleep'),
+                            trailing: Text(
+                                '$timeFallAsleep minutes'),
+                          ),
+                          ListTile(
+                            title: Text('REM state duration'),
+                            trailing: Text('durata fase rem'),
+                          ),
+                          ListTile(
+                            title: Text('Awakenings'),
+                            trailing: Text('numero di risvegli'),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.navigate_before),
+                          onPressed: () {
+                            final provider = Provider.of<AppDatabaseRepository>(context, listen: false);
+                            DateTime day = provider.showDate;
+                            provider.getDataOfDay(day.subtract(const Duration(days: 1)));
+                            
+                          },
+                        ),
+                        Consumer<AppDatabaseRepository>( builder: (context, value, child)
+                        => Text(
+                          DateFormat('dd MMMM yyyy').format(value.showDate),
+                        )),
+                        IconButton(
+                          icon: const Icon(Icons.navigate_next),
+                          onPressed: () {
+                            final provider = Provider.of<AppDatabaseRepository>(context, listen: false);
+                            DateTime day = provider.showDate;
+                            provider.getDataOfDay(day.add(const Duration(days: 1)));
+                            
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+                //questa parte di codice era per gestire il fatto dei dati nulli
+                } else {
+                  return Container(
+                        padding: EdgeInsets.all(16),
+                        child: const Text(
+                          'Can\'t read the data of todai :(',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                  );
+                }//else
+
         //                   ]))); //Scaffold
         //     }
             });
