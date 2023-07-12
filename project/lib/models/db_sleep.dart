@@ -19,5 +19,7 @@ abstract class AppDatabase extends FloorDatabase {
   //Add all the daos as getters here
   DrinkDao get drinkDao;
   SleepDao get sleepDao;
+  LevelsDao get levelDao;
+  DataDao get dataDao;
   GoalDao get goalDao;
 }//AppDatabase

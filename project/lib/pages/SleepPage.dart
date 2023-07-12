@@ -117,27 +117,29 @@ class SleepPage extends StatelessWidget {
                         IconButton(
                           icon: const Icon(Icons.navigate_before),
                           onPressed: () {
-                            final provider = Provider.of<AppDatabaseRepository>(context, listen: false);
-                            DateTime day = provider.showDate;
-                            provider.getDataOfDay(day.subtract(const Duration(days: 1)));
+                            DateTime day = dbr.showDate;
+                            dbr.getDataOfDay(day.subtract(const Duration(days: 1)));
                             
                           },
                         ),
-                        Consumer<AppDatabaseRepository>( builder: (context, value, child)
-                        => Text(
-                          DateFormat('dd MMMM yyyy').format(value.showDate),
-                        )),
+                        // Consumer<AppDatabaseRepository>(
+                        // builder: (context, value, child) =>
+                        Text(DateFormat('dd MMMM yyyy').format(dbr.showDate),
+                        ),
+                        //),
                         IconButton(
                           icon: const Icon(Icons.navigate_next),
                           onPressed: () {
-                            final provider = Provider.of<AppDatabaseRepository>(context, listen: false);
-                            DateTime day = provider.showDate;
-                            provider.getDataOfDay(day.add(const Duration(days: 1)));
-                            
+                            DateTime day = dbr.showDate;
+                            dbr.getDataOfDay(day.add(const Duration(days: 1)));
                           },
                         ),
                       ],
                     ),
+                    //grafico
+                    // Consumer<HomeProvider>(
+                    // builder: (context, value, child) =>
+                    // CustomPlot(data: _parseData(value.exposure)))
                   ],
                 ),
               );
@@ -154,9 +156,6 @@ class SleepPage extends StatelessWidget {
                         ),
                   );
                 }//else
-
-        //                   ]))); //Scaffold
-        //     }
             });
         }
       )
@@ -165,10 +164,10 @@ class SleepPage extends StatelessWidget {
 } //Widget
 } //StatelessWidget
 
-  // List<Map<String, dynamic>> _parseData(List<Levels> data) {
-  //   return data
-  //       .map(
-  //         (e) => {'level': e.levelName, 'time': e.minutes},
-  //       )
-  //       .toList();
-  // }
+// List<Map<String, dynamic>> _parseData(List<Levels> data) {
+//   return data
+//       .map(
+//         (e) => {'level': e.levelName, 'time': e.minutes},
+//       )
+//       .toList();
+// }

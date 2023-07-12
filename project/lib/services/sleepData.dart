@@ -27,6 +27,10 @@ class SleepData {
   // late Map? levelsSummary;
   bool DailyData = true;
 
+// qui ho copiato i DreamSober
+  // Map<String, SleepPhases> phases = {};
+  // List<String> phasesName = ['wake', 'light', 'deep', 'rem'];
+
   SleepData.fromJson(Map<String, dynamic> json) {
     date = json['date'].toString();
     if (!(json['data'] == null)) {
@@ -42,7 +46,14 @@ class SleepData {
       logType = json['data'][0]["logType"].toString();
       mainSleep = json['data'][0]["mainSleep"];
       levels = json['data'][0]["levels"];
-      // levelsSummary = json['data']["levels"]['summary'];
+      // qui ho copiato i DreamSober
+      // for (String phase in phasesName) {
+      //   SleepPhases sleepphase = SleepPhases(
+      //     json['data']['levels']['summary'][phase]['count'],
+      //     json['data']['levels']['summary'][phase]['minutes'],
+      //   );
+      //   phases[phase] = sleepphase;
+      // }
       if (duration == null) {
         DailyData = false;
       }
@@ -60,8 +71,20 @@ class SleepData {
       mainSleep = null;
       levels = null;
       DailyData = false;
+      // qui ho copiato i DreamSober
+      // for (String phase in phasesName) {
+      //   SleepPhases slpphase = SleepPhases(null, null);
+      //   phases[phase] = slpphase;
+      // }
     }
   }
 } //SleepData
 
-
+// qui ho copiato i DreamSober
+// class SleepPhases {
+//   final int? _count;
+//   final int? _minutes;
+//   SleepPhases(this._count, this._minutes);
+//   int? get count => _count;
+//   int? get min => _minutes;
+// }

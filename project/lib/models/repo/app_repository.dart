@@ -14,6 +14,7 @@ class AppDatabaseRepository extends ChangeNotifier {
 
   DateTime showDate = DateTime.now().subtract(const Duration(days: 1));
   late List<Sleep> sleepData;
+  late List<Levels> levelData;
 
   //This method wraps the findAllEfficiencies() method of the DAO
   Future<List<Drink>> findAllDrinks() async {
@@ -103,9 +104,9 @@ class AppDatabaseRepository extends ChangeNotifier {
   } //updateGoal
 
   //Wrap findDrinksOnDate
-  Future<List<Sleep>> findSleepbyDate(date) async {
+  Future<List<Sleep>> findSleepbyDate(DateTime startTime, DateTime endTime) async {
     final results =
-        await database.sleepDao.findSleepbyDate(date);
+        await database.sleepDao.findSleepbyDate(startTime, endTime);
     return results;
   }
 
@@ -130,9 +131,13 @@ class AppDatabaseRepository extends ChangeNotifier {
         
     this.showDate = showDate;
     sleepData = await database.sleepDao.findSleepbyDate(
-        DateUtils.dateOnly(showDate) as String,
-        // DateTime(showDate.year, showDate.month, showDate.day, 23, 59)
+        DateUtils.dateOnly(showDate),
+        DateTime(showDate.year, showDate.month, showDate.day, 23, 59)
         );
+    levelData = await database.levelDao.findLevelsbyDate(
+      DateUtils.dateOnly(showDate),
+      DateTime(showDate.year, showDate.month, showDate.day, 23, 59)
+    );
   }//getDataOfDay
 
 } //SleepDatabaseRepository

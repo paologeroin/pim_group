@@ -65,6 +65,10 @@ class _$AppDatabase extends AppDatabase {
 
   SleepDao? _sleepDaoInstance;
 
+  LevelsDao? _levelDaoInstance;
+
+  DataDao? _dataDaoInstance;
+
   GoalDao? _goalDaoInstance;
 
   Future<sqflite.Database> open(
@@ -113,6 +117,16 @@ class _$AppDatabase extends AppDatabase {
   @override
   SleepDao get sleepDao {
     return _sleepDaoInstance ??= _$SleepDao(database, changeListener);
+  }
+
+  @override
+  LevelsDao get levelDao {
+    return _levelDaoInstance ??= _$LevelsDao(database, changeListener);
+  }
+
+  @override
+  DataDao get dataDao {
+    return _dataDaoInstance ??= _$DataDao(database, changeListener);
   }
 
   @override
@@ -281,26 +295,17 @@ class _$SleepDao extends SleepDao {
   final DeletionAdapter<Sleep> _sleepDeletionAdapter;
 
   @override
-  Future<List<Sleep>> findSleepbyDate(String date) async {
-    return _queryAdapter.queryList('SELECT * FROM Sleep WHERE date = ?1',
-        mapper: (Map<String, Object?> row) => Sleep(
-            id: row['id'] as int?,
-            date: row['date'] as String?,
-            dateOfSleep: row['dateOfSleep'] as String?,
-            startTime: row['startTime'] as String?,
-            endTime: row['endTime'] as String?,
-            duration: row['duration'] as double?,
-            minutesToFallAsleep: row['minutesToFallAsleep'] as int?,
-            minutesAsleep: row['minutesAsleep'] as int?,
-            minutesAwake: row['minutesAwake'] as int?,
-            minutesAfterWakeup: row['minutesAfterWakeup'] as int?,
-            efficiency: row['efficiency'] as int?,
-            logType: row['logType'] as String?,
-            mainSleep: row['mainSleep'] == null
-                ? null
-                : (row['mainSleep'] as int) != 0,
-            levels: row['levels'] as String?),
-        arguments: [date]);
+  Future<List<Sleep>> findSleepbyDate(
+    DateTime startTime,
+    DateTime endTime,
+  ) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM Sleep WHERE dateTime between ?1 and ?2 ORDER BY dateTime ASC',
+        mapper: (Map<String, Object?> row) => Sleep(id: row['id'] as int?, date: row['date'] as String?, dateOfSleep: row['dateOfSleep'] as String?, startTime: row['startTime'] as String?, endTime: row['endTime'] as String?, duration: row['duration'] as double?, minutesToFallAsleep: row['minutesToFallAsleep'] as int?, minutesAsleep: row['minutesAsleep'] as int?, minutesAwake: row['minutesAwake'] as int?, minutesAfterWakeup: row['minutesAfterWakeup'] as int?, efficiency: row['efficiency'] as int?, logType: row['logType'] as String?, mainSleep: row['mainSleep'] == null ? null : (row['mainSleep'] as int) != 0, levels: row['levels'] as String?),
+        arguments: [
+          _dateTimeConverter.encode(startTime),
+          _dateTimeConverter.encode(endTime)
+        ]);
   }
 
   @override
@@ -384,6 +389,238 @@ class _$SleepDao extends SleepDao {
   @override
   Future<void> deleteSleep(Sleep task) async {
     await _sleepDeletionAdapter.delete(task);
+  }
+}
+
+class _$LevelsDao extends LevelsDao {
+  _$LevelsDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
+        _levelsInsertionAdapter = InsertionAdapter(
+            database,
+            'levels',
+            (Levels item) => <String, Object?>{
+                  'id': item.id,
+                  'data': item.data,
+                  'summary': item.summary,
+                  'sleep_id': item.sleepId
+                }),
+        _levelsUpdateAdapter = UpdateAdapter(
+            database,
+            'levels',
+            ['id'],
+            (Levels item) => <String, Object?>{
+                  'id': item.id,
+                  'data': item.data,
+                  'summary': item.summary,
+                  'sleep_id': item.sleepId
+                }),
+        _levelsDeletionAdapter = DeletionAdapter(
+            database,
+            'levels',
+            ['id'],
+            (Levels item) => <String, Object?>{
+                  'id': item.id,
+                  'data': item.data,
+                  'summary': item.summary,
+                  'sleep_id': item.sleepId
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<Levels> _levelsInsertionAdapter;
+
+  final UpdateAdapter<Levels> _levelsUpdateAdapter;
+
+  final DeletionAdapter<Levels> _levelsDeletionAdapter;
+
+  @override
+  Future<List<Levels>> findLevelsbyDate(
+    DateTime startTime,
+    DateTime endTime,
+  ) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM Levels WHERE dateTime between ?1 and ?2 ORDER BY dateTime ASC',
+        mapper: (Map<String, Object?> row) => Levels(row['id'] as int, row['data'] as String, row['summary'] as String, row['sleep_id'] as String),
+        arguments: [
+          _dateTimeConverter.encode(startTime),
+          _dateTimeConverter.encode(endTime)
+        ]);
+  }
+
+  @override
+  Future<List<Levels>> findAllLevels() async {
+    return _queryAdapter.queryList('SELECT * FROM Levels',
+        mapper: (Map<String, Object?> row) => Levels(
+            row['id'] as int,
+            row['data'] as String,
+            row['summary'] as String,
+            row['sleep_id'] as String));
+  }
+
+  @override
+  Future<Levels?> getLevelsById(int id) async {
+    return _queryAdapter.query('SELECT * FROM Level WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => Levels(
+            row['id'] as int,
+            row['data'] as String,
+            row['summary'] as String,
+            row['sleep_id'] as String),
+        arguments: [id]);
+  }
+
+  @override
+  Future<List<Levels>> getLevelsForSleep(int sleepId) async {
+    return _queryAdapter.queryList('SELECT * FROM Level WHERE sleepId = ?1',
+        mapper: (Map<String, Object?> row) => Levels(
+            row['id'] as int,
+            row['data'] as String,
+            row['summary'] as String,
+            row['sleep_id'] as String),
+        arguments: [sleepId]);
+  }
+
+  @override
+  Future<int?> getAwakeCount(int sleepId) async {
+    return _queryAdapter.query(
+        'SELECT count FROM Levels WHERE levelName = \"awake\" AND sleepId = ?1',
+        mapper: (Map<String, Object?> row) => row.values.first as int,
+        arguments: [sleepId]);
+  }
+
+  @override
+  Future<void> insertLevels(Levels levels) async {
+    await _levelsInsertionAdapter.insert(levels, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> updateLevels(Levels levels) async {
+    await _levelsUpdateAdapter.update(levels, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> deleteLevels(Levels levels) async {
+    await _levelsDeletionAdapter.delete(levels);
+  }
+}
+
+class _$DataDao extends DataDao {
+  _$DataDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
+        _dataInsertionAdapter = InsertionAdapter(
+            database,
+            'data',
+            (Data item) => <String, Object?>{
+                  'id': item.id,
+                  'dateTime': _dateTimeConverter.encode(item.dateTime),
+                  'level': item.level,
+                  'seconds': item.seconds,
+                  'levels_id': item.levelsId
+                }),
+        _dataUpdateAdapter = UpdateAdapter(
+            database,
+            'data',
+            ['id'],
+            (Data item) => <String, Object?>{
+                  'id': item.id,
+                  'dateTime': _dateTimeConverter.encode(item.dateTime),
+                  'level': item.level,
+                  'seconds': item.seconds,
+                  'levels_id': item.levelsId
+                }),
+        _dataDeletionAdapter = DeletionAdapter(
+            database,
+            'data',
+            ['id'],
+            (Data item) => <String, Object?>{
+                  'id': item.id,
+                  'dateTime': _dateTimeConverter.encode(item.dateTime),
+                  'level': item.level,
+                  'seconds': item.seconds,
+                  'levels_id': item.levelsId
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<Data> _dataInsertionAdapter;
+
+  final UpdateAdapter<Data> _dataUpdateAdapter;
+
+  final DeletionAdapter<Data> _dataDeletionAdapter;
+
+  @override
+  Future<List<Data>> findDatabyDate(
+    DateTime startTime,
+    DateTime endTime,
+  ) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM Data WHERE dateTime between ?1 and ?2 ORDER BY dateTime ASC',
+        mapper: (Map<String, Object?> row) => Data(row['id'] as int?, _dateTimeConverter.decode(row['dateTime'] as int), row['level'] as int, row['seconds'] as int, row['levels_id'] as String),
+        arguments: [
+          _dateTimeConverter.encode(startTime),
+          _dateTimeConverter.encode(endTime)
+        ]);
+  }
+
+  @override
+  Future<List<Data>> findAllData() async {
+    return _queryAdapter.queryList('SELECT * FROM Data',
+        mapper: (Map<String, Object?> row) => Data(
+            row['id'] as int?,
+            _dateTimeConverter.decode(row['dateTime'] as int),
+            row['level'] as int,
+            row['seconds'] as int,
+            row['levels_id'] as String));
+  }
+
+  @override
+  Future<Data?> getDataById(int id) async {
+    return _queryAdapter.query('SELECT * FROM Data WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => Data(
+            row['id'] as int?,
+            _dateTimeConverter.decode(row['dateTime'] as int),
+            row['level'] as int,
+            row['seconds'] as int,
+            row['levels_id'] as String),
+        arguments: [id]);
+  }
+
+  @override
+  Future<List<Data>> getDataForSleep(int sleepId) async {
+    return _queryAdapter.queryList('SELECT * FROM Level WHERE sleepId = ?1',
+        mapper: (Map<String, Object?> row) => Data(
+            row['id'] as int?,
+            _dateTimeConverter.decode(row['dateTime'] as int),
+            row['level'] as int,
+            row['seconds'] as int,
+            row['levels_id'] as String),
+        arguments: [sleepId]);
+  }
+
+  @override
+  Future<void> insertData(Data data) async {
+    await _dataInsertionAdapter.insert(data, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> updateData(Data data) async {
+    await _dataUpdateAdapter.update(data, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> deleteData(Data data) async {
+    await _dataDeletionAdapter.delete(data);
   }
 }
 
