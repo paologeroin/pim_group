@@ -12,27 +12,12 @@ import '../models/entities/entities.dart';
 import '../models/repo/app_repository.dart';
 import '../models/sleep/sleep_provider.dart';
 
-// DA SISTEMARE TUTTA UNA VOLTA RISOLTO L'IMPACT
-// MA SARÀ STATELESS O STATEFULL???
 
-// // // Creation of a StatefulWidget for the sleep page:
-// // // it requires two classes (at least).
-// // // Below there is the StatefulWidget class that creates an instance of the Widget itself.
-// // class SleepPage extends StatefulWidget {
-// //   const SleepPage({super.key});
-
-// //   @override
-// //   State<SleepPage> createState() => _SleepState();
-// // }
-
-// // // And then there is a State class that manages the state of the StatefulWidget
-// // class _SleepState extends State<SleepPage> {
+// Usiamo il custom plot dei tutor oppure vediamo di usare un altro modo per fare il grafico
+// Siamo sicuri funzioni il database per i dati del sonno???
 
 class SleepPage extends StatelessWidget {
   const SleepPage({Key? key}) : super(key: key);
-
-  //   // Access the data from SleepProvider
-  //   // and build your UI based on the provider's data
 
   @override
   Widget build(BuildContext context) {
@@ -64,11 +49,14 @@ class SleepPage extends StatelessWidget {
             future: dbr.findAllSleeps(),
             builder: (context, snapshot) {
               if (snapshot.hasData){
-                final data = snapshot.data as List<Sleep>;
+                final dataSleep = snapshot.data as List<Sleep>;
+                final dataLevel = snapshot.data as List<Levels>;
+                final dataPhases = snapshot.data as List<Data>;
                 //DateTime showDate = DateTime.now().subtract(const Duration(days: 1));
-                String durationHour = (((data[data.length - 1].duration)!.toDouble())/3600).toString();
-                String timeFallAsleep = data[data.length - 1].minutesToFallAsleep.toString(); // già in minuti
-               // String remDuration = data[data.length - 1].levels.toString(); //capire come accedere a levels->summary->rem->duration
+                String durationHour = (((dataSleep[dataSleep.length - 1].duration)!.toDouble())/3600).toString();
+                String timeFallAsleep = dataSleep[dataSleep.length - 1].minutesToFallAsleep.toString(); // già in minuti
+                // devo creare asse dei tempi -> minuti che ricavo da SleepPhasesData
+                // e asse dei livelli -> anche questi prendo la lista delle fasi in SleepPhasesData
                 //String awakenings =; da calcolare
                 //  print(data[data.length-1].date);
                 
@@ -164,10 +152,10 @@ class SleepPage extends StatelessWidget {
 } //Widget
 } //StatelessWidget
 
-// List<Map<String, dynamic>> _parseData(List<Levels> data) {
+// List<Map<String, dynamic>> _parseData(List<Data> data) {
 //   return data
 //       .map(
-//         (e) => {'level': e.levelName, 'time': e.minutes},
+//         (e) => {'level': e.level, 'time': e.seconds},
 //       )
 //       .toList();
 // }
