@@ -13,8 +13,8 @@ abstract class DataDao {
   @Query('SELECT * FROM Data WHERE id = :id')
   Future<Data?> getDataById(int id);
 
-  @Query('SELECT * FROM Level WHERE sleepId = :sleepId')
-  Future<List<Data>> getDataForSleep(int sleepId);
+  @Query('SELECT * FROM Level WHERE level = :level')
+  Future<List<Data>> getDataForSleep(int level);
 
   @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> insertData(Data data);

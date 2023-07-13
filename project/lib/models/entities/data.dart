@@ -7,10 +7,10 @@ import 'package:pim_group/models/entities/levels.dart';
 // "seconds": 150
 
 @Entity(
-  tableName: 'data',
+  tableName: 'SleepPhasesData',
   foreignKeys: [
     ForeignKey(
-      childColumns: ['levels_id'],
+      childColumns: ['level'],
       parentColumns: ['id'],
       entity: Levels,
     ),
@@ -20,12 +20,11 @@ class Data {
   @PrimaryKey(autoGenerate: true)
   final int? id;
 
-  final DateTime dateTime;
-  final int level;
+  final String dateTime;
   final int seconds;
 
-  @ColumnInfo(name: 'levels_id')
-  final String levelsId;
+  @ColumnInfo(name: 'level')
+  final String level;
 
-  Data(this.id, this.dateTime, this.level, this.seconds, this.levelsId);
+  Data(this.id, this.dateTime, this.seconds, this.level);
 } //Data

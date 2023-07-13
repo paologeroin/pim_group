@@ -3,10 +3,10 @@ import 'package:pim_group/models/entities/entities.dart';
 // The entity is a summary of the sleeping stages (deep/wake/light/rem/restless) during the sleep session
 
 @Entity(
-  tableName: 'levels',
+  tableName: 'levelSummary',
   foreignKeys: [
     ForeignKey(
-      childColumns: ['sleep_id'],
+      childColumns: ['phase'],
       parentColumns: ['id'],
       entity: Sleep,
     ),
@@ -15,13 +15,13 @@ import 'package:pim_group/models/entities/entities.dart';
 class Levels {
   @PrimaryKey(autoGenerate: true)
   final int id;
-  final String data;
-  final String summary;
+  final int count;
+  final int minutes;
 
   // chiave esterna sleepId
-  @ColumnInfo(name: 'sleep_id')
-  final String sleepId;
+  @ColumnInfo(name: 'phase')
+  final String phase;
 
-  Levels(this.id, this.data, this.summary, this.sleepId);
+  Levels(this.id, this.count, this.minutes, this.phase);
 }
 //Levels

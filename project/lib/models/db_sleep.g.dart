@@ -97,9 +97,9 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Sleep` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `date` TEXT, `dateOfSleep` TEXT, `startTime` TEXT, `endTime` TEXT, `duration` REAL, `minutesToFallAsleep` INTEGER, `minutesAsleep` INTEGER, `minutesAwake` INTEGER, `minutesAfterWakeup` INTEGER, `efficiency` INTEGER, `logType` TEXT, `mainSleep` INTEGER, `levels` TEXT, `DailyData` INTEGER NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `levels` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `data` TEXT NOT NULL, `summary` TEXT NOT NULL, `sleep_id` TEXT NOT NULL, FOREIGN KEY (`sleep_id`) REFERENCES `Sleep` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `levelSummary` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `count` INTEGER NOT NULL, `minutes` INTEGER NOT NULL, `phase` TEXT NOT NULL, FOREIGN KEY (`phase`) REFERENCES `Sleep` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `data` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `dateTime` INTEGER NOT NULL, `level` INTEGER NOT NULL, `seconds` INTEGER NOT NULL, `levels_id` TEXT NOT NULL, FOREIGN KEY (`levels_id`) REFERENCES `levels` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `SleepPhasesData` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `dateTime` TEXT NOT NULL, `seconds` INTEGER NOT NULL, `level` TEXT NOT NULL, FOREIGN KEY (`level`) REFERENCES `levelSummary` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Goal` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `money` REAL NOT NULL, `dateTime` INTEGER NOT NULL)');
 
@@ -399,32 +399,32 @@ class _$LevelsDao extends LevelsDao {
   )   : _queryAdapter = QueryAdapter(database),
         _levelsInsertionAdapter = InsertionAdapter(
             database,
-            'levels',
+            'levelSummary',
             (Levels item) => <String, Object?>{
                   'id': item.id,
-                  'data': item.data,
-                  'summary': item.summary,
-                  'sleep_id': item.sleepId
+                  'count': item.count,
+                  'minutes': item.minutes,
+                  'phase': item.phase
                 }),
         _levelsUpdateAdapter = UpdateAdapter(
             database,
-            'levels',
+            'levelSummary',
             ['id'],
             (Levels item) => <String, Object?>{
                   'id': item.id,
-                  'data': item.data,
-                  'summary': item.summary,
-                  'sleep_id': item.sleepId
+                  'count': item.count,
+                  'minutes': item.minutes,
+                  'phase': item.phase
                 }),
         _levelsDeletionAdapter = DeletionAdapter(
             database,
-            'levels',
+            'levelSummary',
             ['id'],
             (Levels item) => <String, Object?>{
                   'id': item.id,
-                  'data': item.data,
-                  'summary': item.summary,
-                  'sleep_id': item.sleepId
+                  'count': item.count,
+                  'minutes': item.minutes,
+                  'phase': item.phase
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -446,7 +446,7 @@ class _$LevelsDao extends LevelsDao {
   ) async {
     return _queryAdapter.queryList(
         'SELECT * FROM Levels WHERE dateTime between ?1 and ?2 ORDER BY dateTime ASC',
-        mapper: (Map<String, Object?> row) => Levels(row['id'] as int, row['data'] as String, row['summary'] as String, row['sleep_id'] as String),
+        mapper: (Map<String, Object?> row) => Levels(row['id'] as int, row['count'] as int, row['minutes'] as int, row['phase'] as String),
         arguments: [
           _dateTimeConverter.encode(startTime),
           _dateTimeConverter.encode(endTime)
@@ -458,39 +458,33 @@ class _$LevelsDao extends LevelsDao {
     return _queryAdapter.queryList('SELECT * FROM Levels',
         mapper: (Map<String, Object?> row) => Levels(
             row['id'] as int,
-            row['data'] as String,
-            row['summary'] as String,
-            row['sleep_id'] as String));
+            row['count'] as int,
+            row['minutes'] as int,
+            row['phase'] as String));
   }
 
   @override
   Future<Levels?> getLevelsById(int id) async {
     return _queryAdapter.query('SELECT * FROM Level WHERE id = ?1',
-        mapper: (Map<String, Object?> row) => Levels(
-            row['id'] as int,
-            row['data'] as String,
-            row['summary'] as String,
-            row['sleep_id'] as String),
+        mapper: (Map<String, Object?> row) => Levels(row['id'] as int,
+            row['count'] as int, row['minutes'] as int, row['phase'] as String),
         arguments: [id]);
   }
 
   @override
-  Future<List<Levels>> getLevelsForSleep(int sleepId) async {
-    return _queryAdapter.queryList('SELECT * FROM Level WHERE sleepId = ?1',
-        mapper: (Map<String, Object?> row) => Levels(
-            row['id'] as int,
-            row['data'] as String,
-            row['summary'] as String,
-            row['sleep_id'] as String),
-        arguments: [sleepId]);
+  Future<List<Levels>> getLevelsForSleep(int phase) async {
+    return _queryAdapter.queryList('SELECT * FROM Level WHERE phase = ?1',
+        mapper: (Map<String, Object?> row) => Levels(row['id'] as int,
+            row['count'] as int, row['minutes'] as int, row['phase'] as String),
+        arguments: [phase]);
   }
 
   @override
-  Future<int?> getAwakeCount(int sleepId) async {
+  Future<int?> getAwakeCount(int phase) async {
     return _queryAdapter.query(
-        'SELECT count FROM Levels WHERE levelName = \"awake\" AND sleepId = ?1',
+        'SELECT count FROM Levels WHERE levelName = \"awake\" AND phase = ?1',
         mapper: (Map<String, Object?> row) => row.values.first as int,
-        arguments: [sleepId]);
+        arguments: [phase]);
   }
 
   @override
@@ -516,35 +510,32 @@ class _$DataDao extends DataDao {
   )   : _queryAdapter = QueryAdapter(database),
         _dataInsertionAdapter = InsertionAdapter(
             database,
-            'data',
+            'SleepPhasesData',
             (Data item) => <String, Object?>{
                   'id': item.id,
-                  'dateTime': _dateTimeConverter.encode(item.dateTime),
-                  'level': item.level,
+                  'dateTime': item.dateTime,
                   'seconds': item.seconds,
-                  'levels_id': item.levelsId
+                  'level': item.level
                 }),
         _dataUpdateAdapter = UpdateAdapter(
             database,
-            'data',
+            'SleepPhasesData',
             ['id'],
             (Data item) => <String, Object?>{
                   'id': item.id,
-                  'dateTime': _dateTimeConverter.encode(item.dateTime),
-                  'level': item.level,
+                  'dateTime': item.dateTime,
                   'seconds': item.seconds,
-                  'levels_id': item.levelsId
+                  'level': item.level
                 }),
         _dataDeletionAdapter = DeletionAdapter(
             database,
-            'data',
+            'SleepPhasesData',
             ['id'],
             (Data item) => <String, Object?>{
                   'id': item.id,
-                  'dateTime': _dateTimeConverter.encode(item.dateTime),
-                  'level': item.level,
+                  'dateTime': item.dateTime,
                   'seconds': item.seconds,
-                  'levels_id': item.levelsId
+                  'level': item.level
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -566,7 +557,7 @@ class _$DataDao extends DataDao {
   ) async {
     return _queryAdapter.queryList(
         'SELECT * FROM Data WHERE dateTime between ?1 and ?2 ORDER BY dateTime ASC',
-        mapper: (Map<String, Object?> row) => Data(row['id'] as int?, _dateTimeConverter.decode(row['dateTime'] as int), row['level'] as int, row['seconds'] as int, row['levels_id'] as String),
+        mapper: (Map<String, Object?> row) => Data(row['id'] as int?, row['dateTime'] as String, row['seconds'] as int, row['level'] as String),
         arguments: [
           _dateTimeConverter.encode(startTime),
           _dateTimeConverter.encode(endTime)
@@ -578,10 +569,9 @@ class _$DataDao extends DataDao {
     return _queryAdapter.queryList('SELECT * FROM Data',
         mapper: (Map<String, Object?> row) => Data(
             row['id'] as int?,
-            _dateTimeConverter.decode(row['dateTime'] as int),
-            row['level'] as int,
+            row['dateTime'] as String,
             row['seconds'] as int,
-            row['levels_id'] as String));
+            row['level'] as String));
   }
 
   @override
@@ -589,23 +579,21 @@ class _$DataDao extends DataDao {
     return _queryAdapter.query('SELECT * FROM Data WHERE id = ?1',
         mapper: (Map<String, Object?> row) => Data(
             row['id'] as int?,
-            _dateTimeConverter.decode(row['dateTime'] as int),
-            row['level'] as int,
+            row['dateTime'] as String,
             row['seconds'] as int,
-            row['levels_id'] as String),
+            row['level'] as String),
         arguments: [id]);
   }
 
   @override
-  Future<List<Data>> getDataForSleep(int sleepId) async {
-    return _queryAdapter.queryList('SELECT * FROM Level WHERE sleepId = ?1',
+  Future<List<Data>> getDataForSleep(int level) async {
+    return _queryAdapter.queryList('SELECT * FROM Level WHERE level = ?1',
         mapper: (Map<String, Object?> row) => Data(
             row['id'] as int?,
-            _dateTimeConverter.decode(row['dateTime'] as int),
-            row['level'] as int,
+            row['dateTime'] as String,
             row['seconds'] as int,
-            row['levels_id'] as String),
-        arguments: [sleepId]);
+            row['level'] as String),
+        arguments: [level]);
   }
 
   @override

@@ -13,12 +13,12 @@ abstract class LevelsDao {
   @Query('SELECT * FROM Level WHERE id = :id')
   Future<Levels?> getLevelsById(int id);
 
-  @Query('SELECT * FROM Level WHERE sleepId = :sleepId')
-  Future<List<Levels>> getLevelsForSleep(int sleepId);
+  @Query('SELECT * FROM Level WHERE phase = :phase')
+  Future<List<Levels>> getLevelsForSleep(int phase);
 
   @Query(
-      'SELECT count FROM Levels WHERE levelName = "awake" AND sleepId = :sleepId')
-  Future<int?> getAwakeCount(int sleepId);
+      'SELECT count FROM Levels WHERE levelName = "awake" AND phase = :phase')
+  Future<int?> getAwakeCount(int phase);
 
   @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> insertLevels(Levels levels);
