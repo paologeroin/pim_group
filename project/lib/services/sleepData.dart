@@ -27,9 +27,11 @@ class SleepData {
   // late Map? levelsSummary;
   bool DailyData = true;
 
-// qui ho copiato i DreamSober
-  // Map<String, SleepPhases> phases = {};
-  // List<String> phasesName = ['wake', 'light', 'deep', 'rem'];
+  Map<String, LevelSummaryData> phases = {};
+  List<String> phaseName = ['wake', 'light', 'deep', 'rem'];
+
+  Map<String, SleepPhasesData> levelsData ={};
+  List<String> levelName = ['wake', 'light', 'deep', 'rem'];
 
   SleepData.fromJson(Map<String, dynamic> json) {
     date = json['date'].toString();
@@ -46,14 +48,23 @@ class SleepData {
       logType = json['data'][0]["logType"].toString();
       mainSleep = json['data'][0]["mainSleep"];
       levels = json['data'][0]["levels"];
-      // qui ho copiato i DreamSober
-      // for (String phase in phasesName) {
-      //   SleepPhases sleepphase = SleepPhases(
-      //     json['data']['levels']['summary'][phase]['count'],
-      //     json['data']['levels']['summary'][phase]['minutes'],
-      //   );
-      //   phases[phase] = sleepphase;
-      // }
+
+      for (String phase in phaseName) {
+        LevelSummaryData sleepPhase = LevelSummaryData(
+          json['data']['levels']['summary'][phase]['count'],
+          json['data']['levels']['summary'][phase]['minutes'],
+        );
+        phases[phase] = sleepPhase;
+      }
+
+      for (String level in levelName) {
+        SleepPhasesData sleepLevel = SleepPhasesData(
+          json['data']['levels']['data'][level]['dateTime'],
+          json['data']['levels']['data'][level]['seconds'],
+        );
+        levelsData[level] = sleepLevel;
+      }
+
       if (duration == null) {
         DailyData = false;
       }
@@ -71,20 +82,28 @@ class SleepData {
       mainSleep = null;
       levels = null;
       DailyData = false;
-      // qui ho copiato i DreamSober
-      // for (String phase in phasesName) {
-      //   SleepPhases slpphase = SleepPhases(null, null);
-      //   phases[phase] = slpphase;
-      // }
+      for (String phase in phaseName) {
+        LevelSummaryData sleephase = LevelSummaryData(null, null);
+        phases[phase] = sleephase;
+      }
     }
   }
 } //SleepData
 
-// qui ho copiato i DreamSober
-// class SleepPhases {
-//   final int? _count;
-//   final int? _minutes;
-//   SleepPhases(this._count, this._minutes);
-//   int? get count => _count;
-//   int? get min => _minutes;
-// }
+// I create a new class for LevelSummaryData to access sleep stage data. We are mainly interested in the "count" and "minutes"
+class LevelSummaryData {
+  late int? count;
+  late int? minutes;
+
+  LevelSummaryData(this.count, this.minutes);
+
+}//LevelSummaryData
+
+// I create a class for SleepPhasesData to access levels->data in which the duration of each phase is contained, useful for hypnograms
+class SleepPhasesData {
+  late String dateTime; 
+  late int seconds;
+
+  SleepPhasesData(this.dateTime, this.seconds);
+
+}//SleepPhases
