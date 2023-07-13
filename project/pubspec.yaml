@@ -33,7 +33,7 @@ dependencies:
   provider: ^6.0.5 # aggiunto
   material_design_icons_flutter: ^6.0.7096 # aggiunto
   intl: ^0.18.0 # aggiunto
-  syncfusion_flutter_charts: ^21.1.41 # forse non serve
+  syncfusion_flutter_charts: ^21.1.41
   flutter_login: ^4.1.1
   quickalert:  
   percent_indicator: ^3.4.0
@@ -50,6 +50,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   floor:  # i tutor lasciano vuoto invece che scrivere ^1.4.2
+  syncfusion_localizations: ^21.2.10
+  flutter_localizations:
+    sdk: flutter
+  flutter_charts: ^0.5.1
 
 dev_dependencies:
   flutter_test:
