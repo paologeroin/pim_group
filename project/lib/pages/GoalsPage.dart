@@ -5,7 +5,7 @@ import 'package:pim_group/pages/inizializegoals.dart';
 import 'package:provider/provider.dart';
 import '../models/entities/entities.dart';
 
-//Homepage screen. It will show the list of goals.
+//Homepage screen where it show the list of goals
 class GoalsPage extends StatelessWidget {
   GoalsPage({Key? key}) : super(key: key);
 
@@ -13,9 +13,7 @@ class GoalsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //Print the route display name for debugging
     print('${GoalsPage.routeDisplayName} built');
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 109, 230, 69),
@@ -27,8 +25,7 @@ class GoalsPage extends StatelessWidget {
               size: 30.0,
               color: Colors.white,
             ),
-            onPressed: () => _toGoalPage(context,
-                null), // se arrivo con null vuol dire che voglio creare un nuovo goal
+            onPressed: () => _toGoalPage(context, null),
           )
         ],
         centerTitle: true,
@@ -38,8 +35,6 @@ class GoalsPage extends StatelessWidget {
         ),
       ),
       body: Center(
-        //We are using a Consumer because we want that the UI showing
-        //the list of goals to rebuild every time the Goal DB updates.
         child: Consumer<AppDatabaseRepository>(
           builder: (context, goal, child) {
             return FutureBuilder(
@@ -48,13 +43,11 @@ class GoalsPage extends StatelessWidget {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   final data = snapshot.data as List<Goal>;
-                  //If the Goal table is empty, show a simple Text, otherwise show the list of goals using a ListView.
                   return data.length == 0
                       ? const Text('The goal list is currently empty')
                       : ListView.builder(
                           itemCount: data.length,
                           itemBuilder: (context, goalIndex) {
-                            //Here, we are using a Card to show a Meal
                             return Card(
                               elevation: 5,
                               child: ListTile(
@@ -63,17 +56,15 @@ class GoalsPage extends StatelessWidget {
                                 title: Text(data[goalIndex].name),
                                 subtitle: Text(
                                     'objective to reach: ${data[goalIndex].money} €'),
-                                //When a ListTile is tapped, the user is redirected to the MealPage, where it will be able to edit it.
                                 onTap: () =>
                                     _toGoalPage(context, data[goalIndex]),
                               ),
                             );
                           });
-                } //if
-                else {
+                } else {
                   return CircularProgressIndicator();
-                } //else
-              }, //FutureBuilder builder
+                }
+              },
             );
           },
         ),
@@ -81,9 +72,9 @@ class GoalsPage extends StatelessWidget {
     );
   } //build
 
-  //Utility method to navigate to GoalPage
+  // Method to navigate to CreateGoalsPage
   void _toGoalPage(BuildContext context, Goal? goal) {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => CreateGoalsPage(goal: goal)));
-  } //_toMealPage
+  } //_toGoalPage
 } //Goalspage

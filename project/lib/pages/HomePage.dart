@@ -19,9 +19,10 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'dart:core';
 
 Random random = new Random();
-int randomNumber = random.nextInt(4); // from 0 upto 99 included
+int randomNumber = random.nextInt(4);
 const Sec = Duration(seconds: 30);
 
+// DA RIVEDERE
 List listaFrasi = [
   'Alcohol is an enemy',
   'You got this!',

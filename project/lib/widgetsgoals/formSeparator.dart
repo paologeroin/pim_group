@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 ///Class that implements a custom [StatelessWidget] that acts as a separator in a [Form].
-///It can be used to separate "categories" in a [Form].
+///It is used to separate "categories" in a [Form].
 class FormSeparator extends StatelessWidget {
   final label;
 

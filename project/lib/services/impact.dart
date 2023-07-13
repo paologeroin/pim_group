@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:pim_group/models/db_sleep.dart';
+import 'package:pim_group/models/db.dart';
 import 'package:pim_group/services/sleepData.dart';
 import 'package:pim_group/utils/shared_preferences.dart';
 import 'package:pim_group/utils/server_strings.dart';
@@ -105,7 +105,7 @@ class ImpactService extends StatelessWidget {
 
   //SAVE DATA in DATABASE
   Future<void> saveDataInDatabase(
-    Map<String, SleepData> ResultMap, BuildContext context) async {
+      Map<String, SleepData> ResultMap, BuildContext context) async {
     Map<String, SleepData> Result = ResultMap;
     print(Result[0]);
     List<Sleep> allSleep =
@@ -160,7 +160,7 @@ class ImpactService extends StatelessWidget {
       }
     }
   }
-  
+
   // metodi da usare in impact_ob
   //This method allows to obtain the JWT token pair from IMPACT
   Future<bool> authorize(String username, String password) async {

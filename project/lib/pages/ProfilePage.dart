@@ -21,9 +21,9 @@ class ProfilePageState extends State<ProfilePage> {
     _loadProfileData();
   }
 
+  // method used to load the ProfileData saved in the SHared Preferences
   Future<void> _loadProfileData() async {
-    SharedPreferences prefs = await SharedPreferences
-        .getInstance(); // avremo potuto gestirla come una unica lista di stringhe ma ormai è cosi, pace e amen, l'idea mi è venuta troppo tardi
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       fullname = prefs.getString('fullname') ?? '';
       username = prefs.getString('username') ?? '';
@@ -127,6 +127,7 @@ class ProfilePageState extends State<ProfilePage> {
   }
 }
 
+// Widget to build the Container of the Profile's information labels
 Widget buildTextLabel(String textLabel) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 0),
@@ -135,6 +136,7 @@ Widget buildTextLabel(String textLabel) {
   );
 }
 
+// Widget to build the Container of the Profile's informations
 Widget buildText(String textField) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 20.0),

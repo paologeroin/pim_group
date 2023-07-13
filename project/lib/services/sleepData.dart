@@ -1,4 +1,3 @@
-//troveremo un modo per definire sto file
 import 'dart:convert';
 import 'dart:io';
 
@@ -24,13 +23,12 @@ class SleepData {
   late String? logType;
   late bool? mainSleep;
   late Map? levels;
-  // late Map? levelsSummary;
   bool DailyData = true;
 
   Map<String, LevelSummaryData> levelsData = {};
   List<String> levelName = ['wake', 'light', 'deep', 'rem'];
 
-  Map<String, SleepPhasesData> phases ={};
+  Map<String, SleepPhasesData> phases = {};
   List<String> phaseName = ['wake', 'light', 'deep', 'rem'];
 
   SleepData.fromJson(Map<String, dynamic> json) {
@@ -51,16 +49,16 @@ class SleepData {
 
       for (String phase in phaseName) {
         SleepPhasesData sleepPhase = SleepPhasesData(
-          dateTime : json['data']['levels']['data'][phase]['dateTime'],
-          seconds : json['data']['levels']['data'][phase]['seconds'],
+          dateTime: json['data']['levels']['data'][phase]['dateTime'],
+          seconds: json['data']['levels']['data'][phase]['seconds'],
         );
         phases[phase] = sleepPhase;
       }
 
       for (String level in levelName) {
         LevelSummaryData sleepLevel = LevelSummaryData(
-          count : json['data']['levels']['summary'][level]['count'],
-          minutes : json['data']['levels']['summary'][level]['minutes'],
+          count: json['data']['levels']['summary'][level]['count'],
+          minutes: json['data']['levels']['summary'][level]['minutes'],
         );
         levelsData[level] = sleepLevel;
       }
@@ -83,11 +81,13 @@ class SleepData {
       levels = null;
       DailyData = false;
       for (String level in levelName) {
-        LevelSummaryData sleepLevel = LevelSummaryData(count: null, minutes : null);
+        LevelSummaryData sleepLevel =
+            LevelSummaryData(count: null, minutes: null);
         levelsData[level] = sleepLevel;
       }
       for (String phase in phaseName) {
-        SleepPhasesData sleepPhase = SleepPhasesData(dateTime: null, seconds : null);
+        SleepPhasesData sleepPhase =
+            SleepPhasesData(dateTime: null, seconds: null);
         phases[phase] = sleepPhase;
       }
     }
@@ -100,14 +100,12 @@ class LevelSummaryData {
   late int? minutes;
 
   LevelSummaryData({required this.count, required this.minutes});
-
-}//LevelSummaryData
+} //LevelSummaryData
 
 // I create a class for SleepPhasesData to access levels->data in which the duration of each phase is contained, useful for hypnograms
 class SleepPhasesData {
-  late String? dateTime; 
+  late String? dateTime;
   late int? seconds;
 
   SleepPhasesData({required this.dateTime, required this.seconds});
-
 }//SleepPhases

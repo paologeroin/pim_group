@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:pim_group/pages/jump.dart';
-import 'package:pim_group/services/impact.dart';
-import 'root.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
@@ -18,21 +16,20 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    //Check if the user is already logged in before rendering the login page
     _checkLogin();
   } //initState
 
+  // Method used to check the login to the App
   void _checkLogin() async {
-    //Get the SharedPreference instance and check if the value of the 'username' filed is set or not
     final prefs = await SharedPreferences.getInstance();
     if (prefs.getString('email') != null) {
-      //If 'username is set, push the HomePage
-      _toHomePage(context);
-    } //if
+      _toJump(context);
+    }
   } //_checkLogin
 
+  // Method used to try the login with the User's credentials to the App
   Future<String> _loginUser(LoginData data) async {
-    if (data.name == 'paolo@cappon.com' && data.password == 'mariairene') {
+    if (data.name == 'user@gmail.com' && data.password == '12345') {
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('email', data.name);
       prefs.setString('password_user', data.password);
@@ -43,12 +40,12 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  // _loginUser
+  // Method for future implementation
   Future<String> _signUpUser(SignupData data) async {
     return 'To be implemented';
-  }
+  } // _signUpUser
 
-  // _signUpUser
+  // Method for future implementation
   Future<String> _recoverPassword(String email) async {
     return 'Recover password functionality needs to be implemented';
   } // _recoverPassword
@@ -67,13 +64,8 @@ class _LoginPageState extends State<LoginPage> {
     );
   } // build
 
-  void _toHomePage(BuildContext context) {
+  void _toJump(BuildContext context) {
     Navigator.of(context)
         .pushReplacement(MaterialPageRoute(builder: (context) => Jump()));
-    // qui teniamo la Jump page (da modificare perché h
-    // ancora i metodi vecchi) che nel caso non ci sono i token
-    // manda al login dell'impact, altrimenti (quindi ci sono i
-    // token ma deve solo fare il refresh) manda a root che
-    // manda a HomePage
-  } //_toHomePage
+  } //_toJump
 } // LoginScreen

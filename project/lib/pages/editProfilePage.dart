@@ -21,6 +21,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     _loadProfileData();
   }
 
+  // this method is used to load the Data of the profile, those are saved in the shared preferences
   Future<void> _loadProfileData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String fullname = prefs.getString('fullname') ?? '';
@@ -38,6 +39,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     });
   }
 
+  // this method is used to save the information written in the text field in the shared preferences
   Future<void> _saveProfileData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('fullname', _fullnameController.text);
@@ -114,6 +116,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
+  // method to save the information written/modified by the user in the text field before to display them in the Profile Page
   void _saveAndPop() async {
     _saveProfileData();
     final updatedData = {

@@ -3,12 +3,10 @@ import 'package:pim_group/drink_screens/drinkpage.dart';
 import 'HomePage.dart';
 import 'SleepPage.dart';
 import 'GoalsPage.dart';
-import 'package:provider/provider.dart';
 import 'HomePage.dart';
 import 'CalendarPage.dart';
 
-/// Definition of Root class, the first class called by the main application class [MyApp]
-
+/// Definition of Root class, the first class called after the login to the App & ImpactPage
 class BottomNavBarV2 extends StatefulWidget {
   @override
   _BottomNavBarV2State createState() => _BottomNavBarV2State();
@@ -51,9 +49,8 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
       bottomNavigationBar: Container(
         width: size.width,
         height: 80,
-        color:Color.fromARGB(255, 255, 255, 255),
+        color: Color.fromARGB(255, 255, 255, 255),
         child: Stack(
-          //overflow: Overflow.visible,
           children: [
             CustomPaint(
               size: Size(size.width, 80),
@@ -62,10 +59,9 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
             Center(
                 heightFactor: 0.6,
                 child: FloatingActionButton(
-                  backgroundColor: Color.fromARGB(255, 255, 147, 15), // PAOLO Colors.pink[300],
-                  child: Icon(Icons.add), // Analyze Button
+                  backgroundColor: Color.fromARGB(255, 255, 147, 15),
+                  child: Icon(Icons.add),
                   elevation: 0.1,
-
                   onPressed: () => _toDrinkPage(context, -1),
                 )),
             Container(
@@ -78,7 +74,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                     icon: Icon(
                       Icons.home,
                       color: currentIndex == 0
-                          ? Color.fromARGB(255, 131, 7, 214) 
+                          ? Color.fromARGB(255, 131, 7, 214)
                           : Color.fromARGB(255, 255, 255, 255),
                     ),
                     onPressed: () {
@@ -154,7 +150,7 @@ class BNBCustomPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     Path path = Path();
-    path.moveTo(0, 20); // Start
+    path.moveTo(0, 20);
     path.quadraticBezierTo(size.width * 0.20, 0, size.width * 0.35, 0);
     path.quadraticBezierTo(size.width * 0.40, 0, size.width * 0.40, 20);
     path.arcToPoint(Offset(size.width * 0.60, 20),

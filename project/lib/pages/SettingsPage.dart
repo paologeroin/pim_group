@@ -6,6 +6,12 @@ class SettingsPage extends StatefulWidget {
   _SettingsPageState createState() => _SettingsPageState();
 }
 
+//
+//
+// layout of the fake page for settings for next implementation
+//
+//
+
 class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
@@ -29,10 +35,6 @@ class _SettingsPageState extends State<SettingsPage> {
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),
         child: ListView(
           children: [
-            // Text(
-            //   "Settings",
-            //   style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-            // ),
             SizedBox(
               height: 40,
             ),
@@ -91,22 +93,6 @@ class _SettingsPageState extends State<SettingsPage> {
             buildNotificationOptionRow("New for you", true),
             buildNotificationOptionRow("Account activity", true),
             buildNotificationOptionRow("Opportunity", false),
-            // SizedBox(
-            //   height: 50,
-            // ),
-            // Center(
-            //   child: OutlinedButton(
-            //     onPressed: () {},
-            //     child: Text("SIGN OUT",
-            //         style: TextStyle(
-            //             fontSize: 16, letterSpacing: 2.2, color: Colors.black)),
-            //   style: OutlinedButton.styleFrom(
-            //     padding: EdgeInsets.symmetric(horizontal: 40),
-            //     shape: RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.circular(20))
-            //   ),
-            //   ),
-            // )
           ],
         ),
       ),
