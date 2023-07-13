@@ -33,7 +33,7 @@ class SleepData {
 
   SleepData.fromJson(Map<String, dynamic> json) {
     date = json['date'].toString();
-    if (!(json['data'] == null)) {
+    if (json['data'].isNotEmpty) {
       dateOfSleep = json['data'][0]['dateOfSleep'].toString();
       startTime = json['data'][0]["startTime"].toString();
       endTime = json['data'][0]["endTime"].toString();
@@ -47,6 +47,7 @@ class SleepData {
       mainSleep = json['data'][0]["mainSleep"];
       levels = json['data'][0]["levels"];
 
+      /*
       for (String phase in phaseName) {
         SleepPhasesData sleepPhase = SleepPhasesData(
           dateTime: json['data']['levels']['data'][phase]['dateTime'],
@@ -65,7 +66,7 @@ class SleepData {
 
       if (duration == null) {
         DailyData = false;
-      }
+      }*/
     } else {
       dateOfSleep = null;
       startTime = null;
