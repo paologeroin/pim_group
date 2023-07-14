@@ -19,10 +19,9 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'dart:core';
 
 Random random = new Random();
-int randomNumber = random.nextInt(4);
+int randomNumber = random.nextInt(4); // from 0 upto 99 included
 const Sec = Duration(seconds: 30);
 
-// DA RIVEDERE
 List listaFrasi = [
   'Alcohol is an enemy',
   'You got this!',
@@ -265,7 +264,7 @@ class _HomePage extends State<HomePage> {
                 Container(
                     child: Column(
                       children: [
-                        Text('You have not drink for',
+                        Text('You have not been drinking for',
                             textAlign: TextAlign.center,
                             style: GoogleFonts.lato(
                                 fontSize: 33,
@@ -319,14 +318,25 @@ class _HomePage extends State<HomePage> {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 5.0),
                           ),
-                          CircularPercentIndicator(
+                          //SOBRIETY
+                      Consumer<AppDatabaseRepository>(
+                              builder: (context, dbr, child) {
+                       return FutureBuilder(
+                          initialData: null,
+                                //future: dbr.findSleepbyDate("${DateTime.now().subtract(const Duration(days: 1)).year}-0${DateTime.now().subtract(const Duration(days: 1)).month}-0${DateTime.now(). subtract(const Duration(days: 1)).day}"),
+                                future: dbr.findDrinksOnDate(DateTime(today.year, today.month, today.day, 0, 0),DateTime(today.year, today.month, today.day, 23, 59)),
+                                builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                                    final data = snapshot.data as List<Drink>;
+                        /*  CircularPercentIndicator(
                             radius: 140.0,
                             lineWidth: 25.0,
-                            percent: 0.7,
+                            percent:   data.length /
+                                              10.0,
                             //   header: new Text("Icon header"),
                             center: Container(
                                 child: Text(
-                                  'Sobriety level',
+                                  'Sobriety',
                                   textDirection: TextDirection.ltr,
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.lato(),
@@ -342,11 +352,80 @@ class _HomePage extends State<HomePage> {
                             backgroundColor: Color.fromARGB(255, 238, 237, 237),
                             circularStrokeCap: CircularStrokeCap.round,
                             progressColor: Color.fromARGB(255, 255, 147, 15),
-                          ),
+                            );*/
+                           
+                           
+                           return CircularPercentIndicator(radius: 140, lineWidth: 25.0, 
+                                center: Column(children: [
+                                  Padding(
+                    padding: EdgeInsets.only(
+                        top: 50),),
+                                              Text('Sobriety', textDirection: TextDirection.ltr,
+                                                textAlign: TextAlign.center,
+                                                style: GoogleFonts.lato(fontSize: 13),),
+                                                 Padding(
+                    padding: EdgeInsets.only(
+                        top: 5),),
+                                       Text(
+                                              '${data.length} /5'  ,
+                                                  //  .toString(),
+                                                textDirection: TextDirection.ltr,
+                                                textAlign: TextAlign.center,
+                                                style: GoogleFonts.lato(),
+                                      )
+                                  
+                                      
+                                      ] ),
+                              
+
+                            backgroundColor: Color.fromARGB(255, 238, 237, 237),
+                            circularStrokeCap: CircularStrokeCap.round,
+                            progressColor: Color.fromARGB(255, 255, 147, 15),
+                            
+                            percent: (data.length*2)/
+                                              10.0);}
+                                              else  {
+                                    //A CircularProgressIndicator is shown while the list of Todo is loading.
+                                    return CircularPercentIndicator(
+                                      radius: 140.0,
+                                      lineWidth: 25.0,
+                                      percent: 0.0,
+
+                                      //  header: new Text("Icon header"),
+                                      center: Container(
+                                          child: Text(
+                                            "Still no drinks!",
+                                            textDirection: TextDirection.ltr,
+                                            textAlign: TextAlign.center,
+                                            style: GoogleFonts.lato(),
+                                          ),
+                                          width: 70,
+                                          height: 53,
+                                          padding: EdgeInsets.all(7.0),
+                                          //color: Colors.amber,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          )),
+                                      circularStrokeCap:
+                                          CircularStrokeCap.round,
+                                      backgroundColor:
+                                          Color.fromARGB(255, 196, 193, 193),
+                                      progressColor: Colors.teal[200],
+                                    );}
+                                          
+                           
+                                });
+    }),
+
+
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20.0),
                           ),
 
+
+
+//EFFICIENCY
                           Consumer<AppDatabaseRepository>(
                               builder: (context, dbr, child) {
                             //The logic is to query the DB for the entire list of Todo using dbr.findAllTodos()
@@ -369,14 +448,24 @@ class _HomePage extends State<HomePage> {
 
                                       //  header: new Text("Icon header"),
                                       center: Container(
-                                          child: Text(
-                                            data[data.length - 1]
-                                                .efficiency
-                                                .toString(),
+                                        child: Column(children: [
+                                          Text('Efficiency', textDirection: TextDirection.ltr,
+                                            textAlign: TextAlign.center,
+                                            style: GoogleFonts.lato(fontSize: 13),),
+                                             Padding(
+                    padding: EdgeInsets.only(
+                        top: 5),),
+                                       Text(
+                                          ' ${data[data.length - 1]
+                                                .efficiency} \%' ,
+                                              //  .toString(),
                                             textDirection: TextDirection.ltr,
                                             textAlign: TextAlign.center,
                                             style: GoogleFonts.lato(),
-                                          ),
+                                      )
+                                  
+                                      
+                                      ] ),
                                           width: 70,
                                           height: 53,
                                           padding: EdgeInsets.all(7.0),
@@ -402,7 +491,7 @@ class _HomePage extends State<HomePage> {
                                       //  header: new Text("Icon header"),
                                       center: Container(
                                           child: Text(
-                                            "0",
+                                            "No data available",
                                             textDirection: TextDirection.ltr,
                                             textAlign: TextAlign.center,
                                             style: GoogleFonts.lato(),
