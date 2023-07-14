@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:pim_group/models/db.dart';
 import 'package:pim_group/services/sleepData.dart';
 import 'package:pim_group/utils/shared_preferences.dart';
 import 'package:pim_group/utils/server_strings.dart';
@@ -16,6 +15,7 @@ import 'package:pim_group/models/repo/app_repository.dart';
 import 'package:pim_group/models/entities/drink.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:pim_group/pages/HomePage.dart';
 
 // creo la classe ImpactService
 class ImpactService extends StatelessWidget {
@@ -67,9 +67,9 @@ class ImpactService extends StatelessWidget {
 
     //Create the (representative) request
     final start_date = DateFormat('y-M-d')
-        .format(DateTime.now().subtract(const Duration(days: 10)));
+        .format(DateTime.now().subtract(const Duration(days: 5)));
     final end_date = DateFormat('y-M-d')
-        .format(DateTime.now().subtract(const Duration(days: 4)));
+        .format(DateTime.now().subtract(const Duration(days: 1)));
     //final day = '2023-05-04';
     //final url = ServerStrings.baseUrl + ServerStrings.sleepEndpoint + ServerStrings.patientUsername + '/day/$day/';
 
@@ -293,6 +293,13 @@ class ImpactService extends StatelessWidget {
                     print("NOT NULL");
                     saveDataInDatabase(result, context);
                   }
+                 /*
+                  // se non ho dati
+                   if (result.isEmpty) {
+                    print("NULL");
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                  }
+                  */
                   ScaffoldMessenger.of(context)
                     ..removeCurrentSnackBar()
                     ..showSnackBar(SnackBar(content: Text(message)));
