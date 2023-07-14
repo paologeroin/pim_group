@@ -8,11 +8,9 @@ import 'entities/entities.dart';
 part 'db.g.dart';
 
 @TypeConverters([DateTimeConverter])
-@Database(version: 6, entities: [Drink, Sleep, Levels, Data, Goal])
+@Database(version: 6, entities: [Drink, Sleep, Goal])
 abstract class AppDatabase extends FloorDatabase {
   DrinkDao get drinkDao;
   SleepDao get sleepDao;
-  LevelsDao get levelDao;
-  DataDao get dataDao;
   GoalDao get goalDao;
 }//AppDatabase
