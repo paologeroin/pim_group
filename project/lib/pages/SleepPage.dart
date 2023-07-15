@@ -48,8 +48,13 @@ class SleepPage extends StatelessWidget {
                     if (snapshot.hasData) {
                       final dataSleep = snapshot.data as List<Sleep>;
                       String durationHour =
-                          (((dataSleep[dataSleep.length - 1].duration)! .toDouble()) / 3600).toString();
-                      String minutesAsleep = dataSleep[dataSleep.length - 1].minutesAsleep.toString();
+                          (((dataSleep[dataSleep.length - 1].duration)!
+                                      .toDouble()) /
+                                  3600)
+                              .toString();
+                      String minutesAsleep = dataSleep[dataSleep.length - 1]
+                          .minutesAsleep
+                          .toString();
                       return Column(
                         children: [
                           Card(
@@ -76,7 +81,6 @@ class SleepPage extends StatelessWidget {
                     }
                   },
                 ),
-
                 SfCartesianChart(
                   primaryXAxis: CategoryAxis(),
                   primaryYAxis: CategoryAxis(title: AxisTitle(text: 'minutes')),

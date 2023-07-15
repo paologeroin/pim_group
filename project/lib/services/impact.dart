@@ -18,29 +18,26 @@ import 'package:provider/provider.dart';
 import 'package:pim_group/pages/HomePage.dart';
 
 List<int> deep = [];
-      List<int> light = [];
-      List<int> rem = [];
-      List<int> wake = [] ;
-     
+List<int> light = [];
+List<int> rem = [];
+List<int> wake = [];
 
 final first_day = DateFormat('y-M-d')
-        .format(DateTime.now().subtract(const Duration(days: 5)));
+    .format(DateTime.now().subtract(const Duration(days: 5)));
 
 final second_day = DateFormat('y-M-d')
-        .format(DateTime.now().subtract(const Duration(days: 4)));
-        
+    .format(DateTime.now().subtract(const Duration(days: 4)));
+
 final third_day = DateFormat('y-M-d')
-        .format(DateTime.now().subtract(const Duration(days: 3)));
+    .format(DateTime.now().subtract(const Duration(days: 3)));
 
 final fourth_day = DateFormat('y-M-d')
-        .format(DateTime.now().subtract(const Duration(days: 2)));
-        
+    .format(DateTime.now().subtract(const Duration(days: 2)));
+
 final fifth_day = DateFormat('y-M-d')
-        .format(DateTime.now().subtract(const Duration(days: 1)));
+    .format(DateTime.now().subtract(const Duration(days: 1)));
 
 List<String> days = [first_day, second_day, third_day, fourth_day, fifth_day];
-
-
 
 // creo la classe ImpactService
 class ImpactService extends StatelessWidget {
@@ -117,9 +114,8 @@ class ImpactService extends StatelessWidget {
     Map<String, SleepData> Result = {};
 
     if (response.statusCode == 200) {
-
       String temp = '';
-     
+
       final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
       for (int i = 0; i < decodedResponse['data'].length; i++) {
         SleepData dataDay = SleepData.fromJson(decodedResponse['data'][i]);
@@ -129,44 +125,47 @@ class ImpactService extends StatelessWidget {
         String summary = dataDay.levels.toString();
         int deepindex = summary.indexOf("minutes");
         print(deepindex); //la parola minutes inizia all'indice 28
-        if (deepindex != -1){
-          deepindex=deepindex+9;
-        while (summary[deepindex] != ',') {  // finchè non trovo la , entro nel while
-          temp = temp + summary[deepindex];
-          deepindex = deepindex + 1;
+        if (deepindex != -1) {
+          deepindex = deepindex + 9;
+          while (summary[deepindex] != ',') {
+            // finchè non trovo la , entro nel while
+            temp = temp + summary[deepindex];
+            deepindex = deepindex + 1;
           }
-          deep.add(int.parse(temp));  //trasfromo in un intero la temp e la aggiungo alla lista deep
+          deep.add(int.parse(
+              temp)); //trasfromo in un intero la temp e la aggiungo alla lista deep
           temp = ''; //azzero temp
-          int wakeindex = summary.indexOf("minutes",deepindex);
-          wakeindex=wakeindex+9;
+          int wakeindex = summary.indexOf("minutes", deepindex);
+          wakeindex = wakeindex + 9;
 
-          while (summary[wakeindex] != ',') {  // finchè non trovo la , entro nel while
-          temp = temp + summary[wakeindex];
-          wakeindex = wakeindex + 1;
+          while (summary[wakeindex] != ',') {
+            // finchè non trovo la , entro nel while
+            temp = temp + summary[wakeindex];
+            wakeindex = wakeindex + 1;
           }
           wake.add(int.parse(temp));
-          temp='';
+          temp = '';
 
-          int lightindex = summary.indexOf("minutes",wakeindex);
-        lightindex = lightindex+9;
+          int lightindex = summary.indexOf("minutes", wakeindex);
+          lightindex = lightindex + 9;
 
-        while (summary[lightindex] != ',') {
-        temp = temp + summary[lightindex];
-        lightindex = lightindex + 1;
-        }
-        light.add(int.parse(temp));
-        temp='';
-        int remindex = summary.indexOf("minutes",lightindex);
-        remindex = remindex+9;
-
-        while (summary[remindex] != ',') {
-        temp = temp + summary[remindex];
-        remindex = remindex + 1;
+          while (summary[lightindex] != ',') {
+            temp = temp + summary[lightindex];
+            lightindex = lightindex + 1;
           }
-        rem.add(int.parse(temp));
-        temp='';
+          light.add(int.parse(temp));
+          temp = '';
+          int remindex = summary.indexOf("minutes", lightindex);
+          remindex = remindex + 9;
+
+          while (summary[remindex] != ',') {
+            temp = temp + summary[remindex];
+            remindex = remindex + 1;
+          }
+          rem.add(int.parse(temp));
+          temp = '';
         }
-        
+
         // print(summary == String);
         // print(summary);
         // print(dataDay.levels.toString() == String);
@@ -371,7 +370,7 @@ class ImpactService extends StatelessWidget {
                     print("NOT NULL");
                     saveDataInDatabase(result, context);
                   }
-                 /*
+                  /*
                   // se non ho dati
                    if (result.isEmpty) {
                     print("NULL");

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pim_group/drink_screens/drinkpage.dart';
+import 'package:pim_group/pages/DrinkPage.dart';
 import 'HomePage.dart';
 import 'SleepPage.dart';
 import 'GoalsPage.dart';

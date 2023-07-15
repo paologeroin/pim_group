@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pim_group/widgetsgoals/formTiles.dart';
+import 'package:pim_group/widgetDrinks/formTiles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -53,7 +53,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 97, 198, 171),
+        backgroundColor: Color.fromARGB(255, 194, 138, 243),
         elevation: 1,
         centerTitle: true,
         title: const Text(

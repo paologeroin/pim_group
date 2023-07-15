@@ -25,8 +25,8 @@ const Sec = Duration(seconds: 30);
 List listaFrasi = [
   'Alcohol is an enemy',
   'You got this!',
-  'Less Alcohol more Maria!',
-  'It\'s one life, don\'t waste it!'
+  'Life is only one',
+  'Don\'t waste your healthy!'
 ];
 
 var frasedisplay = listaFrasi[randomNumber];
@@ -71,22 +71,22 @@ class _HomePage extends State<HomePage> {
     setState(() => countdownTimer!.cancel());
   }
 
+  // In this App we have decided to make the user earn 10 euros in the virtual
+  // wallet for each day in which he doesn't drink. We want to help the user to hold on and
+  // resist also by directly showing him an average estimate of the money he
+  // saves on the days in which he does not drink (an alcoholic pays between
+  // 10-15 euros on alcohol per day).
   void earnMoney() {
-    // funzione per aggiornare il portafoglio
-    // Aggiungi 5 al portafoglio ogni 24 ore
     int time = diff.inHours;
     if (countdownTimer != 0) {
       multiplier = time ~/ 24;
-      // print('il moltiplicatore nella funzione è: $multiplier');
-      //  print('time nella funzione: $time');
     }
 
     if (time / 24 >= 1) {
       setState(() {
         wallet = 10 * multiplier;
-        //  print('Money added to wallet. Total money earned nella funzione: $wallet');
       });
-      saveSharedPrefs(); // Salva il nuovo valore nel wallet
+      saveSharedPrefs();
     }
   }
 
@@ -103,19 +103,13 @@ class _HomePage extends State<HomePage> {
   }
 
   void changePhrase() {
-    //print(oldValue);
     randomNumber = random.nextInt(4);
-    //print(randomNumber);
-    //setState(() {
     if (randomNumber == oldValue && randomNumber > 0) {
       randomNumber--;
-      // print("change: $randomNumber");
     } else if (randomNumber == oldValue && randomNumber < 3) {
       randomNumber++;
-      // print("change: $randomNumber");
     }
 
-    //});
     setState(() {
       oldValue = randomNumber;
       frasedisplay = listaFrasi[randomNumber];
@@ -127,7 +121,6 @@ class _HomePage extends State<HomePage> {
     setState(() {
       today = DateTime.now();
     });
-    // print(diff);
   }
 
   @override
@@ -146,7 +139,6 @@ class _HomePage extends State<HomePage> {
     _loadWallet();
     earnMoney();
     diff = -(last.difference(today));
-    //  print('dopo la funzione $wallet');
 
     DateTime now = DateTime.now();
     String convertedDateTime = "";
@@ -154,17 +146,12 @@ class _HomePage extends State<HomePage> {
         "${now.year.toString()}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}-${now.minute.toString().padLeft(2, '0')}";
 
     return Scaffold(
-        //backgroundColor: Colors.grey[200],
-        //backgroundColor: Color.fromARGB(99, 243, 210, 112),
-        backgroundColor: Color.fromARGB(
-            255, 255, 255, 255), // CAMBIO COLORE PAOLO Colors.teal[50],
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
         drawer: Drawer(
-          backgroundColor: Color.fromARGB(
-              255, 255, 255, 255), // CAMBIO COLORE PAOLO Colors.teal[50],
+          backgroundColor: Color.fromARGB(255, 255, 255, 255),
           child: ListView(
             // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
-
             children: [
               SizedBox(
                 height: 50,
@@ -184,7 +171,6 @@ class _HomePage extends State<HomePage> {
                     confirmBtnColor: Color.fromARGB(255, 194, 138, 243),
                     onConfirmBtnTap: () => _toLoginPage(context),
                   );
-                  //  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
                 },
               ),
               Divider(),
@@ -205,7 +191,6 @@ class _HomePage extends State<HomePage> {
                 ),
                 title: const Text('Settings'),
                 onTap: () {
-                  // TO DO: create settings page
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => SettingsPage()));
                 },
@@ -216,39 +201,28 @@ class _HomePage extends State<HomePage> {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(47.0),
           child: AppBar(
-            title: Column(children: [
-              Text("Ciao $fullname", style: GoogleFonts.lato()),
-              GestureDetector(
-                child: Text(frasedisplay, style: GoogleFonts.lato()),
-              )
-            ]),
-            backgroundColor: Color.fromARGB(255, 194, 138, 243),
-            elevation: 0,
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(
-                  Icons.account_circle,
-                  size: 30.0,
-                  color: Colors.white,
+              // motivational phrases for the User that change during time
+              title: Column(children: [
+                Text("Hey $fullname", style: GoogleFonts.lato()),
+                GestureDetector(
+                  child: Text(frasedisplay, style: GoogleFonts.lato()),
+                )
+              ]),
+              backgroundColor: Color.fromARGB(255, 194, 138, 243),
+              elevation: 0,
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Icons.account_circle,
+                    size: 30.0,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => ProfilePage()));
+                  },
                 ),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ProfilePage()));
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.key,
-                  size: 30.0,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  // Navigator.push(context,
-                  //     MaterialPageRoute(builder: (context) => TokenPage()));
-                },
-              )
-            ],
-          ),
+              ]),
         ),
         body: ListView(children: [
           Column(children: [
@@ -319,16 +293,20 @@ class _HomePage extends State<HomePage> {
                             padding: EdgeInsets.symmetric(horizontal: 5.0),
                           ),
                           //SOBRIETY
-                      Consumer<AppDatabaseRepository>(
+                          Consumer<AppDatabaseRepository>(
                               builder: (context, dbr, child) {
-                       return FutureBuilder(
-                          initialData: null,
+                            return FutureBuilder(
+                                initialData: null,
                                 //future: dbr.findSleepbyDate("${DateTime.now().subtract(const Duration(days: 1)).year}-0${DateTime.now().subtract(const Duration(days: 1)).month}-0${DateTime.now(). subtract(const Duration(days: 1)).day}"),
-                                future: dbr.findDrinksOnDate(DateTime(today.year, today.month, today.day, 0, 0),DateTime(today.year, today.month, today.day, 23, 59)),
+                                future: dbr.findDrinksOnDate(
+                                    DateTime(today.year, today.month, today.day,
+                                        0, 0),
+                                    DateTime(today.year, today.month, today.day,
+                                        23, 59)),
                                 builder: (context, snapshot) {
-                          if (snapshot.hasData) {
+                                  if (snapshot.hasData) {
                                     final data = snapshot.data as List<Drink>;
-                        /*  CircularPercentIndicator(
+                                    /*  CircularPercentIndicator(
                             radius: 140.0,
                             lineWidth: 25.0,
                             percent:   data.length /
@@ -353,38 +331,40 @@ class _HomePage extends State<HomePage> {
                             circularStrokeCap: CircularStrokeCap.round,
                             progressColor: Color.fromARGB(255, 255, 147, 15),
                             );*/
-                           
-                           
-                           return CircularPercentIndicator(radius: 140, lineWidth: 25.0, 
-                                center: Column(children: [
-                                  Padding(
-                    padding: EdgeInsets.only(
-                        top: 50),),
-                                              Text('Sobriety', textDirection: TextDirection.ltr,
-                                                textAlign: TextAlign.center,
-                                                style: GoogleFonts.lato(fontSize: 13),),
-                                                 Padding(
-                    padding: EdgeInsets.only(
-                        top: 5),),
-                                       Text(
-                                              '${data.length} /5'  ,
-                                                  //  .toString(),
-                                                textDirection: TextDirection.ltr,
-                                                textAlign: TextAlign.center,
-                                                style: GoogleFonts.lato(),
-                                      )
-                                  
-                                      
-                                      ] ),
-                              
 
-                            backgroundColor: Color.fromARGB(255, 238, 237, 237),
-                            circularStrokeCap: CircularStrokeCap.round,
-                            progressColor: Color.fromARGB(255, 255, 147, 15),
-                            
-                            percent: (data.length*2)/
-                                              10.0);}
-                                              else  {
+                                    return CircularPercentIndicator(
+                                        radius: 140,
+                                        lineWidth: 25.0,
+                                        center: Column(children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(top: 50),
+                                          ),
+                                          Text(
+                                            'Sobriety',
+                                            textDirection: TextDirection.ltr,
+                                            textAlign: TextAlign.center,
+                                            style:
+                                                GoogleFonts.lato(fontSize: 13),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(top: 5),
+                                          ),
+                                          Text(
+                                            '${data.length} /5',
+                                            //  .toString(),
+                                            textDirection: TextDirection.ltr,
+                                            textAlign: TextAlign.center,
+                                            style: GoogleFonts.lato(),
+                                          )
+                                        ]),
+                                        backgroundColor:
+                                            Color.fromARGB(255, 238, 237, 237),
+                                        circularStrokeCap:
+                                            CircularStrokeCap.round,
+                                        progressColor:
+                                            Color.fromARGB(255, 255, 147, 15),
+                                        percent: (data.length * 2) / 10.0);
+                                  } else {
                                     //A CircularProgressIndicator is shown while the list of Todo is loading.
                                     return CircularPercentIndicator(
                                       radius: 140.0,
@@ -412,18 +392,14 @@ class _HomePage extends State<HomePage> {
                                       backgroundColor:
                                           Color.fromARGB(255, 196, 193, 193),
                                       progressColor: Colors.teal[200],
-                                    );}
-                                          
-                           
+                                    );
+                                  }
                                 });
-    }),
-
+                          }),
 
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20.0),
                           ),
-
-
 
 //EFFICIENCY
                           Consumer<AppDatabaseRepository>(
@@ -448,24 +424,25 @@ class _HomePage extends State<HomePage> {
 
                                       //  header: new Text("Icon header"),
                                       center: Container(
-                                        child: Column(children: [
-                                          Text('Efficiency', textDirection: TextDirection.ltr,
-                                            textAlign: TextAlign.center,
-                                            style: GoogleFonts.lato(fontSize: 13),),
-                                             Padding(
-                    padding: EdgeInsets.only(
-                        top: 5),),
-                                       Text(
-                                          ' ${data[data.length - 1]
-                                                .efficiency} \%' ,
+                                          child: Column(children: [
+                                            Text(
+                                              'Efficiency',
+                                              textDirection: TextDirection.ltr,
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.lato(
+                                                  fontSize: 13),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(top: 5),
+                                            ),
+                                            Text(
+                                              ' ${data[data.length - 1].efficiency} \%',
                                               //  .toString(),
-                                            textDirection: TextDirection.ltr,
-                                            textAlign: TextAlign.center,
-                                            style: GoogleFonts.lato(),
-                                      )
-                                  
-                                      
-                                      ] ),
+                                              textDirection: TextDirection.ltr,
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.lato(),
+                                            )
+                                          ]),
                                           width: 70,
                                           height: 53,
                                           padding: EdgeInsets.all(7.0),
@@ -528,7 +505,7 @@ class _HomePage extends State<HomePage> {
                     child: Container(
                         width: MediaQuery.of(context).size.width / 1.2,
                         margin:
-                            const EdgeInsets.only(top: 40, left: 15, right: 15),
+                            const EdgeInsets.only(top: 10, left: 15, right: 15),
                         padding: EdgeInsets.only(
                             top: 25.0, bottom: 25.0, left: 15, right: 15),
                         decoration: BoxDecoration(
@@ -553,8 +530,7 @@ class _HomePage extends State<HomePage> {
                         // color: Colors.blue,
                         child: Column(children: [
                           Center(
-                              child: Text(
-                                  'Based on the consecutive days where you did not drink, you saved: \n',
+                              child: Text('Money saved: \n',
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.lato(
                                     fontWeight: FontWeight.normal,
@@ -600,13 +576,38 @@ class _HomePage extends State<HomePage> {
                                 //Here, we are using a Card to show a Meal
                                 Card(
                                     elevation: 5,
-                                    child: ListTile(
-                                      leading: const Icon(MdiIcons.star),
-                                      title: Text(data[0].name),
-                                      subtitle: Text(
-                                          'Objective to reach: ${data[0].money} €'),
+                                    child: Column(
+                                      children: [
+                                        ListTile(
+                                          leading: const Icon(MdiIcons.star),
+                                          title: Text(data[0].name),
+                                          subtitle: Text(
+                                              'Objective to reach: ${data[0].money} €'),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.all(15.0),
+                                          child: LinearPercentIndicator(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                50,
+                                            animation: true,
+                                            lineHeight: 20.0,
+                                            animationDuration: 2500,
+                                            percent: wallet >= data[0].money
+                                                ? 1.0
+                                                : wallet / data[0].money,
+                                            center: Text(wallet >= data[0].money
+                                                ? '100%'
+                                                : '${(wallet / data[0].money * 100).toStringAsFixed(2)}%'),
+                                            linearStrokeCap:
+                                                LinearStrokeCap.roundAll,
+                                            progressColor: Color.fromARGB(
+                                                255, 119, 2, 170),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    // andrebbe qua
                                   );
                           } //if
                           else {
@@ -669,7 +670,5 @@ Future<DateTime> lastDrink(BuildContext context) async {
   } else {
     lastDrinkDate = lastDrinks.last.dateTime;
   }
-
-  //(lastDrinkDate);
   return lastDrinkDate;
 }

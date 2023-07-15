@@ -57,7 +57,7 @@ class Jump extends StatelessWidget {
             Text(
               'SoberMan',
               style: TextStyle(
-                  color: Color.fromARGB(255, 197, 141, 20),
+                  color: Color.fromARGB(255, 194, 138, 243),
                   fontSize: 48,
                   fontWeight: FontWeight.bold),
             ),
@@ -65,7 +65,7 @@ class Jump extends StatelessWidget {
               child: CircularProgressIndicator(
                 strokeWidth: 6,
                 valueColor: AlwaysStoppedAnimation<Color>(
-                    Color.fromARGB(255, 102, 208, 14)),
+                    Color.fromARGB(255, 255, 133, 12)),
               ),
             ),
           ],

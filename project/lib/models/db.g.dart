@@ -93,7 +93,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Sleep` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `date` TEXT, `dateOfSleep` TEXT, `startTime` TEXT, `endTime` TEXT, `duration` REAL, `minutesToFallAsleep` INTEGER, `minutesAsleep` INTEGER, `minutesAwake` INTEGER, `minutesAfterWakeup` INTEGER, `efficiency` INTEGER, `logType` TEXT, `mainSleep` INTEGER, `levels` TEXT, `DailyData` INTEGER NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Goal` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `money` REAL NOT NULL, `dateTime` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `Goal` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `money` REAL NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -385,8 +385,7 @@ class _$GoalDao extends GoalDao {
             (Goal item) => <String, Object?>{
                   'id': item.id,
                   'name': item.name,
-                  'money': item.money,
-                  'dateTime': _dateTimeConverter.encode(item.dateTime)
+                  'money': item.money
                 }),
         _goalUpdateAdapter = UpdateAdapter(
             database,
@@ -395,8 +394,7 @@ class _$GoalDao extends GoalDao {
             (Goal item) => <String, Object?>{
                   'id': item.id,
                   'name': item.name,
-                  'money': item.money,
-                  'dateTime': _dateTimeConverter.encode(item.dateTime)
+                  'money': item.money
                 }),
         _goalDeletionAdapter = DeletionAdapter(
             database,
@@ -405,8 +403,7 @@ class _$GoalDao extends GoalDao {
             (Goal item) => <String, Object?>{
                   'id': item.id,
                   'name': item.name,
-                  'money': item.money,
-                  'dateTime': _dateTimeConverter.encode(item.dateTime)
+                  'money': item.money
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -427,8 +424,7 @@ class _$GoalDao extends GoalDao {
         mapper: (Map<String, Object?> row) => Goal(
             id: row['id'] as int?,
             name: row['name'] as String,
-            money: row['money'] as double,
-            dateTime: _dateTimeConverter.decode(row['dateTime'] as int)));
+            money: row['money'] as double));
   }
 
   @override
@@ -437,8 +433,7 @@ class _$GoalDao extends GoalDao {
         mapper: (Map<String, Object?> row) => Goal(
             id: row['id'] as int?,
             name: row['name'] as String,
-            money: row['money'] as double,
-            dateTime: _dateTimeConverter.decode(row['dateTime'] as int)));
+            money: row['money'] as double));
   }
 
   @override

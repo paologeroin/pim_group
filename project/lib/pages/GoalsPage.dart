@@ -16,7 +16,7 @@ class GoalsPage extends StatelessWidget {
     print('${GoalsPage.routeDisplayName} built');
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 109, 230, 69),
+        backgroundColor: Color.fromARGB(255, 194, 138, 243),
         elevation: 0,
         actions: <Widget>[
           IconButton(

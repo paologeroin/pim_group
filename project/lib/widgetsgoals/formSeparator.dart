@@ -21,7 +21,7 @@ class FormSeparator extends StatelessWidget {
                 height: 2,
                 width: 75,
                 child: Container(
-                  color: Color.fromARGB(255, 109, 230, 69),
+                  color: Color.fromARGB(255, 194, 138, 243),
                 ),
               ),
               Expanded(
@@ -34,7 +34,7 @@ class FormSeparator extends StatelessWidget {
                 height: 2,
                 width: 75,
                 child: Container(
-                  color: Color.fromARGB(255, 109, 230, 69),
+                  color: Color.fromARGB(255, 194, 138, 243),
                 ),
               ),
             ],

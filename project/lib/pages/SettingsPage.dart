@@ -17,7 +17,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 97, 198, 171),
+        backgroundColor: Color.fromARGB(255, 194, 138, 243),
         elevation: 1,
         title: const Text('Settings', textAlign: TextAlign.center),
         centerTitle: true,
@@ -42,7 +42,7 @@ class _SettingsPageState extends State<SettingsPage> {
               children: [
                 Icon(
                   Icons.person,
-                  color: Colors.green,
+                  color: Color.fromARGB(255, 194, 138, 243),
                 ),
                 SizedBox(
                   width: 8,
@@ -72,7 +72,7 @@ class _SettingsPageState extends State<SettingsPage> {
               children: [
                 Icon(
                   Icons.volume_up_outlined,
-                  color: Colors.green,
+                  color: Color.fromARGB(255, 194, 138, 243),
                 ),
                 SizedBox(
                   width: 8,

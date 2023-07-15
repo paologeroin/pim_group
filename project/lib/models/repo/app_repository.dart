@@ -98,5 +98,5 @@ class AppDatabaseRepository extends ChangeNotifier {
     sleepData = await database.sleepDao.findSleepbyDate(
         DateUtils.dateOnly(showDate),
         DateTime(showDate.year, showDate.month, showDate.day, 23, 59));
- } //getDataOfDay
+  } //getDataOfDay
 } //SleepDatabaseRepository

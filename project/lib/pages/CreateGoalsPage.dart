@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pim_group/models/repo/app_repository.dart';
-import 'package:pim_group/widgetsgoals/formTiles.dart';
+import 'package:pim_group/widgetsgoals/formTilesGoals.dart';
 import 'package:pim_group/widgetsgoals/formSeparator.dart';
-import 'package:pim_group/utils/formats.dart';
 import 'package:provider/provider.dart';
 import '../models/entities/goals.dart';
 
@@ -26,16 +24,11 @@ class _GoalPageState extends State<CreateGoalsPage> {
 
   TextEditingController _Controller = TextEditingController();
 
-  DateTime _selectedDate = DateTime.now();
-
   @override
   void initState() {
     _NameController.text = widget.goal == null ? '' : widget.goal!.name;
 
     _Controller.text = widget.goal == null ? '' : widget.goal!.money.toString();
-
-    _selectedDate =
-        widget.goal == null ? DateTime.now() : widget.goal!.dateTime;
 
     super.initState();
   } // initState
@@ -54,7 +47,7 @@ class _GoalPageState extends State<CreateGoalsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 109, 230, 69),
+        backgroundColor: Color.fromARGB(255, 194, 138, 243),
         centerTitle: true,
         title: Text(CreateGoalsPage.routeDisplayName),
         actions: [
@@ -94,48 +87,11 @@ class _GoalPageState extends State<CreateGoalsPage> {
               controller: _Controller,
               icon: Icons.money,
             ),
-            FormSeparator(label: 'Date your Goal was created:'),
-            FormDateTile(
-              labelText: 'Creation Goal time',
-              date: _selectedDate,
-              icon: MdiIcons.clockTimeFourOutline,
-              onPressed: () {
-                _selectDate(context);
-              },
-              dateFormat: Formats.fullDateFormatNoSeconds,
-            ),
           ],
         ),
       ),
     );
   } // _buildForm
-
-  // Utility method that implements a Date+Time picker
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-            context: context,
-            initialDate: _selectedDate,
-            firstDate: DateTime(2010),
-            lastDate: DateTime(2101))
-        .then((value) async {
-      if (value != null) {
-        TimeOfDay? pickedTime = await showTimePicker(
-          context: context,
-          initialTime:
-              TimeOfDay(hour: _selectedDate.hour, minute: _selectedDate.minute),
-        );
-        return pickedTime != null
-            ? value.add(
-                Duration(hours: pickedTime.hour, minutes: pickedTime.minute))
-            : null;
-      }
-      return null;
-    });
-    if (picked != null && picked != _selectedDate)
-      setState(() {
-        _selectedDate = picked;
-      });
-  } //_selectDate
 
   // method to validate and save the goal's data
   void _validateAndSave(BuildContext context) async {
@@ -144,16 +100,14 @@ class _GoalPageState extends State<CreateGoalsPage> {
         Goal newGoal = Goal(
             id: null,
             name: _NameController.text,
-            money: double.parse(_Controller.text),
-            dateTime: _selectedDate);
+            money: double.parse(_Controller.text));
         await Provider.of<AppDatabaseRepository>(context, listen: false)
             .insertGoal(newGoal);
       } else {
         Goal updatedGoal = Goal(
             id: widget.goal!.id,
             name: _NameController.text,
-            money: double.parse(_Controller.text),
-            dateTime: _selectedDate);
+            money: double.parse(_Controller.text));
         await Provider.of<AppDatabaseRepository>(context, listen: false)
             .updateGoal(updatedGoal);
       }

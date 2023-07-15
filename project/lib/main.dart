@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Bottom Nav Bar V2',
           theme: ThemeData(
-            primarySwatch: Colors.green,
+            primarySwatch: Colors.deepPurple,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
           home: LoginPage()),

@@ -13,7 +13,7 @@ class FormTextTile extends ListTile {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     return ListTile(
-      leading: Icon(icon, color: Colors.green),
+      leading: Icon(icon, color: Color.fromARGB(255, 194, 138, 243)),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -25,7 +25,7 @@ class FormTextTile extends ListTile {
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 labelText: labelText,
-                focusColor: Colors.green,
+                focusColor: Color.fromARGB(255, 194, 138, 243),
               ),
             ),
           ),
@@ -47,7 +47,7 @@ class FormNumberTile extends ListTile {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     return ListTile(
-      leading: Icon(icon, color: Colors.green),
+      leading: Icon(icon, color: Color.fromARGB(255, 194, 138, 243)),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -66,7 +66,7 @@ class FormNumberTile extends ListTile {
               keyboardType: TextInputType.numberWithOptions(signed: true),
               decoration: InputDecoration(
                 labelText: labelText,
-                focusColor: Colors.green,
+                focusColor: Color.fromARGB(255, 194, 138, 243),
               ),
             ),
           ),
@@ -95,7 +95,7 @@ class FormDateTile extends ListTile {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     return ListTile(
-      leading: Icon(icon, color: Colors.green),
+      leading: Icon(icon, color: Color.fromARGB(255, 194, 138, 243)),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -140,7 +140,7 @@ class DropdownButtonTileNumber extends ListTile {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     return ListTile(
-      leading: Icon(icon, color: Colors.green),
+      leading: Icon(icon, color: Color.fromARGB(255, 194, 138, 243)),
       title: Container(
         width: screenSize.width / 1.5,
         child: DropdownButton<int>(
@@ -174,7 +174,7 @@ class DropdownButtonTileString extends ListTile {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     return ListTile(
-      leading: Icon(icon, color: Colors.green),
+      leading: Icon(icon, color: Color.fromARGB(255, 194, 138, 243)),
       title: Container(
         width: screenSize.width / 1.5,
         child: DropdownButton<String>(

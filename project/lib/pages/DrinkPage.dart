@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:pim_group/widgetsgoals/formTiles.dart';
 import 'package:pim_group/widgetsgoals/formSeparator.dart';
 import 'package:pim_group/utils/formats.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:provider/provider.dart';
 import 'package:pim_group/models/repo/app_repository.dart';
 import 'package:pim_group/models/entities/drink.dart';
+
+import '../widgetDrinks/formTiles.dart';
 
 class DrinkPage extends StatefulWidget {
   final int drinkIndex;
