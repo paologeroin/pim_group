@@ -81,17 +81,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
             children: [
               FormTextTile(
                 labelText: "Full Name",
-                icon: Icons.people, // E' L'ICONA
+                icon: Icons.person, // E' L'ICONA
                 controller: _fullnameController,
               ),
               FormTextTile(
                 labelText: "Username",
-                icon: Icons.pedal_bike, // E' L'ICONA
+                icon: Icons.alternate_email_rounded, // E' L'ICONA
                 controller: _usernameController,
               ),
               FormTextTile(
                 labelText: "Birth place",
-                icon: Icons.baby_changing_station, // E' L'ICONA
+                icon: Icons.location_on_outlined, // E' L'ICONA
                 controller: _birthplaceController,
               ),
               FormNumberTile(
@@ -101,13 +101,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ),
               FormTextTile(
                 labelText: "E-mail",
-                icon: Icons.computer, // E' L'ICONA
+                icon: Icons.email_outlined, // E' L'ICONA
                 controller: _emailController,
               ),
               SizedBox(height: 18.0),
               ElevatedButton(
                 onPressed: _saveAndPop,
-                child: const Text('Salva'),
+                child: const Text('Save'),
               ),
             ],
           ),
