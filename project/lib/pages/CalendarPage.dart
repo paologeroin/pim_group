@@ -51,7 +51,7 @@ class _ProgressState extends State<ProgressPage> {
             },
           ),
           SizedBox(
-            height: 300,
+            height: 270,
             child: Center(
               child:
                   //We will show the todo table with a ListView.
