@@ -6,9 +6,6 @@ abstract class GoalDao {
   @Query('SELECT * FROM Goal')
   Future<List<Goal>> findAllGoals();
 
-  @Query('SELECT * FROM Goal ORDER BY dateTime ASC')
-  Future<List<Goal>> findMostRecentGoal();
-
   @insert
   Future<void> insertGoal(Goal goal);
 

@@ -428,15 +428,6 @@ class _$GoalDao extends GoalDao {
   }
 
   @override
-  Future<List<Goal>> findMostRecentGoal() async {
-    return _queryAdapter.queryList('SELECT * FROM Goal ORDER BY dateTime ASC',
-        mapper: (Map<String, Object?> row) => Goal(
-            id: row['id'] as int?,
-            name: row['name'] as String,
-            money: row['money'] as double));
-  }
-
-  @override
   Future<void> insertGoal(Goal goal) async {
     await _goalInsertionAdapter.insert(goal, OnConflictStrategy.abort);
   }
