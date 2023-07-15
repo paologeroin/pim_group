@@ -55,7 +55,7 @@ class GoalsPage extends StatelessWidget {
                                 trailing: const Icon(MdiIcons.noteEdit),
                                 title: Text(data[goalIndex].name),
                                 subtitle: Text(
-                                    'objective to reach: ${data[goalIndex].money} €'),
+                                    'Goal to reach: ${data[goalIndex].money} €'),
                                 onTap: () =>
                                     _toGoalPage(context, data[goalIndex]),
                               ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pim_group/models/repo/app_repository.dart';
-import 'package:pim_group/widgetsgoals/formTilesGoals.dart';
-import 'package:pim_group/widgetsgoals/formSeparator.dart';
+import 'package:pim_group/widgetGoals/formTilesGoals.dart';
+import 'package:pim_group/widgetGoals/formSeparator.dart';
 import 'package:provider/provider.dart';
 import '../models/entities/goals.dart';
 

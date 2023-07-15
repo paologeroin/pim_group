@@ -50,14 +50,15 @@ class Jump extends StatelessWidget {
         const Duration(seconds: 2), () => checkAuthentication(context));
     return Material(
       child: Container(
-        color: const Color(0xFF83AA99),
+        color: Color.fromARGB(255, 194, 138, 243),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: const <Widget>[
             Text(
-              'SoberMan',
+              'WineNot?',
               style: TextStyle(
-                  color: Color.fromARGB(255, 194, 138, 243),
+                  color: Color.fromARGB(255, 255, 208,
+                                65),
                   fontSize: 48,
                   fontWeight: FontWeight.bold),
             ),
@@ -65,7 +66,8 @@ class Jump extends StatelessWidget {
               child: CircularProgressIndicator(
                 strokeWidth: 6,
                 valueColor: AlwaysStoppedAnimation<Color>(
-                    Color.fromARGB(255, 255, 133, 12)),
+                    Color.fromARGB(255, 255, 208,
+                                65)),
               ),
             ),
           ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:pim_group/widgetsgoals/formSeparator.dart';
+import 'package:pim_group/widgetGoals/formSeparator.dart';
 import 'package:pim_group/utils/formats.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:provider/provider.dart';
@@ -125,7 +125,7 @@ class _DrinkPageState extends State<DrinkPage> {
                                 child: ListTile(
                                   leading: Icon(MdiIcons.note),
                                   title: Text(drink.drinkType),
-                                  subtitle: Text('ID: ${drink.id}'),
+                                  subtitle: Text('Drink Number: ${drink.id}'),
                                 ),
                                 onDismissed: (direction) async {
                                   await Provider.of<AppDatabaseRepository>(
@@ -162,7 +162,7 @@ class _DrinkPageState extends State<DrinkPage> {
         padding: const EdgeInsets.only(top: 10, bottom: 8, left: 20, right: 20),
         child: ListView(
           children: <Widget>[
-            FormSeparator(label: 'SELEZIONA DRINK'),
+            FormSeparator(label: 'Select drink'),
             SizedBox(
               height: 100,
               child: (() {
@@ -203,7 +203,7 @@ class _DrinkPageState extends State<DrinkPage> {
                     });
               }()),
             ),
-            FormSeparator(label: 'IMPOSTA ORARIO'),
+            FormSeparator(label: 'Choose time'),
             FormDateTile(
               labelText: 'Drink Time',
               date: _selectedDate,

@@ -1,64 +1,52 @@
 import 'package:flutter/material.dart';
 
-/// Definition of AboutPage class
-
 class AboutPage extends StatelessWidget {
-  const AboutPage({super.key});
+  const AboutPage({Key? key});
 
- @override
+  @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 97, 198, 171),
-        elevation: 1,title: const Text ('About', textAlign: TextAlign.center), centerTitle: true),
-      body: Column(
-        children: [
-          Container( 
-            child: Text('!!!TO MODIFY The projects of these working group must address the Sustainable Development Goal 3 (Good health and well-being: Ensure healthy lives and promote well-being for all at all ages), Target 3.5 (Strengthen the prevention and treatment of substance abuse, including narcotic drug abuse and harmful use of alcohol).'),
-                  
+        elevation: 1,
+        title: const Text('What\'s WineNot?', textAlign: TextAlign.center),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+             Container(
+                margin: const EdgeInsets.all(15),
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/unipd-universita-di-padova.png',
+                      height: 160.0,
+                      width: 160.0,
+                      fit: BoxFit.contain,
+                    ),
+                    Spacer(),
+                    Image.asset(
+                      'assets/images/dei-logo.png',
+                      height: 160.0,
+                      width: 160.0,
+                      fit: BoxFit.contain,
+                    ),
+                  ],
+                ),
+              ),
 
-                  margin: const EdgeInsets.only(top: 40),
-                  padding: EdgeInsets.all(25.0),
-                  // Border to visualize the container
-                 // decoration: BoxDecoration(
-                  //  border: Border.all(),
-                  //  borderRadius: BorderRadius.circular(10),
-                    
-                 // ),
-                 ),
-          SizedBox(
-           height: 250,
-           child: Container( 
-            child: Row(
-                children: [
-                  Image.asset('assets/images/unipd-universita-di-padova.png',
-                  height: 160.0,
-                  width: 160.0,
-                  fit: BoxFit.contain,),
-                  new Spacer(),
-                  Image.asset('assets/images/dei-logo.png',
-                  height: 160.0,
-                  width: 160.0,
-                  fit: BoxFit.contain,),
-                  ]
-                  ),
-
-                  margin: EdgeInsets.all(15),
-                  //margin: const EdgeInsets.only(top: 70),
-                  padding: EdgeInsets.all(25.0),
-                  // Border to visualize the container
-                 // decoration: BoxDecoration(
-                 //   border: Border.all(),
-                 //   borderRadius: BorderRadius.circular(10),
-                    
-                //  ),
-                 ), 
-          ),
-        
-         ],
-          )
+            Container(
+              margin: const EdgeInsets.only(top: 0),
+              padding: const EdgeInsets.all(25.0),
+              child: Text(
+                'WineNot? aims to reduce the consumption of alcoholic beverages by raising awareness among users about the negative effects on their health, particularly on sleep quality. We help users record and monitor their alcohol consumption, allowing them to observe how it impacts their rest. Additionally, through the achievement of savings goals, the app provides users with financial incentives to limit their intake of alcoholic drinks.\n\nIn summary, WineNot? promotes greater awareness of personal health, while encouraging saving and moderation in alcohol consumption.',
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
-
-  
