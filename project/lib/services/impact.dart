@@ -20,7 +20,7 @@ import 'package:pim_group/pages/HomePage.dart';
 List<int> deep = [];
       List<int> light = [];
       List<int> rem = [];
-      List<int> wake = [];
+      List<int> wake = [] ;
      
 
 final first_day = DateFormat('y-M-d')
