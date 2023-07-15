@@ -33,7 +33,7 @@ dependencies:
   provider: ^6.0.5 # aggiunto
   material_design_icons_flutter: ^6.0.7096 # aggiunto
   intl: ^0.18.0 # aggiunto
-  syncfusion_flutter_charts: ^21.1.41
+  syncfusion_flutter_charts: ^22.1.38
   flutter_login: ^4.1.1
   quickalert:  
   percent_indicator: ^3.4.0
