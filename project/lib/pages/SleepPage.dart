@@ -35,7 +35,7 @@ class SleepPage extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.all(16),
                   child: const Text(
-                    'How did you sleep last night?',
+                    'How was your sleep last night?',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -52,9 +52,9 @@ class SleepPage extends StatelessWidget {
                                       .toDouble()) /
                                   3600)
                               .toString();
-                      String minutesAsleep = dataSleep[dataSleep.length - 1]
-                          .minutesAsleep
-                          .toString();
+                      String minutesAsleep = (((dataSleep[dataSleep.length - 1]
+                          .minutesAsleep)!.toDouble())/60)
+                          .toStringAsFixed(1);
                       return Column(
                         children: [
                           Card(
@@ -62,12 +62,12 @@ class SleepPage extends StatelessWidget {
                             child: Column(
                               children: [
                                 ListTile(
-                                  title: Text('Sleep Duration'),
+                                  title: Text('Sleep Session Duration'),
                                   trailing: Text('$durationHour hours'),
                                 ),
                                 ListTile(
                                   title: Text('Actually Asleep'),
-                                  trailing: Text('$minutesAsleep minutes'),
+                                  trailing: Text('$minutesAsleep hours'),
                                 ),
                               ],
                             ),
@@ -84,7 +84,7 @@ class SleepPage extends StatelessWidget {
                 SfCartesianChart(
                   primaryXAxis: CategoryAxis(),
                   primaryYAxis: CategoryAxis(title: AxisTitle(text: 'minutes')),
-                  title: ChartTitle(text: 'Sleep data'),
+                  title: ChartTitle(text: 'Sleep Stages Summary'),
                   legend: Legend(isVisible: true),
                   series: <ChartSeries>[
                     StackedColumnSeries<SummaryData, String>(
