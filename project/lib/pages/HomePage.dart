@@ -363,7 +363,7 @@ class _HomePage extends State<HomePage> {
                                             CircularStrokeCap.round,
                                         progressColor:
                                             Color.fromARGB(255, 255, 147, 15),
-                                        percent: (data.length * 2) / 10.0);
+                                        percent: min(((data.length * 2) / 10.0),1),);
                                   } else {
                                     //A CircularProgressIndicator is shown while the list of Todo is loading.
                                     return CircularPercentIndicator(
@@ -556,7 +556,13 @@ class _HomePage extends State<HomePage> {
                             )),
                           )),
                         ]))),
-
+const Padding(padding: EdgeInsets.all(15)),
+                const Text(
+                  "Goal:",
+                  style: TextStyle(
+                    fontSize: 20
+                  ),
+                ),
                 Center(
                   //We are using a Consumer because we want that the UI showing
                   //the list of goals to rebuild every time the Goal DB updates.
@@ -618,6 +624,7 @@ class _HomePage extends State<HomePage> {
                     },
                   ),
                 ),
+                const Padding(padding: EdgeInsets.all(15)),
               ],
             )
           ]),
