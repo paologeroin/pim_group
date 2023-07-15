@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -16,11 +17,15 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 194, 138, 243),
-        elevation: 1,
-        title: const Text('Settings', textAlign: TextAlign.center),
-        centerTitle: true,
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(47.0),
+          child: AppBar(
+              // motivational phrases for the User that change during time
+              title: Column(children: [
+                Text("Settings", style: GoogleFonts.lato()),
+              ]),
+              backgroundColor: Color.fromARGB(255, 194, 138, 243),
+              elevation: 0,
         leading: IconButton(
           onPressed: () {
             Navigator.of(context).pop();
@@ -30,6 +35,7 @@ class _SettingsPageState extends State<SettingsPage> {
             color: Colors.white,
           ),
         ),
+      ),
       ),
       body: Container(
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),

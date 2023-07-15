@@ -46,7 +46,8 @@ class _DrinkPageState extends State<DrinkPage> {
   Widget build(BuildContext context) {
     print('${DrinkPage.routeDisplayName} built');
     return Scaffold(
-      appBar: AppBar(
+      appBar: 
+      AppBar(
         title: Text(DrinkPage.routeDisplayName),
         actions: [
           IconButton(

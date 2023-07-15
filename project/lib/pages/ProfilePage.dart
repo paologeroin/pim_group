@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pim_group/pages/EditProfilePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -66,11 +67,10 @@ class ProfilePageState extends State<ProfilePage> {
             ),
           ],
           centerTitle: true,
-          title: const Text(
-            "Profile",
-            style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+          title: Text(
+            "Your Profile",
+            style: GoogleFonts.lato()),
           ),
-        ),
         body: Container(
             padding: EdgeInsets.only(left: 16, top: 25, right: 16),
             child: ListView(children: [

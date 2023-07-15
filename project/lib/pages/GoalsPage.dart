@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pim_group/models/repo/app_repository.dart';
 import 'package:pim_group/pages/CreateGoalsPage.dart';
@@ -15,9 +16,15 @@ class GoalsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     print('${GoalsPage.routeDisplayName} built');
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 194, 138, 243),
-        elevation: 0,
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(47.0),
+          child: AppBar(
+              // motivational phrases for the User that change during time
+              title: Center(
+                child: Text("Your Goals", style: GoogleFonts.lato()),
+              ),
+              backgroundColor: Color.fromARGB(255, 194, 138, 243),
+              elevation: 0,
         actions: <Widget>[
           IconButton(
             icon: Icon(
@@ -28,12 +35,7 @@ class GoalsPage extends StatelessWidget {
             onPressed: () => _toGoalPage(context, null),
           )
         ],
-        centerTitle: true,
-        title: const Text(
-          GoalsPage.routeDisplayName,
-          style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
-        ),
-      ),
+        ),),
       body: Center(
         child: Consumer<AppDatabaseRepository>(
           builder: (context, goal, child) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../models/entities/entities.dart';
 import '../models/repo/app_repository.dart';
 import 'package:provider/provider.dart';
@@ -18,11 +19,15 @@ class SleepPage extends StatelessWidget {
     print('dati grafico ${datigrafico}');
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 194, 138, 243),
-        elevation: 1,
-        title: const Text('Sleep Data', textAlign: TextAlign.center),
-        centerTitle: true,
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(47.0),
+          child: AppBar(
+              // motivational phrases for the User that change during time
+              title: Center(child:
+                Text("Your Sleep Data", style: GoogleFonts.lato()),
+              ),
+              backgroundColor: Color.fromARGB(255, 194, 138, 243),
+              elevation: 0)
       ),
       body: Padding(
         padding: EdgeInsets.all(8.0),

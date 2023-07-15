@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pim_group/models/repo/app_repository.dart';
 import 'package:pim_group/widgetGoals/formTilesGoals.dart';
 import 'package:pim_group/widgetGoals/formSeparator.dart';
@@ -46,16 +47,21 @@ class _GoalPageState extends State<CreateGoalsPage> {
     print('${CreateGoalsPage.routeDisplayName} built');
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 194, 138, 243),
-        centerTitle: true,
-        title: Text(CreateGoalsPage.routeDisplayName),
+      appBar:  PreferredSize(
+          preferredSize: Size.fromHeight(47.0),
+          child: AppBar(
+              // motivational phrases for the User that change during time
+              title: Center(child:
+                Text("Goal Specification", style: GoogleFonts.lato()),
+              ),
+              backgroundColor: Color.fromARGB(255, 194, 138, 243),
+              elevation: 0,
         actions: [
           IconButton(
               onPressed: () => _validateAndSave(context),
               icon: Icon(Icons.done))
         ],
-      ),
+      ),),
       body: Center(
         child: _buildForm(context),
       ),

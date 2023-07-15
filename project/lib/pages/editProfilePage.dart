@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pim_group/widgetDrinks/formTiles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -56,10 +57,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
         backgroundColor: Color.fromARGB(255, 194, 138, 243),
         elevation: 1,
         centerTitle: true,
-        title: const Text(
-          'Profile information',
-          style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
-        ),
+        title: Text(
+          'Edit Profile Information',
+          style: GoogleFonts.lato()),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,

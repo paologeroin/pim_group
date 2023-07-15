@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:provider/provider.dart';
 import 'package:pim_group/models/repo/app_repository.dart';
@@ -22,11 +23,15 @@ class _ProgressState extends State<ProgressPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 194, 138, 243),
-        elevation: 1,
-        title: const Text('Calendar'),
-        centerTitle: true,
+      appBar:  PreferredSize(
+          preferredSize: Size.fromHeight(47.0),
+          child: AppBar(
+              // motivational phrases for the User that change during time
+              title: Center(child:
+                Text("Calendar", style: GoogleFonts.lato()),
+              ),
+              backgroundColor: Color.fromARGB(255, 194, 138, 243),
+              elevation: 0)
       ),
       body: Column(
         children: [

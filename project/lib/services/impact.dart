@@ -283,7 +283,7 @@ class ImpactService extends StatelessWidget {
                 Padding(
                     padding:
                         EdgeInsets.all(15), //apply padding to all four sides
-                    child: Text('W I N E     N O T  ',
+                    child: Text('W I N E  N O T ? ',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.lato(
                             fontSize: 15,

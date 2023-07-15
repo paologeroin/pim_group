@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({Key? key});
@@ -6,12 +7,16 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 97, 198, 171),
-        elevation: 1,
-        title: const Text('What\'s WineNot?', textAlign: TextAlign.center),
-        centerTitle: true,
-      ),
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(47.0),
+          child: AppBar(
+              // motivational phrases for the User that change during time
+              title: Column(children: [
+                Text("About WineNot?", style: GoogleFonts.lato()),
+              ]),
+              backgroundColor: Color.fromARGB(255, 194, 138, 243),
+              elevation: 0)
+      ), 
       body: SingleChildScrollView(
         child: Column(
           children: [
