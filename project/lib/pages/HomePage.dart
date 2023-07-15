@@ -61,7 +61,13 @@ class _HomePage extends State<HomePage> {
     });
   }
 
-  format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
+  format(Duration d) => ((){
+      String duration = d.toString().split('.').first.padLeft(8, "0"); 
+      String duration_2 = duration.substring(0, 2) + "h " + duration.substring(3, 5) + "m " + duration.substring(6, 8) + "s ";  
+      return duration_2;      
+    }
+    ()
+  );
 
   void startTimer() {
     countdownTimer = Timer.periodic(myDuration, (_) => changePhrase());
@@ -340,7 +346,7 @@ class _HomePage extends State<HomePage> {
                                             padding: EdgeInsets.only(top: 50),
                                           ),
                                           Text(
-                                            'Sobriety',
+                                            'N° drinks',
                                             textDirection: TextDirection.ltr,
                                             textAlign: TextAlign.center,
                                             style:
